@@ -1,0 +1,5 @@
+{
+  "realm": "process.env.SSO_REALM",
+  "baseURL": "process.env.SSO_BASE_URL",
+  "client": "process.env.SSO_CLIENT"
+}

@@ -5,16 +5,19 @@ import { request } from "@octokit/request";
 import { readFileSync } from 'fs';
 import {  every, intersectionBy, isArray,  isObject, isString } from "lodash";
 import path from 'path';
-import { getConfig } from "./config";
+import { getConfig, getSSO } from "./config";
 import log from 'log';
 
 
 const file = readFileSync(path.join(__dirname, '../config/github-private-key.pem'));
 
+// cached value
 const installationApps = {
   initialized: null,
   apps: {}
 };
+
+
 
 const auth = createAppAuth({
   appId: process.env.APP_ID,
@@ -104,4 +107,27 @@ const getAuthenticatedApps = async () => {
   return installationApps;
 }
 
-export default getAuthenticatedApps;
+
+
+/**
+ * initializes and validates SSO config as well as github applications
+ * all errors bubble to top to quit process
+ */
+export const init = async () => {
+  // check SSO Config
+  log.info('Checking SSO Configuration');
+  let ssoConfig;
+  try {
+    ssoConfig = getSSO();
+  } catch(e) {
+    log.warn("Unable to get sso config. Does it exist? ");
+    log.warn(e.message);
+    throw e;
+  }
+  log.info('Checking OIDC Discovery');
+  await getOidcDiscovery(ssoConfig.discovery);
+  log.info('Checking Authenticated Apps');
+  await getAuthenticatedApps();
+}
+
+export default init;

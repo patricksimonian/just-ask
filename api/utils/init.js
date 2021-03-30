@@ -12,11 +12,9 @@ import log from 'log';
 const file = readFileSync(path.join(__dirname, '../config/github-private-key.pem'));
 
 const installationApps = {
-  initialized: Date.now(),
+  initialized: null,
   apps: {}
 };
-
-log.info('installedApps initialized');
 
 const auth = createAppAuth({
   appId: process.env.APP_ID,
@@ -37,6 +35,7 @@ const requestWithAuth = request.defaults({
 
 
 export const getInstallations = async () => {
+  log.info('getInstallations');
   const response = await requestWithAuth('GET /app/installations');
   return response.data;
 }
@@ -45,7 +44,7 @@ export const getOrgInstallations = async () => {
   const config = getConfig();
 
   if(!isObject(config) || !isArray(config.orgs) || !every(config.orgs, isString) || config.orgs.length === 0) {
-    throw new Error('FOO!');
+    throw new Error('Configuration is invalid. config.orgs is invalid or misconfigured');
   }
   const installations = await getInstallations();
 
@@ -66,7 +65,7 @@ const newAuthorizedApp = installationId => {
     clientSecret: process.env.CLIENT_SECRET,
     installationId,
   });
-  
+  log.info(`authorized application created for installation ${installationId}`);
   return {
     initialized: Date.now(),
     app,
@@ -85,15 +84,22 @@ const newAuthorizedApp = installationId => {
  * a new authenticated app must be created for every installation in order to invite users
  */
 const getAuthenticatedApps = async () => {
-  const installations = await getOrgInstallations();
+  if(!installationApps.initialized) {
+    log.info('Initializing Authenticated Apps');
+    installationApps.initialized = Date.now();
+    const installations = await getOrgInstallations();
+    
+    installations.forEach(installation => {
+      const name = installation.account.login.toLowerCase();
+      if(!installationApps.apps[name]) {
+        installationApps.apps[name] = newAuthorizedApp(installation.id);
+      }
+  
+    });
+  } else {
+    log.info(`Authenticated Apps were cached, reusing the ones initialized on ${installationApps.initialized}`);
+  }
 
-  installations.forEach(installation => {
-    const name = installation.account.login.toLowerCase();
-    if(!installationApps.apps[name]) {
-      installationApps.apps[name] = newAuthorizedApp(installation.id);
-    }
-
-  });
 
   return installationApps;
 }

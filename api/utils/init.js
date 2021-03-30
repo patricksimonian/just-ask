@@ -7,6 +7,7 @@ import {  every, intersectionBy, isArray,  isObject, isString } from "lodash";
 import path from 'path';
 import { getConfig, getSSO } from "./config";
 import log from 'log';
+import { getOidcDiscovery } from "./sso";
 
 
 const file = readFileSync(path.join(__dirname, '../config/github-private-key.pem'));

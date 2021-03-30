@@ -6,11 +6,13 @@
   "dependencies": {
     "@octokit/auth": "^3.0.3",
     "@octokit/core": "^3.3.0",
+    "axios": "^0.21.1",
     "babel-jest": "^26.6.3",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "lodash": "^4.17.21",
-    "log": "^6.0.0"
+    "log": "^6.0.0",
+    "log-node": "^7.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.13.10",

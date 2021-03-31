@@ -47,7 +47,7 @@ export const getInstallations = async () => {
 export const getOrgInstallations = async () => {
   const config = getConfig();
 
-  if(!isObject(config) || !isArray(config.orgs) || !every(config.orgs, isString) || config.orgs.length === 0) {
+  if(!config || !isObject(config) || !isArray(config.orgs) || !every(config.orgs, isString) || config.orgs.length === 0) {
     throw new Error('Configuration is invalid. config.orgs is invalid or misconfigured');
   }
   const installations = await getInstallations();

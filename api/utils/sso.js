@@ -10,6 +10,7 @@ const cache = {
 export async function getOidcDiscovery(discoveryEndpoint) {
   if (!cache.initialized && !cache.fetching) {
     cache.fetching = true;
+
     try {
       const response = await axios.get(discoveryEndpoint);
       cache.initialized = Date.now();

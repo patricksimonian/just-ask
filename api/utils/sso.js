@@ -14,6 +14,7 @@ export async function getOidcDiscovery(discoveryEndpoint) {
       const response = await axios.get(discoveryEndpoint);
       cache.initialized = Date.now();
       cache.discovery = response.data;
+      console.log(cache.discovery);
     } catch (error) {
       log.error(`getOidcDiscovery: OIDC Discovery failed - ${error.message}`);
       throw error;

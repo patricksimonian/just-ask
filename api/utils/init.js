@@ -121,8 +121,8 @@ export const init = async () => {
   try {
     ssoConfig = getSSO();
   } catch(e) {
-    log.warn("Unable to get sso config. Does it exist? ");
-    log.warn(e.message);
+    log.warn("Unable to get sso config. Does it exist?");
+    log.error(e.message);
     throw e;
   }
   log.info('Checking OIDC Discovery');

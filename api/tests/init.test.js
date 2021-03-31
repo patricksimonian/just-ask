@@ -1,9 +1,9 @@
-import { getOrgInstallations } from "../utils/init";
+import init, { getOrgInstallations } from "../utils/init";
 import installations from '../fixtures/installations';
 import nock from 'nock';
 
 
-import { getConfig } from "../utils/config";
+import { getConfig, getSSO } from "../utils/config";
 import log from 'log';
 
 jest.mock('../utils/config.js')
@@ -15,11 +15,23 @@ jest.mock('log', () => ({
 
 
 describe('Octokit initialization', () => {
+  describe('init', () => {
+    beforeEach(() => {
+      jest.resetModules();
+      nock.disableNetConnect();
+    });
+
+    it('throws if getting SSO config fails', async () => {
+      getSSO.mockImplementation(() => {throw new Error('uhoh!')});
+      await expect(init()).rejects.toThrow();
+      expect(log.warn).toHaveBeenCalledWith("Unable to get sso config. Does it exist?");
+    });
+  });
   describe('getOrgInstallations', () => {
     beforeEach(() => {
       jest.resetModules();
       nock.disableNetConnect();
-    })
+    });
     it('Throws if config.json is undefined or orgs are misconfigured', async () => {
       nock('https://api.github.com').get('/app/installations')
       .reply(200, installations

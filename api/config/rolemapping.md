@@ -4,7 +4,7 @@ The github app utilizes to Roles for the invitation workflow. There are 3 base r
 
 - APPROVER: this role allows a user to approve inivation requests that are otherwise no authorized. For example if a user requests themselves into an organization an APPROVER can grant access
 - REQUESTER: this is role applied to users granting them access to make requests to orgs.
-- COLLABORATOR: this role applies to users who are able to request users access into orgs without APPROVER grants.
+- COLLABORATOR: this role applies to users who are able to request users access into orgs without APPROVER grants. The COLLABORATOR can only invite users to orgs that they belong too. APPROVERS can invite users to any org the app is installed on
 
 
 ## Role Mappings
@@ -18,19 +18,19 @@ The config `role-mappers.json` can map a list of org level roles as well as gith
     {
       "kind": "OrgRole",
       "role": "owner",
-      "name": "bcgov"
+      "organization": "bcgov"
     },
     {
       "kind": "GithubTeam",
-      "value": "OrgApprovers",
+      "team": "OrgApprovers",
       "organization": "bcgov"
     }
   ],
   "COLLABORATOR": [{
       "kind": "OrgRole",
       "role": "member",
-      "name": "bcgov"
-    },],
+      "organization": "bcgov"
+    }],
   "REQUESTER": [null]
 }
 
@@ -42,4 +42,4 @@ Since this app can manage multiple organizations. There is no delineation betwee
 
 ## Special Cases
 
-`null` values treat the role mapping as a no-mapping-required. In other words, the role is applied to all users by default. `APPROVER` mappings cannot be `null`.
+`null` values in the first index of the role mapping treat the role mapping as a no-mapping-required. In other words, the role is applied to all users by default. `APPROVER` mappings cannot be `null`.

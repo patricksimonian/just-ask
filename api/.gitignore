@@ -4,4 +4,4 @@ dist
 *.pem
 
 config/config.json
-config/sso.json
+config/role-mappers.json

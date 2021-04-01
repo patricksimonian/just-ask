@@ -88,7 +88,7 @@ export const getOrgInstallations = async () => {
 /**
  * a new authenticated app must be created for every installation in order to invite users
  */
-const getAuthenticatedApps = async () => {
+export const getAuthenticatedApps = async () => {
   if(!installationApps.initialized) {
     log.info('Initializing Authenticated Apps');
     installationApps.initialized = Date.now();

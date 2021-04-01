@@ -1,0 +1,22 @@
+{
+  "APPROVER": [
+    {
+      "kind": "OrgRole",
+      "role": "owner",
+      "name": "bcgov"
+    },
+    {
+      "kind": "GithubTeam",
+      "value": "OrgApprovers",
+      "organization": "bcgov"
+    }
+  ],
+  "REQUESTER": [null],
+  "COLLABORATOR": [
+    {
+      "kind": "OrgRole",
+      "role": "member",
+      "name": "bcgov"
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-import { getOrgInstallations } from "../utils/init";
+import init, { getOrgInstallations } from "../utils/init";
 import installations from '../fixtures/installations';
 import nock from 'nock';
 
@@ -13,13 +13,29 @@ jest.mock('log', () => ({
   info: jest.fn(),
 }));
 
+describe('init', () => {
 
+
+  it('initializes without failure', async () => {
+    const orgs = installations.filter(installation => installation.target_type === 'Organization');
+
+    getConfig.mockReturnValueOnce(({orgs: orgs.map(o => o.account.login)}));
+    nock('https://api.github.com').get('/app/installations')
+    .reply(200, installations);
+    nock.cleanAll();
+    await expect(init()).resolves;
+  });
+});
 describe('Octokit initialization', () => {
+  afterEach(() => {
+
+  });
+  beforeEach(() => {
+    nock.disableNetConnect();
+  });
+  
   describe('getOrgInstallations', () => {
-    beforeEach(() => {
-      jest.resetModules();
-      nock.disableNetConnect();
-    })
+
     it('Throws if config.json is undefined or orgs are misconfigured', async () => {
       nock('https://api.github.com').get('/app/installations')
       .reply(200, installations
@@ -48,7 +64,7 @@ describe('Octokit initialization', () => {
       nock('https://api.github.com').get('/app/installations')
       .reply(200, []
       );
-      getConfig.mockReturnValueOnce(({orgs: [ 'hello world']}));
+      getConfig.mockReturnValue(({orgs: [ 'hello world']}));
       await getOrgInstallations()
       expect(log.info).toHaveBeenCalledWith('This github app has no public org installations yet');
     });

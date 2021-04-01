@@ -27,7 +27,7 @@ const auth = createAppAuth({
   clientSecret: process.env.CLIENT_SECRET,
 });
 
-const requestWithAuth = request.defaults({
+const nonInstallationRequest = request.defaults({
   request: {
     hook: auth.hook,
   },
@@ -36,30 +36,6 @@ const requestWithAuth = request.defaults({
   },
 });
 
-
-
-export const getInstallations = async () => {
-  log.info('getInstallations');
-  const response = await requestWithAuth('GET /app/installations');
-  return response.data;
-}
-
-export const getOrgInstallations = async () => {
-  const config = getConfig();
-
-  if(!isObject(config) || !isArray(config.orgs) || !every(config.orgs, isString) || config.orgs.length === 0) {
-    throw new Error('Configuration is invalid. config.orgs is invalid or misconfigured');
-  }
-  const installations = await getInstallations();
-
-    
-  const matchedInstallations = intersectionBy( installations, config.orgs.map(org => ({ account: {login: org}})), 'account.login')
-  .filter(installation => installation.target_type === 'Organization')
-  if(matchedInstallations.length === 0) {
-    log.info(`This github app has no public org installations yet`);
-  }
-  return matchedInstallations;
-}
 
 const newAuthorizedApp = installationId => {
   const app =  createAppAuth({
@@ -84,10 +60,35 @@ const newAuthorizedApp = installationId => {
     })
   }
 }
+
+export const getInstallations = async () => {
+  log.info('getInstallations');
+  const response = await nonInstallationRequest('GET /app/installations');
+  return response.data;
+}
+
+export const getOrgInstallations = async () => {
+  const config = getConfig();
+
+  if(!config || !isObject(config) || !isArray(config.orgs) || !every(config.orgs, isString) || config.orgs.length === 0) {
+    throw new Error('Configuration is invalid. config.orgs is invalid or misconfigured');
+  }
+  const installations = await getInstallations();
+
+    
+  const matchedInstallations = intersectionBy( installations, config.orgs.map(org => ({ account: {login: org}})), 'account.login')
+  .filter(installation => installation.target_type === 'Organization')
+  if(matchedInstallations.length === 0) {
+    log.info(`This github app has no public org installations yet`);
+  }
+  return matchedInstallations;
+}
+
+
 /**
  * a new authenticated app must be created for every installation in order to invite users
  */
-const getAuthenticatedApps = async () => {
+export const getAuthenticatedApps = async () => {
   if(!installationApps.initialized) {
     log.info('Initializing Authenticated Apps');
     installationApps.initialized = Date.now();
@@ -115,18 +116,6 @@ const getAuthenticatedApps = async () => {
  * all errors bubble to top to quit process
  */
 export const init = async () => {
-  // check SSO Config
-  log.info('Checking SSO Configuration');
-  let ssoConfig;
-  try {
-    ssoConfig = getSSO();
-  } catch(e) {
-    log.warn("Unable to get sso config. Does it exist? ");
-    log.warn(e.message);
-    throw e;
-  }
-  log.info('Checking OIDC Discovery');
-  await getOidcDiscovery(ssoConfig.discovery);
   log.info('Checking Authenticated Apps');
   await getAuthenticatedApps();
 }

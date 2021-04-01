@@ -11,15 +11,9 @@ export const getConfig = () => {
 
 
 /**
- * returns the sso config plus the discovery endpoint
- * @returns ssoConfig
+ * @returns role mapping configg
  */
-export const getSSO = () => {
-  const data = readFileSync(path.join(__dirname, '../config/sso.json'));
-  const json = JSON.parse(data.toString());
-
-  return {
-    ...json,
-    discovery: `${json.baseURL}/auth/realms/${json.realm}/.well-known/openid-configuration`
-  }
+export const getRoleMapping = () => {
+  const data = readFileSync(path.join(__dirname, '../config/role-mappers.json'));
+  return JSON.parse(data.toString());
 }

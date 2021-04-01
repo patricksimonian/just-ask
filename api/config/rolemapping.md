@@ -1,4 +1,4 @@
-## SSO ROLE MAPPING CONFIG
+## oAuth role mapping
 
 The github app utilizes to Roles for the invitation workflow. There are 3 base roles:
 

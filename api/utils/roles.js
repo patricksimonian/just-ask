@@ -77,8 +77,9 @@ export const doesUserHaveRole = async (role, username) => {
 export const getTeamMembershipForOrg = async (username, org, team) => {
   const installations = await getAuthenticatedApps();
   if(!installations.apps[org]) {
-    log.warn(`Unable to get org information for ${username}. The org ${org} is not a valid installation`);
-    throw new Error(`Unable to get org information for ${username}. The org ${org} is not a valid installation`);
+    const message = `Unable to get org information for ${username}. The org ${org} is not a valid installation`;
+    log.warn(message);
+    throw new Error(message);
   }
   const installation = installations.apps[org];
 
@@ -99,11 +100,12 @@ export const getTeamMembershipForOrg = async (username, org, team) => {
  */
 export const getOrgRoleForUser = async (username, org) => {
   const installations = await getAuthenticatedApps();
-  const installation = installations.apps[org.toLowercase()];
+  const installation = installations.apps[org];
 
   if(!installation) {
-    log.warn(`Unable to get org information for ${username}. The org ${org} is not a valid installation`);
-    throw null;
+    const message = `Unable to get org information for ${username}. The org ${org} is not a valid installation`;
+    log.warn(message);
+    throw new Error(message);
   }
 
   // make request for org membership

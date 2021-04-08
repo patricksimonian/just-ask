@@ -1,3 +1,4 @@
+import { has } from "lodash";
 import log from "log";
 import { ROLES, ROLE_MAPPING_KINDS } from "../constants";
 import { getRoleMapping } from "./config";
@@ -14,7 +15,6 @@ import { getAuthenticatedApps } from "./init"
 export const resolveOrgRole = async (username, org, role) => {
   try {
     const orgMembershipRole = await getOrgRoleForUser(username, org);
-  
     return role === orgMembershipRole;
   } catch(e) {
     log.error(e.message);
@@ -54,12 +54,12 @@ export const doesUserHaveRole = async (role, username) => {
   // special case where you can grant access to role if configured to not look for anything special
   if(role !== ROLES.APPROVER && mappings[role][0] === null) return true;
 
-  const checks = await Promise.all(mappings[role].map(mapper => {
+  const checks = await Promise.all(mappings[role].map(async mapper => {
     switch(mapper.kind) {
       case ROLE_MAPPING_KINDS.OrgRole:
-        return resolveOrgRole(mapper.role, mapper.organization, username);
+        return resolveOrgRole(username, mapper.organization, mapper.role);
       case ROLE_MAPPING_KINDS.GithubTeam:
-        return resolveGithubTeam(mapper.team, mapper.organization, username);
+        return resolveGithubTeam(username, mapper.organization, mapper.team);
       default:
         return false;
     }

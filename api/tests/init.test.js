@@ -28,7 +28,7 @@ describe('init', () => {
 });
 describe('Octokit initialization', () => {
   afterEach(() => {
-
+    nock.cleanAll();
   });
   beforeEach(() => {
     nock.disableNetConnect();

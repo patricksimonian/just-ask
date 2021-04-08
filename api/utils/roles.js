@@ -6,13 +6,14 @@ import { getAuthenticatedApps } from "./init"
 
 /**
  * checks a user against an org role and returns boolean if they meet the spec
+ * @param {String} username valid github user
  * @param {String} role valid github org role (member/owner)
- * @param {String} name github org name
+ * @param {String} org github org name
  * @returns {Promise<Boolean>}
  */
-export const resolveOrgRole = async (role, name, username) => {
+export const resolveOrgRole = async (username, org, role) => {
   try {
-    const orgMembershipRole = await getOrgRoleForUser(username, name);
+    const orgMembershipRole = await getOrgRoleForUser(username, org);
   
     return role === orgMembershipRole;
   } catch(e) {
@@ -24,14 +25,14 @@ export const resolveOrgRole = async (role, name, username) => {
 
 /**
  * checks if user is apart of specific org team
- * @param {String} team the github team
- * @param {String} org the org name
  * @param {String} username the user
+ * @param {String} org the org name
+ * @param {String} team the github team
  * @returns {Promise<Boolean>}
  */
-export const resolveGithubTeam = async (team, org, username) => {
+export const resolveGithubTeam = async (username, org, team) => {
   try {
-    const user = getTeamMembershipForOrg(username, org, team);
+    const user = await getTeamMembershipForOrg(username, org, team);
 
     return !!user;
   } catch(e) {

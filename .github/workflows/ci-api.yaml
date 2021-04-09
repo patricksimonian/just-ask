@@ -2,8 +2,6 @@ name: Api CI
 on:
   pull_request:
     branches: [ $default-branch ]
-    paths:
-      - api/**
 
 jobs:
   build:

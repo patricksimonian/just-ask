@@ -1,11 +1,16 @@
 import nock from "nock";
 import { ROLES } from "../constants";
 import accessToken from "../fixtures/accessToken";
+import githubPrivateKey from "../fixtures/githubPrivateKey";
 import installations from "../fixtures/installations";
 import orgMembership from "../fixtures/orgMembership";
 import orgTeamMembership from "../fixtures/orgTeamMembership";
 import roleMapping from "../fixtures/roleMapping";
-import { getConfig, getRoleMapping } from "../utils/config";
+import {
+  getConfig,
+  getGithubPrivateKey,
+  getRoleMapping,
+} from "../utils/config";
 import {
   doesUserHaveRole,
   getOrgRoleForUser,
@@ -15,9 +20,12 @@ import {
 } from "../utils/roles";
 
 jest.mock("../utils/config.js");
+
 const orgs = installations.filter(
   (installation) => installation.target_type === "Organization"
 );
+
+getGithubPrivateKey.mockReturnValue(githubPrivateKey);
 
 describe("Role utilities tests", () => {
   afterEach(() => {

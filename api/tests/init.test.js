@@ -2,8 +2,9 @@ import init, { getOrgInstallations } from "../utils/init";
 import installations from "../fixtures/installations";
 import nock from "nock";
 
-import { getConfig } from "../utils/config";
+import { getConfig, getGithubPrivateKey } from "../utils/config";
 import log from "log";
+import githubPrivateKey from "../fixtures/githubPrivateKey";
 
 jest.mock("../utils/config.js");
 jest.mock("log", () => ({
@@ -11,6 +12,8 @@ jest.mock("log", () => ({
   error: jest.fn(),
   info: jest.fn(),
 }));
+
+getGithubPrivateKey.mockReturnValue(githubPrivateKey);
 
 describe("init", () => {
   it("initializes without failure", async () => {

@@ -1,14 +1,8 @@
 import { createAppAuth } from "@octokit/auth";
 import { request } from "@octokit/request";
-import { readFileSync } from "fs";
 import { every, intersectionBy, isArray, isObject, isString } from "lodash";
-import path from "path";
-import { getConfig } from "./config";
+import { getConfig, getGithubPrivateKey } from "./config";
 import log from "log";
-
-const file = readFileSync(
-  path.join(__dirname, "../config/github-private-key.pem")
-);
 
 // cached value
 const installationApps = {
@@ -16,26 +10,29 @@ const installationApps = {
   apps: {},
 };
 
-const auth = createAppAuth({
-  appId: process.env.APP_ID,
-  privateKey: file.toString(),
-  clientId: process.env.CLIENT_ID,
-  clientSecret: process.env.CLIENT_SECRET,
-});
+const getNonInstallationApp = () => {
+  const auth = createAppAuth({
+    appId: process.env.APP_ID,
+    privateKey: getGithubPrivateKey(),
+    clientId: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET,
+  });
 
-const nonInstallationRequest = request.defaults({
-  request: {
-    hook: auth.hook,
-  },
-  mediaType: {
-    previews: ["machine-man"],
-  },
-});
+  const nonInstallationRequest = request.defaults({
+    request: {
+      hook: auth.hook,
+    },
+    mediaType: {
+      previews: ["machine-man"],
+    },
+  });
+  return nonInstallationRequest;
+};
 
 const newAuthorizedApp = (installationId) => {
   const app = createAppAuth({
     appId: process.env.APP_ID,
-    privateKey: file.toString(),
+    privateKey: getGithubPrivateKey(),
     clientId: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
     installationId,
@@ -58,6 +55,7 @@ const newAuthorizedApp = (installationId) => {
 
 export const getInstallations = async () => {
   log.info("getInstallations");
+  const nonInstallationRequest = getNonInstallationApp();
   const response = await nonInstallationRequest("GET /app/installations");
   return response.data;
 };

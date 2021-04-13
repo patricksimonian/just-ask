@@ -11,6 +11,7 @@
     "dotenv": "^8.2.0",
     "eslint-plugin-jest": "^24.3.4",
     "express": "^4.17.1",
+    "express-bearer-token": "^2.4.0",
     "lodash": "^4.17.21",
     "log": "^6.0.0",
     "log-node": "^7.0.0",

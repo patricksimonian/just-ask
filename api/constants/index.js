@@ -4,6 +4,12 @@ export const ROLES = {
   REQUESTER: 'REQUESTER',
 }
 
+export const ROLE_PRESCEDENT = [
+  ROLES.APPROVER,
+  ROLES.COLLABORATOR,
+  ROLES.REQUESTER,
+]
+
 export const ROLE_MAPPING_KINDS = {
   OrgRole: 'OrgRole',
   GithubTeam: 'GithubTeam',

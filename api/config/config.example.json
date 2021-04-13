@@ -4,5 +4,6 @@
     "bcdevops",
     "patricksimonian",
     "patrick-org-test"
-  ]
+  ],
+  "primaryOrg": "patrick-org-test"
 }

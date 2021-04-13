@@ -1,22 +1,22 @@
 import mongoose from 'mongoose'
 
 const auditSchema = new mongoose.Schema(
-    {
-        apiVersion: String,
-        data: {
-            type: String,
-            validate: {
-                validator: function (s) {
-                    return JSON.parse(s)
-                },
-                message: (props) => `${props.s} is not a JSON String!!`,
-            },
+  {
+    apiVersion: String,
+    data: {
+      type: String,
+      validate: {
+        validator: function (s) {
+          return JSON.parse(s)
         },
-        action: String,
+        message: (props) => `${props.s} is not a JSON String!!`,
+      },
     },
-    {
-        timestamps: true,
-    }
+    action: String,
+  },
+  {
+    timestamps: true,
+  }
 )
 
 export default mongoose.model('Audit', auditSchema)

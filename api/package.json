@@ -13,7 +13,8 @@
     "express": "^4.17.1",
     "lodash": "^4.17.21",
     "log": "^6.0.0",
-    "log-node": "^7.0.0"
+    "log-node": "^7.0.0",
+    "mongoose": "^5.12.3"
   },
   "devDependencies": {
     "@babel/core": "^7.13.10",

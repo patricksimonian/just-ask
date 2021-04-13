@@ -1,6 +1,7 @@
+import axios from 'axios'
 import log from 'log'
 import { ROLES, ROLE_MAPPING_KINDS } from '../constants'
-import { getConfig, getRoleMapping } from './config'
+import { getRoleMapping } from './config'
 import { getAuthenticatedApps } from './init'
 
 /**
@@ -127,16 +128,12 @@ export const getOrgRoleForUser = async (username, org) => {
 }
 
 export const getUserFromBearerToken = async (token) => {
-  const installations = await getAuthenticatedApps()
-  const config = getConfig()
-
-  const app = installations.apps[config.primaryOrg]
-
-  const response = await app.authenticatedRequest('GET /user', {
+  const response = await axios.get('https://api.github.com/user', {
     headers: {
       authorization: `token ${token}`,
+      accept: 'application/json',
     },
   })
 
-  return response.data
+  return response.data.login
 }

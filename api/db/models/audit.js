@@ -19,4 +19,4 @@ const auditSchema = new mongoose.Schema(
     }
 )
 
-export default mongoose.Model('Audit', auditSchema)
+export default mongoose.model('Audit', auditSchema)

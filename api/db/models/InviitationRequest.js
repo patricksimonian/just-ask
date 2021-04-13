@@ -22,4 +22,4 @@ const InvitationRequest = new mongoose.Schema(
     }
 )
 
-export default mongoose.Model('InvitationRequest', InvitationRequest)
+export default mongoose.model('InvitationRequest', InvitationRequest)

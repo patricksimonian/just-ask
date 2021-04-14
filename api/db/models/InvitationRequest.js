@@ -15,7 +15,7 @@ const InvitationRequest = new mongoose.Schema(
         INVITATION_REQUEST_STATES.PENDING,
       ],
     },
-    approvedBy: String,
+    approvedBy: { type: String, default: null },
   },
   {
     timestamps: true,

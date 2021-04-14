@@ -5,7 +5,7 @@ import { difference } from 'lodash'
 import { getAuthenticatedApps } from '../utils/init'
 import log from 'log'
 import { createAudit } from '../utils/audit'
-import { inviteUserToOrgs } from '../utils/invitations'
+import { getUserByName, inviteUserToOrgs } from '../utils/github'
 
 /**
  * PATCH /requests/:id
@@ -48,28 +48,55 @@ export const patchInvitationRequest = async (req, res) => {
     })
     return
   }
-
+  let request
   try {
-    const invitationRequest = await InvitationRequest.findOne({
-      id: req.param.id,
-    }).exec()
+    request = await InvitationRequest.updateOne(
+      {
+        id: req.param.id,
+        state: INVITATION_REQUEST_STATES.PENDING, // only update pending requests
+      },
+      {
+        state: req.body.state,
+      }
+    ).exec()
 
-    if (invitationRequest.state !== INVITATION_REQUEST_STATES.PENDING) {
-      // only pending requests can be patched
-      log.warn(
-        `user ${req.auth.user} attempting to patch a non pending request. Request failed`
-      )
-      res.status(400).send({
-        message: 'unable to patch a request that is not in pending state',
-      })
-      return
-    }
+    log.info(
+      `user ${req.auth.user} patched request ${req.param.id} to state=${req.body.state}`
+    )
   } catch (e) {
-    log.warn(`user ${req.auth.user} request ${req.param.id} not found`)
-    res.status(404).send({
-      message: `InvitationRequest ${req.param.id} not found`,
+    log.warn(
+      `user ${req.auth.user} request ${req.param.id} could not be updated to ${req.body.state}`
+    )
+    res.status(400).send({
+      message: `Unable to patch InvitationRequest ${req.param.id}`,
     })
   }
+  // if approved send the github org
+  if (req.body.state === INVITATION_REQUEST_STATES.APPROVED) {
+    // get github user id
+    try {
+      const { id } = await getUserByName(request.recipient)
+      await inviteUserToOrgs(id, request.organizations)
+    } catch (e) {
+      log.warn(
+        `unable to invite recipient ${request.recipient} to organizations from request`
+      )
+      res.status(400).send({
+        message: 'Unable to invite user to org',
+      })
+      // fail request
+      await InvitationRequest.updateOne(
+        {
+          id: req.param.id,
+        },
+        {
+          state: INVITATION_REQUEST_STATES.FAILED,
+        }
+      ).exec()
+    }
+  }
+
+  res.status(200).send(request)
 }
 /**
  * GET /requests

@@ -330,7 +330,7 @@ describe('Invitation Request Controllers', () => {
       expect(res.status).toHaveBeenCalledWith(400)
     })
 
-    it('returns 400 if patched request is not in pending state', async () => {
+    it('returns 400 if patched request is not in pending state or cannot be found', async () => {
       const req = {
         auth: {
           user: 'matt damon',
@@ -350,9 +350,9 @@ describe('Invitation Request Controllers', () => {
         })),
       }
 
-      InvitationRequest.findOne.mockImplementation(() => ({
+      InvitationRequest.updateOne.mockImplementation(() => ({
         exec: jest.fn().mockReturnValue(
-          Promise.resolve({
+          Promise.reject({
             ...modelsInvitationRequest,
             state: INVITATION_REQUEST_STATES.DENIED,
           })
@@ -363,7 +363,7 @@ describe('Invitation Request Controllers', () => {
       expect(res.status).toHaveBeenCalledWith(400)
     })
 
-    it('returns 404 if patched request cannot be found', async () => {
+    it('returns 200 if patched request is succesful and state set to denied', async () => {
       const req = {
         auth: {
           user: 'matt damon',
@@ -383,9 +383,9 @@ describe('Invitation Request Controllers', () => {
         })),
       }
 
-      InvitationRequest.findOne.mockImplementation(() => ({
+      InvitationRequest.updateOne.mockImplementation(() => ({
         exec: jest.fn().mockReturnValue(
-          Promise.reject({
+          Promise.resolve({
             ...modelsInvitationRequest,
             state: INVITATION_REQUEST_STATES.DENIED,
           })
@@ -393,7 +393,7 @@ describe('Invitation Request Controllers', () => {
       }))
 
       await patchInvitationRequest(req, res)
-      expect(res.status).toHaveBeenCalledWith(404)
+      expect(res.status).toHaveBeenCalledWith(200)
     })
   })
 })

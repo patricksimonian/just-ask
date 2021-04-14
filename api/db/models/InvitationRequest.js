@@ -13,6 +13,7 @@ const InvitationRequest = new mongoose.Schema(
         INVITATION_REQUEST_STATES.APPROVED,
         INVITATION_REQUEST_STATES.DENIED,
         INVITATION_REQUEST_STATES.PENDING,
+        INVITATION_REQUEST_STATES.FAILED,
       ],
     },
     approvedBy: { type: String, default: null },

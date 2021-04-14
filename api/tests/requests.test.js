@@ -1,4 +1,3 @@
-import { initial } from 'lodash'
 import nock from 'nock'
 import { INVITATION_REQUEST_STATES, ROLES } from '../constants'
 import {

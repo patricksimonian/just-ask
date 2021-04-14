@@ -280,7 +280,8 @@ export const createInvitationRequest = async (req, res) => {
   }
 
   try {
-    await inviteUserToOrgs(req.auth.userId, organizations)
+    const { id } = await getUserByName(recipient)
+    await inviteUserToOrgs(id, organizations)
 
     await InvitationRequest.create(
       requests.map((r) => ({ ...r, state: INVITATION_REQUEST_STATES.APPROVED }))

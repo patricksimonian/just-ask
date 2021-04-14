@@ -5,9 +5,165 @@ import { difference } from 'lodash'
 import { getAuthenticatedApps } from '../utils/init'
 import log from 'log'
 import { createAudit } from '../utils/audit'
-import { inviteUserToOrgs } from '../utils/invitations'
+import { getUserByName, inviteUserToOrgs } from '../utils/github'
+
 /**
- * POST /request
+ * PATCH /requests/:id
+ * @param {Express Request} req
+ * @param {Express Response} res
+ * @returns undefined
+ */
+export const patchInvitationRequest = async (req, res) => {
+  log.info('patchInvitationRequest')
+  if (!hasRule(req.auth.role, RULES.approvals)) {
+    log.warn(
+      `user ${req.auth.user} does not have sufficient priviledge for ${AUDIT_ACTIONS.api.requests.patch}`
+    )
+
+    await createAudit({
+      apiVersion: 'v1',
+      action: AUDIT_ACTIONS.api.requests.patch,
+      data: JSON.stringify({
+        message: `user does not have rule ${RULES.approvals}`,
+        user: req.auth.user,
+        payload: req.body,
+        type: 'error',
+      }),
+    })
+
+    res.status(403).send({
+      message: 'user does not have permission to update requests',
+    })
+    return
+  }
+
+  const { state } = req.body
+
+  if (!state || !Object.keys(INVITATION_REQUEST_STATES).includes(state)) {
+    log.warn(
+      `user ${req.auth.user} requests with state=${req.body.state} is invalid`
+    )
+    res.status(400).send({
+      message: 'unable to patch requests when req.body.state is invalid',
+    })
+    return
+  }
+  let request
+  try {
+    request = await InvitationRequest.updateOne(
+      {
+        id: req.param.id,
+        state: INVITATION_REQUEST_STATES.PENDING, // only update pending requests
+      },
+      {
+        state: req.body.state,
+      }
+    ).exec()
+
+    log.info(
+      `user ${req.auth.user} patched request ${req.param.id} to state=${req.body.state}`
+    )
+  } catch (e) {
+    log.warn(
+      `user ${req.auth.user} request ${req.param.id} could not be updated to ${req.body.state}`
+    )
+    res.status(400).send({
+      message: `Unable to patch InvitationRequest ${req.param.id}`,
+    })
+  }
+  // if approved send the github org
+  if (req.body.state === INVITATION_REQUEST_STATES.APPROVED) {
+    // get github user id
+    try {
+      const { id } = await getUserByName(request.recipient)
+      await inviteUserToOrgs(id, request.organizations)
+    } catch (e) {
+      log.warn(
+        `unable to invite recipient ${request.recipient} to organizations from request`
+      )
+      res.status(400).send({
+        message: 'Unable to invite user to org',
+      })
+      // fail request
+      await InvitationRequest.updateOne(
+        {
+          id: req.param.id,
+        },
+        {
+          state: INVITATION_REQUEST_STATES.FAILED,
+        }
+      ).exec()
+    }
+  }
+
+  res.status(200).send(request)
+}
+/**
+ * GET /requests
+ * this request should fail if state query param does not exist
+ * @param {Express Request} req
+ * @param {Express Response} res
+ * @returns undefined
+ */
+export const getInvitationRequests = async (req, res) => {
+  log.info('getInvitationRequests')
+
+  if (!hasRule(req.auth.role, RULES.approvals)) {
+    log.warn(
+      `user ${req.auth.user} does not have sufficient priviledge for ${AUDIT_ACTIONS.api.requests.get}`
+    )
+
+    await createAudit({
+      apiVersion: 'v1',
+      action: AUDIT_ACTIONS.api.requests.list,
+      data: JSON.stringify({
+        message: `user does not have rule ${RULES.approvals}`,
+        user: req.auth.user,
+        payload: req.query,
+        type: 'error',
+      }),
+    })
+
+    res.status(403).send({
+      message: 'user does not have permission to make requests',
+    })
+    return
+  }
+  const stateParamValid = Object.keys(INVITATION_REQUEST_STATES).includes(
+    req.query.state
+  )
+
+  if (!stateParamValid || !req.query.state) {
+    log.warn(
+      `user ${req.auth.user} requests with state=${req.query.state} is invalid`
+    )
+    res.status(400).send({
+      message: 'unable to get requests when state param is invalid',
+    })
+    return
+  }
+
+  try {
+    const requests = await InvitationRequest.find({
+      state: req.query.state,
+    }).exec()
+
+    log.info(
+      `user ${req.auth.user} found requests with state=${req.query.state}`
+    )
+
+    res.status(200).send(requests)
+    return
+  } catch (e) {
+    log.error(`unable to find requests`)
+
+    res.status(400).send({
+      message: `Unable to get invitation requests with state ${req.query.state}`,
+    })
+  }
+}
+/**
+ * POST /requests
  * @param {Express Request} req
  * @param {Express Response} res
  * @returns undefined
@@ -87,7 +243,7 @@ export const createInvitationRequest = async (req, res) => {
 
       log.info(`user ${req.auth.user} pending request created`)
 
-      res.status(200).send({
+      res.status(201).send({
         message: `${requests.length} pending invitation${
           requests.length > 1 ? 's' : ''
         }created`,
@@ -133,7 +289,7 @@ export const createInvitationRequest = async (req, res) => {
     log.info(`user ${req.auth.user} approved request created for ${recipient}`)
     // this is where we could create the invitations for recipient
 
-    res.status(200).send({
+    res.status(201).send({
       message: `${requests.length} approved invitation${
         requests.length > 1 ? 's' : ''
       }created`,

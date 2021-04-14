@@ -1,3 +1,4 @@
+import { getConfig } from './config'
 import { getAuthenticatedApps } from './init'
 
 export const inviteUserToOrgs = async (userId, orgs) => {
@@ -10,4 +11,15 @@ export const inviteUserToOrgs = async (userId, orgs) => {
     })
   })
   await Promise.all(promises)
+}
+
+export const getUserByName = async (username) => {
+  const installations = await getAuthenticatedApps()
+  const config = getConfig()
+  const response = await installations.apps[
+    config.primaryOrg
+  ].authenticatedRequest('GET /users/{username}', {
+    username,
+  })
+  return response.data
 }

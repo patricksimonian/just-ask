@@ -1,11 +1,17 @@
+import { initial } from 'lodash'
 import nock from 'nock'
-import { ROLES } from '../constants'
-import { createInvitationRequest } from '../controllers/requests'
+import { INVITATION_REQUEST_STATES, ROLES } from '../constants'
+import {
+  createInvitationRequest,
+  getInvitationRequests,
+  patchInvitationRequest,
+} from '../controllers/requests'
 import InvitationRequest from '../db/models/InvitationRequest'
 import accessToken from '../fixtures/accessToken'
 
 import githubPrivateKey from '../fixtures/githubPrivateKey'
 import installations from '../fixtures/installations'
+import modelsInvitationRequest from '../fixtures/models.InvitationRequest'
 import orgInvitation from '../fixtures/orgInvitation'
 import { getConfig, getGithubPrivateKey } from '../utils/config'
 
@@ -65,7 +71,7 @@ describe('Invitation Request Controllers', () => {
 
       await createInvitationRequest(req, res)
 
-      expect(res.status).toHaveBeenCalledWith(200)
+      expect(res.status).toHaveBeenCalledWith(201)
     })
 
     it('sends 400 user is requesting for themselves and orgs do not match installations', async () => {
@@ -194,6 +200,199 @@ describe('Invitation Request Controllers', () => {
 
       await createInvitationRequest(req, res)
 
+      expect(res.status).toHaveBeenCalledWith(201)
+    })
+  })
+
+  describe('Get Invitation Requests', () => {
+    it('sends 403 if does role does not have rule approvals', async () => {
+      const req = {
+        auth: {
+          role: 'foo',
+        },
+      }
+      const res = {
+        status: jest.fn().mockImplementation(() => ({ send: jest.fn() })),
+      }
+      await getInvitationRequests(req, res)
+      await getInvitationRequests({ auth: { role: undefined } }, res)
+      expect(res.status).toHaveBeenCalledWith(403)
+      expect(res.status).toHaveBeenCalledWith(403)
+    })
+
+    it('sends 400 if query param state is invalid or does not exist', async () => {
+      const req = {
+        auth: {
+          user: 'matt damon',
+          role: ROLES.APPROVER,
+        },
+        query: {
+          state: 'INVALID',
+        },
+      }
+
+      const res = {
+        status: jest.fn().mockImplementation(() => ({
+          send: jest.fn(),
+        })),
+      }
+
+      await getInvitationRequests(req, res)
+      await getInvitationRequests(
+        {
+          auth: {
+            user: 'matt damon',
+            role: ROLES.APPROVER,
+          },
+          query: {},
+        },
+        res
+      )
+
+      expect(res.status).toHaveBeenCalledWith(400)
+      expect(res.status).toHaveBeenCalledWith(400)
+    })
+
+    it('returns pending requests', async () => {
+      const req = {
+        auth: {
+          user: 'matt damon',
+          role: ROLES.APPROVER,
+        },
+        query: {
+          state: INVITATION_REQUEST_STATES.PENDING,
+        },
+      }
+
+      const res = {
+        status: jest.fn().mockImplementation(() => ({
+          send: jest.fn(),
+        })),
+      }
+
+      InvitationRequest.find.mockImplementation(() => ({
+        exec: jest
+          .fn()
+          .mockReturnValue(Promise.resolve([modelsInvitationRequest])),
+      }))
+
+      await getInvitationRequests(req, res)
+      expect(res.status).toHaveBeenCalledWith(200)
+    })
+  })
+
+  describe('Patch Invitation Requests', () => {
+    it('sends 403 if does role does not have rule approvals', async () => {
+      const req = {
+        auth: {
+          role: 'foo',
+        },
+      }
+      const res = {
+        status: jest.fn().mockImplementation(() => ({ send: jest.fn() })),
+      }
+      await patchInvitationRequest(req, res)
+      await patchInvitationRequest({ auth: { role: undefined } }, res)
+      expect(res.status).toHaveBeenCalledWith(403)
+      expect(res.status).toHaveBeenCalledWith(403)
+    })
+
+    it('sends 400 if req.body.state is invalid or does not exist', async () => {
+      const req = {
+        auth: {
+          user: 'matt damon',
+          role: ROLES.APPROVER,
+        },
+        body: {
+          state: 'INVALID',
+        },
+      }
+
+      const res = {
+        status: jest.fn().mockImplementation(() => ({
+          send: jest.fn(),
+        })),
+      }
+
+      await patchInvitationRequest(req, res)
+      await patchInvitationRequest(
+        {
+          auth: {
+            user: 'matt damon',
+            role: ROLES.APPROVER,
+          },
+          body: {},
+        },
+        res
+      )
+
+      expect(res.status).toHaveBeenCalledWith(400)
+      expect(res.status).toHaveBeenCalledWith(400)
+    })
+
+    it('returns 400 if patched request is not in pending state or cannot be found', async () => {
+      const req = {
+        auth: {
+          user: 'matt damon',
+          role: ROLES.APPROVER,
+        },
+        param: {
+          id: 'foo',
+        },
+        body: {
+          state: INVITATION_REQUEST_STATES.DENIED,
+        },
+      }
+
+      const res = {
+        status: jest.fn().mockImplementation(() => ({
+          send: jest.fn(),
+        })),
+      }
+
+      InvitationRequest.updateOne.mockImplementation(() => ({
+        exec: jest.fn().mockReturnValue(
+          Promise.reject({
+            ...modelsInvitationRequest,
+            state: INVITATION_REQUEST_STATES.DENIED,
+          })
+        ),
+      }))
+
+      await patchInvitationRequest(req, res)
+      expect(res.status).toHaveBeenCalledWith(400)
+    })
+
+    it('returns 200 if patched request is succesful and state set to denied', async () => {
+      const req = {
+        auth: {
+          user: 'matt damon',
+          role: ROLES.APPROVER,
+        },
+        param: {
+          id: 'foo',
+        },
+        body: {
+          state: INVITATION_REQUEST_STATES.DENIED,
+        },
+      }
+
+      const res = {
+        status: jest.fn().mockImplementation(() => ({
+          send: jest.fn(),
+        })),
+      }
+
+      InvitationRequest.updateOne.mockImplementation(() => ({
+        exec: jest.fn().mockReturnValue(
+          Promise.resolve({
+            ...modelsInvitationRequest,
+            state: INVITATION_REQUEST_STATES.DENIED,
+          })
+        ),
+      }))
+
+      await patchInvitationRequest(req, res)
       expect(res.status).toHaveBeenCalledWith(200)
     })
   })

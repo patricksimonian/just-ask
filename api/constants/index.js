@@ -32,6 +32,7 @@ export const INVITATION_REQUEST_STATES = {
   APPROVED: 'APPROVED',
   DENIED: 'DENIED',
   PENDING: 'PENDING',
+  FAILED: 'FAILED',
 }
 
 export const AUDIT_ACTIONS = {
@@ -39,6 +40,8 @@ export const AUDIT_ACTIONS = {
     requests: {
       create: 'requests.create',
       update: 'requests.update',
+      patch: 'requests.patch',
+      list: 'requests.list',
     },
   },
 }

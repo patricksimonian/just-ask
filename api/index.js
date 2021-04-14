@@ -2,7 +2,7 @@ import 'dotenv/config'
 import express from 'express'
 import logNode from 'log-node'
 import axios from 'axios'
-import init from './utils/init.js'
+import init, { getAuthenticatedApps } from './utils/init.js'
 import connect from './db/connect.js'
 import orgRouters from './routes/organizations'
 import { getUserFromBearerToken } from './utils/roles.js'
@@ -19,7 +19,6 @@ async function initailize() {
   app.use(express.json())
 
   app.get('/', async (req, res) => {
-    console.log(req.query)
     const response = await axios.post(
       'https://github.com/login/oauth/access_token',
       {

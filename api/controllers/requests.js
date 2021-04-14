@@ -8,6 +8,70 @@ import { createAudit } from '../utils/audit'
 import { inviteUserToOrgs } from '../utils/invitations'
 
 /**
+ * PATCH /requests/:id
+ * @param {Express Request} req
+ * @param {Express Response} res
+ * @returns undefined
+ */
+export const patchInvitationRequest = async (req, res) => {
+  log.info('patchInvitationRequest')
+  if (!hasRule(req.auth.role, RULES.approvals)) {
+    log.warn(
+      `user ${req.auth.user} does not have sufficient priviledge for ${AUDIT_ACTIONS.api.requests.patch}`
+    )
+
+    await createAudit({
+      apiVersion: 'v1',
+      action: AUDIT_ACTIONS.api.requests.patch,
+      data: JSON.stringify({
+        message: `user does not have rule ${RULES.approvals}`,
+        user: req.auth.user,
+        payload: req.body,
+        type: 'error',
+      }),
+    })
+
+    res.status(403).send({
+      message: 'user does not have permission to update requests',
+    })
+    return
+  }
+
+  const { state } = req.body
+
+  if (!state || !Object.keys(INVITATION_REQUEST_STATES).includes(state)) {
+    log.warn(
+      `user ${req.auth.user} requests with state=${req.body.state} is invalid`
+    )
+    res.status(400).send({
+      message: 'unable to patch requests when req.body.state is invalid',
+    })
+    return
+  }
+
+  try {
+    const invitationRequest = await InvitationRequest.findOne({
+      id: req.param.id,
+    }).exec()
+
+    if (invitationRequest.state !== INVITATION_REQUEST_STATES.PENDING) {
+      // only pending requests can be patched
+      log.warn(
+        `user ${req.auth.user} attempting to patch a non pending request. Request failed`
+      )
+      res.status(400).send({
+        message: 'unable to patch a request that is not in pending state',
+      })
+      return
+    }
+  } catch (e) {
+    log.warn(`user ${req.auth.user} request ${req.param.id} not found`)
+    res.status(404).send({
+      message: `InvitationRequest ${req.param.id} not found`,
+    })
+  }
+}
+/**
  * GET /requests
  * this request should fail if state query param does not exist
  * @param {Express Request} req
@@ -28,7 +92,7 @@ export const getInvitationRequests = async (req, res) => {
       data: JSON.stringify({
         message: `user does not have rule ${RULES.approvals}`,
         user: req.auth.user,
-        payload: req.body,
+        payload: req.query,
         type: 'error',
       }),
     })

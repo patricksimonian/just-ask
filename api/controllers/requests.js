@@ -42,7 +42,7 @@ export const createInvitationRequest = async (req, res) => {
   const { user: recipient, organizations } = req.body
   const { user: requester } = req.auth
 
-  const requestingForSelf = recipient.toLowerCase() === recipient.toLowerCase()
+  const requestingForSelf = recipient.toLowerCase() === requester.toLowerCase()
   const installations = Object.keys(authApps.apps)
   // if user is requesting invites to orgs that have not been installed
   const diff = difference(organizations, installations)
@@ -117,6 +117,10 @@ export const createInvitationRequest = async (req, res) => {
         type: 'error',
       }),
     })
+    res.status(403).send({
+      message: 'user does not have permission to make requests',
+    })
+    return
   }
 
   try {
@@ -125,7 +129,8 @@ export const createInvitationRequest = async (req, res) => {
     await InvitationRequest.create(
       requests.map((r) => ({ ...r, state: INVITATION_REQUEST_STATES.APPROVED }))
     )
-    log.info(`user ${req.auth.user} request created for ${recipient}`)
+
+    log.info(`user ${req.auth.user} approved request created for ${recipient}`)
     // this is where we could create the invitations for recipient
 
     res.status(200).send({
@@ -134,6 +139,7 @@ export const createInvitationRequest = async (req, res) => {
       }created`,
     })
   } catch (e) {
+    console.log(e)
     log.warn(`user ${req.auth.user} request failed`)
     res.status(400).send({
       message: 'Unable to create invitation',

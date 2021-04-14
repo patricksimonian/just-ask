@@ -65,7 +65,7 @@ describe('Invitation Request Controllers', () => {
 
       await createInvitationRequest(req, res)
 
-      expect(res.status).toHaveBeenCalledWith(200)
+      expect(res.status).toHaveBeenCalledWith(201)
     })
 
     it('sends 400 user is requesting for themselves and orgs do not match installations', async () => {
@@ -194,7 +194,7 @@ describe('Invitation Request Controllers', () => {
 
       await createInvitationRequest(req, res)
 
-      expect(res.status).toHaveBeenCalledWith(200)
+      expect(res.status).toHaveBeenCalledWith(201)
     })
   })
 })

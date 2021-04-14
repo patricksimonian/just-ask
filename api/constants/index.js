@@ -39,6 +39,7 @@ export const AUDIT_ACTIONS = {
     requests: {
       create: 'requests.create',
       update: 'requests.update',
+      list: 'requests.list',
     },
   },
 }

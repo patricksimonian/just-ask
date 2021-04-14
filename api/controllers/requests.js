@@ -15,6 +15,18 @@ import { getUserByName, inviteUserToOrgs } from '../utils/github'
  */
 export const patchInvitationRequest = async (req, res) => {
   log.info('patchInvitationRequest')
+
+  await createAudit({
+    apiVersion: 'v1',
+    action: AUDIT_ACTIONS.api.requests.update,
+    data: JSON.stringify({
+      message: `user attempting to patch invitationRequest`,
+      user: req.auth.user,
+      payload: req.body,
+      type: 'info',
+    }),
+  })
+
   if (!hasRule(req.auth.role, RULES.approvals)) {
     log.warn(
       `user ${req.auth.user} does not have sufficient priviledge for ${AUDIT_ACTIONS.api.requests.patch}`
@@ -108,6 +120,17 @@ export const patchInvitationRequest = async (req, res) => {
 export const getInvitationRequests = async (req, res) => {
   log.info('getInvitationRequests')
 
+  await createAudit({
+    apiVersion: 'v1',
+    action: AUDIT_ACTIONS.api.requests.list,
+    data: JSON.stringify({
+      message: `user attempting to list invitationRequests`,
+      user: req.auth.user,
+      payload: req.query,
+      type: 'info',
+    }),
+  })
+
   if (!hasRule(req.auth.role, RULES.approvals)) {
     log.warn(
       `user ${req.auth.user} does not have sufficient priviledge for ${AUDIT_ACTIONS.api.requests.get}`
@@ -170,6 +193,17 @@ export const getInvitationRequests = async (req, res) => {
  */
 export const createInvitationRequest = async (req, res) => {
   log.info('createInvitationRequest')
+
+  await createAudit({
+    apiVersion: 'v1',
+    action: AUDIT_ACTIONS.api.requests.create,
+    data: JSON.stringify({
+      message: `user attempting to create invitationRequest`,
+      user: req.auth.user,
+      payload: req.body,
+      type: 'info',
+    }),
+  })
   // get role and check rule
   if (!hasRule(req.auth.role, RULES.requests)) {
     log.warn(
@@ -296,7 +330,6 @@ export const createInvitationRequest = async (req, res) => {
       }created`,
     })
   } catch (e) {
-    console.log(e)
     log.warn(`user ${req.auth.user} request failed`)
     res.status(400).send({
       message: 'Unable to create invitation',

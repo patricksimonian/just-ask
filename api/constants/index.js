@@ -37,6 +37,9 @@ export const INVITATION_REQUEST_STATES = {
 
 export const AUDIT_ACTIONS = {
   api: {
+    organizations: {
+      list: 'organizations.list',
+    },
     requests: {
       create: 'requests.create',
       update: 'requests.update',

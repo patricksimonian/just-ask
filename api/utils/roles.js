@@ -15,7 +15,7 @@ export const resolveOrgRole = async (username, org, role) => {
   try {
     log.info(`Checking if ${username} has role ${role} in ${org}`)
     const orgMembershipRole = await getOrgRoleForUser(username, org)
-    console.log(orgMembershipRole)
+
     return role === orgMembershipRole
   } catch (e) {
     log.error(e.message)

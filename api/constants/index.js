@@ -25,7 +25,7 @@ export const ROLE_RULES = {
   [ROLES.APPROVER]: [RULES.approvals, RULES.requests, RULES.invitations],
   [ROLES.COLLABORATOR]: [RULES.requests, RULES.invitations],
   [ROLES.REQUESTER]: [RULES.requests],
-  [undefined]: [], // stub role role
+  [undefined]: [], // stub role
 }
 
 export const INVITATION_REQUEST_STATES = {

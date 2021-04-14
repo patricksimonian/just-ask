@@ -13,8 +13,9 @@ import { getAuthenticatedApps } from './init'
  */
 export const resolveOrgRole = async (username, org, role) => {
   try {
+    log.info(`Checking if ${username} has role ${role} in ${org}`)
     const orgMembershipRole = await getOrgRoleForUser(username, org)
-
+    console.log(orgMembershipRole)
     return role === orgMembershipRole
   } catch (e) {
     log.error(e.message)
@@ -48,7 +49,7 @@ export const resolveGithubTeam = async (username, org, team) => {
  */
 export const doesUserHaveRole = async (role, username) => {
   const mappings = getRoleMapping()
-
+  console.log('checking role', role, 'against ', username)
   // special case where you can grant access to role if configured to not look for anything special
   if (role !== ROLES.APPROVER && mappings[role][0] === null) return true
 

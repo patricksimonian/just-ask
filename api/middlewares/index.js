@@ -19,15 +19,21 @@ export const getUserFromToken = async (req, res, next) => {
   if (!req.token) {
     res.status(401).send()
   } else {
-    const user = await getUserFromBearerToken(req.token)
-    const role = await getRole(user.login)
+    try {
+      const user = await getUserFromBearerToken(req.token)
 
-    req.auth = {
-      user: user.login,
-      id: user.id,
-      role,
+      const role = await getRole(user.login)
+      console.log(role, user.login)
+      req.auth = {
+        user: user.login,
+        id: user.id,
+        role,
+      }
+      next()
+    } catch (e) {
+      // token must have expired
+      res.status(401).send('Token expired')
     }
-    next()
   }
 }
 

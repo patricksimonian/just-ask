@@ -25,10 +25,20 @@ export const ROLE_RULES = {
   [ROLES.APPROVER]: [RULES.approvals, RULES.requests, RULES.invitations],
   [ROLES.COLLABORATOR]: [RULES.requests, RULES.invitations],
   [ROLES.REQUESTER]: [RULES.requests],
+  [undefined]: [], // stub role role
 }
 
 export const INVITATION_REQUEST_STATES = {
   APPROVED: 'APPROVED',
   DENIED: 'DENIED',
   PENDING: 'PENDING',
+}
+
+export const AUDIT_ACTIONS = {
+  api: {
+    requests: {
+      create: 'requests.create',
+      update: 'requests.update',
+    },
+  },
 }

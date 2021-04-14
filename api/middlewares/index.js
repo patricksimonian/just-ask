@@ -20,10 +20,11 @@ export const getUserFromToken = async (req, res, next) => {
     res.status(401).send()
   } else {
     const user = await getUserFromBearerToken(req.token)
-    const role = await getRole(user)
+    const role = await getRole(user.login)
 
     req.auth = {
-      user,
+      user: user.login,
+      id: user.id,
       role,
     }
     next()

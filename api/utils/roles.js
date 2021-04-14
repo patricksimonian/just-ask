@@ -1,6 +1,6 @@
 import axios from 'axios'
 import log from 'log'
-import { ROLES, ROLE_MAPPING_KINDS } from '../constants'
+import { ROLES, ROLE_MAPPING_KINDS, ROLE_RULES } from '../constants'
 import { getRoleMapping } from './config'
 import { getAuthenticatedApps } from './init'
 
@@ -135,5 +135,15 @@ export const getUserFromBearerToken = async (token) => {
     },
   })
 
-  return response.data.login
+  return response.data
+}
+
+/**
+ * helper to see if a role has a rule
+ * @param {String} role
+ * @param {String} rule
+ * @returns
+ */
+export const hasRule = (role, rule) => {
+  return ROLE_RULES[role] && ROLE_RULES[role].includes(rule)
 }

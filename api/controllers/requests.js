@@ -32,6 +32,7 @@ export const getInvitationRequests = async (req, res) => {
         type: 'error',
       }),
     })
+
     res.status(403).send({
       message: 'user does not have permission to make requests',
     })
@@ -55,13 +56,16 @@ export const getInvitationRequests = async (req, res) => {
     const requests = await InvitationRequest.find({
       state: req.query.state,
     }).exec()
+
     log.info(
       `user ${req.auth.user} found requests with state=${req.query.state}`
     )
+
     res.status(200).send(requests)
     return
   } catch (e) {
     log.error(`unable to find requests`)
+
     res.status(400).send({
       message: `Unable to get invitation requests with state ${req.query.state}`,
     })

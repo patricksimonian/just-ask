@@ -3,6 +3,7 @@ import express from 'express'
 import logNode from 'log-node'
 import log from 'log'
 import axios from 'axios'
+import cors from 'cors'
 import expressBearerToken from 'express-bearer-token'
 import init from './utils/init.js'
 import connect from './db/connect.js'
@@ -20,7 +21,7 @@ async function initailize() {
 
   // middlewares
   app.use(express.json())
-
+  app.use(cors({ origin: process.env.WEB_URL }))
   app.get('/server-health', (req, res) =>
     res.send(process.env.SERVER_HEALTHY_MESSAGE || 'ok')
   )
@@ -36,6 +37,11 @@ async function initailize() {
           client_id: process.env.CLIENT_ID,
           client_secret: process.env.CLIENT_SECRET,
           code: req.body.code,
+        },
+        {
+          headers: {
+            accept: 'application/json',
+          },
         }
       )
       res.status(201).send(response.data)

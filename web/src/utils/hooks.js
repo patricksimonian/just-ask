@@ -17,7 +17,6 @@ import { useEffect, useState } from "react";
           accept: 'application/json'
         }
       }).then(response => {
-        console.log(response);
         setFetched(true);
         setFetching(false);
         setConfig(response.data)

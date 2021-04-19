@@ -1,19 +1,26 @@
-import { Flex } from 'rebass';
+import { useTheme } from 'emotion-theming';
+import { useContext } from 'react';
+import { Flex, Text } from 'rebass';
+import { ContentContext } from '../providers/ContentProvider';
 import { WidthControlledContainer } from './Containers';
 
 
 
-const Header = () => (
+const Header = () =>{
+  const content = useContext(ContentContext);
+  const theme = useTheme();
 
-  <WidthControlledContainer as="header" bg="primary" py={8} px={6}>
-    <Flex color="text">
-      <span>brandlogo</span>
-      <span>brand</span>
+  return  (
+    <WidthControlledContainer as="header" bg="primary" py={8} px={6} style={{borderBottom: '2px solid', borderColor: theme.colors && theme.colors.secondary, fontFamily: "'Orbitron', sans-serif"}}>
+      <Flex color="secondary" justifyContent="space-between" alignItems="center">
+        
+        <Text as="h1" mb={0}  >{content.brandTitle}</Text>
+        <span>auth</span>
 
-      <span>auth</span>
-    </Flex>
-  </WidthControlledContainer>
-);
+      </Flex>
+    </WidthControlledContainer>
+  )
+};
 
 
 export default Header;

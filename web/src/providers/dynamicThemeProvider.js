@@ -10,18 +10,18 @@ import { useConfig } from '../utils/hooks';
 const defaultCreatedPallete = createPalette(defaultPallete, luminosities);
 
 export const DynamicThemeProvider = ({children}) => {
-  const [ palette, fetched] = useConfig('/config/pallete.json')
+  const [ palette] = useConfig('/config/pallete.json')
   
-  const content = fetched ? (
+ return (
     <ThemeProvider theme={{
         ...baseTheme, 
         colors: palette ? createPalette(palette, luminosities) : defaultCreatedPallete
       }}>
       {children}
     </ThemeProvider>
-  ) : children
+  )
 
   
-  return content
+
     
 }

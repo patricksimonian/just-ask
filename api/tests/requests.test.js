@@ -51,6 +51,7 @@ describe('Invitation Request Controllers', () => {
       )
 
       getConfig.mockReturnValueOnce({ orgs: orgs.map((o) => o.account.login) })
+
       const req = {
         auth: {
           user: 'matt damon',

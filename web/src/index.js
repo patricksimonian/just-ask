@@ -1,14 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import './defaults/fonts.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { DynamicThemeProvider } from './providers/dynamicThemeProvider';
+import { ContentProvider } from './providers/ContentProvider';
+import AuthProvider from './providers/AuthContext';
 
 ReactDOM.render(
   <React.StrictMode>
     <DynamicThemeProvider>
-      <App />
+      <ContentProvider>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </ContentProvider>
     </DynamicThemeProvider>
   </React.StrictMode>,
   document.getElementById('root')

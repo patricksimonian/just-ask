@@ -15,6 +15,8 @@ cp .env.example .env
 CLIENT_ID=foo
 CLIENT_SECRET=bar
 APP_ID=baz
+PORT=3001
+WEB_URL=http://localhost:3000
 MONGO_URL=mongodb://localhost:27017/dbname
 ```
 3. run api in dev mode `npm start`

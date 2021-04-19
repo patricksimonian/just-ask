@@ -236,10 +236,12 @@ export const createInvitationRequest = async (req, res) => {
   const installations = Object.keys(authApps.apps)
   // if user is requesting invites to orgs that have not been installed
   const diff = difference(organizations, installations)
+
   if (diff.length > 0) {
     log.warn(
       `user ${req.auth.user} request is for orgs that are not verified installations`
     )
+
     res.status(400).send({
       message: 'organizations do not match installations for the github app',
     })
@@ -283,6 +285,7 @@ export const createInvitationRequest = async (req, res) => {
         }created`,
       })
     } catch (e) {
+      console.log('WHat', diff, organizations, installations)
       log.warn(`user ${req.auth.user} request failed`)
       res.status(400).send({
         message: 'Unable to create invitation',
@@ -330,6 +333,7 @@ export const createInvitationRequest = async (req, res) => {
       }created`,
     })
   } catch (e) {
+    console.log(e)
     log.warn(`user ${req.auth.user} request failed`)
     res.status(400).send({
       message: 'Unable to create invitation',

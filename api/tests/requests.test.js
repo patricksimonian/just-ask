@@ -181,7 +181,10 @@ describe('Invitation Request Controllers', () => {
         (installation) => installation.target_type === 'Organization'
       )
 
-      getConfig.mockReturnValueOnce({ orgs: orgs.map((o) => o.account.login) })
+      getConfig.mockReturnValue({
+        orgs: orgs.map((o) => o.account.login),
+        primaryOrg: orgs[0].account.login,
+      })
       const req = {
         auth: {
           user: 'matt damon',

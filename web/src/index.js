@@ -3,10 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { DynamicThemeProvider } from './providers/dynamicThemeProvider';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <DynamicThemeProvider>
+      <App />
+    </DynamicThemeProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

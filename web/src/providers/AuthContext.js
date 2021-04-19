@@ -10,12 +10,14 @@ export const initialState = {
 export const reducer = (state, action) => {
   switch (action.type) {
     case "LOGIN": {
-      localStorage.setItem("isLoggedIn", JSON.stringify(action.payload.isLoggedIn))
+      localStorage.setItem("isLoggedIn", true)
       localStorage.setItem("user", JSON.stringify(action.payload.user))
+      localStorage.setItem("token", JSON.stringify(action.payload.token))
       return {
         ...state,
-        isLoggedIn: action.payload.isLoggedIn,
-        user: action.payload.user
+        isLoggedIn: true,
+        user: action.payload.user,
+        token: action.payload.token
       };
     }
     case "LOGOUT": {
@@ -23,7 +25,8 @@ export const reducer = (state, action) => {
       return {
         ...state,
         isLoggedIn: false,
-        user: null
+        user: null,
+        token: null,
       };
     }
     default:

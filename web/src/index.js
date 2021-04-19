@@ -6,12 +6,15 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { DynamicThemeProvider } from './providers/dynamicThemeProvider';
 import { ContentProvider } from './providers/ContentProvider';
+import AuthProvider from './providers/AuthContext';
 
 ReactDOM.render(
   <React.StrictMode>
     <DynamicThemeProvider>
       <ContentProvider>
-        <App />
+        <AuthProvider>
+          <App />
+        </AuthProvider>
       </ContentProvider>
     </DynamicThemeProvider>
   </React.StrictMode>,

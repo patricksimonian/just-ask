@@ -30,3 +30,33 @@ import { useEffect, useState } from "react";
 
   return [config, fetched, fetching, error];
 };
+
+export const useOAuth = code => {
+  const [OAuth, setOAuth] = useState(null);
+  const [error, setError] = useState(null);
+
+
+  useEffect(() => {
+    if(window.location.search.indexOf('?code=') >= 0) {
+      const code = window.location.search.replace('?code=', '');
+      axios.post('http://localhost:3001/auth', {code})
+      .then(async res => {
+        const apiResponse = await axios.get('https://api.github.com/user', {
+          headers: {
+            authorization: `Bearer ${res.data.access_token}`
+          }
+        })
+        setOAuth({
+          token: res.data,
+          user: apiResponse.data
+        });
+
+      })
+      .catch(e => {
+        setError(e)
+      })
+  
+    }
+  }, [])
+  return {OAuth, error}
+}

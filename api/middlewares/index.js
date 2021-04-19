@@ -21,7 +21,7 @@ export const getUserFromToken = async (req, res, next) => {
   } else {
     try {
       const user = await getUserFromBearerToken(req.token)
-
+      console.log(user.login)
       const role = await getRole(user.login)
 
       req.auth = {

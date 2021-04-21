@@ -9,7 +9,7 @@ const RequestForm = ({organizations, onSubmit, isRequester, username = ''}) => (
   <Form
   onSubmit={onSubmit}
   render={({ handleSubmit }) => (
-    <Flex onSubmit={handleSubmit} alignItems="center" py={4}>
+    <Flex onSubmit={handleSubmit} alignItems="center" py={4} flexWrap="wrap">
       
         <Text pr={4}>Request an invite for</Text>
         <Field name="user" defaultValue={isRequester ? username: '' }  render={({ input, meta }) => (

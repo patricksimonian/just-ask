@@ -37,7 +37,7 @@ export const useOAuth = code => {
 
 
   useEffect(() => {
-    if(window.location.search.indexOf('?code=') >= 0) {
+    if(code) {
       const code = window.location.search.replace('?code=', '');
       axios.post('http://localhost:3001/auth', {code})
       .then(async res => {
@@ -56,8 +56,10 @@ export const useOAuth = code => {
         setError(e)
       })
   
+    } else {
+      setError(new Error('Unable to complete authentication! Github did not return a code.'))
     }
-  }, [])
+  }, [code])
   return {OAuth, error}
 }
 
@@ -83,23 +85,6 @@ export const useGetOrganizations =  (accessToken) => {
 }
 
 
-export const useGetPendingRequests =  (accessToken) => {
-  const [pendingRequests, setPendingRequests] = useState(null);
-  const [fetching, setFetching] = useState(null);
-  useEffect(() => {
-    setFetching(true);
-    axios.get('http://localhost:3001/requests?state=PENDING', {
-      headers: {
-        authorization: `Bearer ${accessToken}`
-      }
-    }).then(res => {
-      setPendingRequests(res.data);
-      setFetching(false);
-    })
-  }, [accessToken])
-
-  return {pendingRequests, fetching}
-}
 
 export const useAuth = () => {
   const [auth, setAuth] = useState(null);
@@ -149,3 +134,4 @@ export const useGetUser = (accessToken, username) => {
 
   return {user, fetching}
 }
+

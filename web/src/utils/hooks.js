@@ -1,5 +1,6 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../providers/AuthContext";
 
 /**
  * react hook to get our app config from a static path
@@ -18,7 +19,6 @@ import { useEffect, useState } from "react";
         }
       }).then(response => {
         setFetched(true);
-        setFetching(false);
         setConfig(response.data)
       }).catch(e => {
         setFetched(false);
@@ -101,6 +101,30 @@ export const useGetPendingRequests =  (accessToken) => {
   return {pendingRequests, fetching}
 }
 
+export const useAuth = () => {
+  const [auth, setAuth] = useState(null);
+  const [fetching, setFetching] = useState(false);
+  const { state: {token: {access_token: accessToken }}} = useContext(AuthContext);
+  useEffect(() => {
+    if(!auth && accessToken) {
+      setFetching(true);
+      axios.get('http://localhost:3001/roles', {
+        headers: {
+          authorization: `Bearer ${accessToken}`
+        }
+      })
+      .then(res => {
+        setAuth(res.data.role);
+      })
+      .finally(() => {
+        setFetching(false);
+      })
+    }
+  }, [auth, accessToken]);
+  
+  return { auth, fetching };
+}
+
 export const useGetUser = (accessToken, username) => {
   const [user, setUser] = useState(null);
   const [fetching, setFetching] = useState(false);
@@ -115,7 +139,6 @@ export const useGetUser = (accessToken, username) => {
         }
       })
       .then(res => {
-        setFetching(false);
         setUser(res.data)
       })
       .finally(() => {

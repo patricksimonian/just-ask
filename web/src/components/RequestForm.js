@@ -13,7 +13,7 @@ const RequestForm = ({organizations, onSubmit}) => (
         <Text pr={4}>Request an invite for</Text>
         <Field name="user" render={({ input, meta }) => (
             <Box alignItems="center" pr={4}>
-              <Input placeholder="github id" {...input} width={[400, 300, 400]} />
+              <Input placeholder="github id" {...input} maxWidth={[400, 300, 400]} />
               {meta.touched && meta.error && <span>{meta.error}</span>}
             </Box>
           )} />

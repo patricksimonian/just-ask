@@ -8,6 +8,7 @@ import expressBearerToken from 'express-bearer-token'
 import init from './utils/init.js'
 import connect from './db/connect.js'
 import orgRouters from './routes/organizations'
+import userRoleRouters from './routes/userRoles'
 import requestRouters from './routes/requests'
 import { getUserFromToken } from './middlewares/index.js'
 
@@ -56,7 +57,7 @@ async function initailize() {
 
   app.use(expressBearerToken())
   app.use(getUserFromToken)
-
+  app.use('/roles', userRoleRouters)
   app.use('/organizations', orgRouters)
   app.use('/requests', requestRouters)
 

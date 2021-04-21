@@ -4,7 +4,9 @@ import { ROLES } from '../constants';
 import Approvals from "./Approvals";
 import Requests from "./Requests";
 
-const ApprovalRequestManager = () => (
+const ApprovalRequestManager = () => {
+  
+  return (
   <React.Fragment>
     <WithRole roles={[ROLES.APPROVER, ROLES.COLLABORATER, ROLES.REQUESTER, ROLES.AUDITER]}>
       <Requests />
@@ -14,5 +16,6 @@ const ApprovalRequestManager = () => (
     </WithRole>
   </React.Fragment>
 )
+}
 
 export default ApprovalRequestManager;

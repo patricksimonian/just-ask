@@ -2,32 +2,31 @@
 import { Redirect } from '@reach/router';
 import { useContext, useEffect, useState } from 'react';
 import { WidthControlledContainer } from '../components/Containers';
+import { Notice } from '../components/Notice';
 import { AuthContext } from '../providers/AuthContext';
 import { useOAuth } from '../utils/hooks';
 
 const Auth = () => {
+  const params = new URLSearchParams(window.location.search);
+  const { OAuth, error } = useOAuth(params.get('code'))
+
+  const {state, dispatch} = useContext(AuthContext);
   
-  const { OAuth, error } = useOAuth(window.location.search.replace('?code=', ''))
-
-  const [authComplete, setAuthComplete] = useState(false);
-  const { dispatch} = useContext(AuthContext);
-
   useEffect(() => {
     if(OAuth !== null) {
       dispatch({type: 'LOGIN', payload: OAuth})
-      setAuthComplete(true); 
-    } 
-  }, [authComplete, OAuth, dispatch, setAuthComplete]);
+    }
+  }, [OAuth, dispatch]);
+  
 
-  if(authComplete) {
-    return <Redirect from="/auth" to="/" />
+  if(state.isLoggedIn) {
+    window.location.search = ''
+    return <Redirect to="/"  noThrow/>
   }
 
-  if(error) {
-    throw error;
-  }
+  
 
-  return <WidthControlledContainer><h1>logging in</h1></WidthControlledContainer>
+  return <WidthControlledContainer>{error ? <Notice type="error">{error.message}</Notice> : <h1>logging in</h1>}</WidthControlledContainer>
 }
 
 export default Auth;

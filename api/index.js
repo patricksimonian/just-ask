@@ -57,6 +57,11 @@ async function initailize() {
 
   app.use(expressBearerToken())
   app.use(getUserFromToken)
+  // just verifies github token is still working
+  app.get('/verify', (req, res) => {
+    res.status(200).json({ message: 'ok' })
+  })
+
   app.use('/roles', userRoleRouters)
   app.use('/organizations', orgRouters)
   app.use('/requests', requestRouters)

@@ -5,7 +5,7 @@ import { useGetUser } from "../utils/hooks"
 
 
 
-const Request = ({username, id, organization, state: requestState, onApprove, onDeny}) => {
+const Request = ({username, organization, state: requestState, onApprove, onDeny}) => {
   const { state } = useContext(AuthContext)
   const {user, fetching} = useGetUser(state.token.access_token, username)
 
@@ -22,8 +22,8 @@ const Request = ({username, id, organization, state: requestState, onApprove, on
         <Text as="span" ml={4} fontSize={4}>{username} to {organization}</Text>
       </Flex>
       <Box py={4}>
-        <Button mr={4} bg="primary" color="secondary" onClick={() => onApprove(id)}>Approve</Button>
-        <Button bg="red" color="white" onClick={() => onDeny(id)}>Deny</Button>
+        <Button mr={4} bg="primary" color="secondary" onClick={() => onApprove()}>Approve</Button>
+        <Button bg="red" color="white" onClick={() => onDeny()}>Deny</Button>
       </Box>
     </Box>
   )

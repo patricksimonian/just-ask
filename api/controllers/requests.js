@@ -60,9 +60,9 @@ export const patchInvitationRequest = async (req, res) => {
     })
     return
   }
-  let request
+
   try {
-    request = await InvitationRequest.updateOne(
+    await InvitationRequest.updateOne(
       {
         id: req.param.id,
         state: INVITATION_REQUEST_STATES.PENDING, // only update pending requests
@@ -86,9 +86,13 @@ export const patchInvitationRequest = async (req, res) => {
   // if approved send the github org
   if (req.body.state === INVITATION_REQUEST_STATES.APPROVED) {
     // get github user id
+    const request = await InvitationRequest.findOne({
+      _id: req.params.id,
+    })
+
     try {
       const { id } = await getUserByName(request.recipient)
-      await inviteUserToOrgs(id, request.organizations)
+      await inviteUserToOrgs(id, [request.organization])
     } catch (e) {
       log.warn(
         `unable to invite recipient ${request.recipient} to organizations from request`
@@ -105,10 +109,11 @@ export const patchInvitationRequest = async (req, res) => {
           state: INVITATION_REQUEST_STATES.FAILED,
         }
       ).exec()
+      return
     }
   }
 
-  res.status(200).send(request)
+  res.status(200).json({ message: 'update complete' })
 }
 /**
  * GET /requests
@@ -175,7 +180,7 @@ export const getInvitationRequests = async (req, res) => {
       `user ${req.auth.user} found requests with state=${req.query.state}`
     )
 
-    res.status(200).send(requests)
+    res.status(200).json(requests)
     return
   } catch (e) {
     log.error(`unable to find requests`)
@@ -285,7 +290,6 @@ export const createInvitationRequest = async (req, res) => {
         }created`,
       })
     } catch (e) {
-      console.log('WHat', diff, organizations, installations)
       log.warn(`user ${req.auth.user} request failed`)
       res.status(400).send({
         message: 'Unable to create invitation',
@@ -333,7 +337,6 @@ export const createInvitationRequest = async (req, res) => {
       }created`,
     })
   } catch (e) {
-    console.log(e)
     log.warn(`user ${req.auth.user} request failed`)
     res.status(500).send({
       message: 'Unable to create invitation',

@@ -74,7 +74,55 @@ export const useGetOrganizations =  (accessToken) => {
       setOrgs(res.data);
       setFetching(false);
     })
+    .finally(() => {
+      setFetching(false);
+    })
   }, [accessToken])
 
   return {orgs, fetching}
+}
+
+
+export const useGetPendingRequests =  (accessToken) => {
+  const [pendingRequests, setPendingRequests] = useState(null);
+  const [fetching, setFetching] = useState(null);
+  useEffect(() => {
+    setFetching(true);
+    axios.get('http://localhost:3001/requests?state=PENDING', {
+      headers: {
+        authorization: `Bearer ${accessToken}`
+      }
+    }).then(res => {
+      setPendingRequests(res.data);
+      setFetching(false);
+    })
+  }, [accessToken])
+
+  return {pendingRequests, fetching}
+}
+
+export const useGetUser = (accessToken, username) => {
+  const [user, setUser] = useState(null);
+  const [fetching, setFetching] = useState(false);
+
+  useEffect(() => {
+    if(!user) {
+
+      setFetching(true);
+      axios.get(`https://api.github.com/users/${username}`, {
+        headers: {
+          authorization: `Bearer ${accessToken}`
+        }
+      })
+      .then(res => {
+        setFetching(false);
+        setUser(res.data)
+      })
+      .finally(() => {
+        setFetching(false);
+      })
+    }
+  }, [user, accessToken, username])
+
+  return {user, fetching}
 }

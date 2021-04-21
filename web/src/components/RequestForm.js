@@ -2,18 +2,28 @@
 import { Form, Field } from 'react-final-form'
 import { Input, Label, Checkbox } from '@rebass/forms';
 import { Box, Button, Flex, Image, Text } from 'rebass';
+import React from 'react';
 
 
-const RequestForm = ({organizations, onSubmit}) => (
+const RequestForm = ({organizations, onSubmit, isRequester, username = ''}) => (
   <Form
   onSubmit={onSubmit}
   render={({ handleSubmit }) => (
     <Flex onSubmit={handleSubmit} alignItems="center" py={4}>
       
         <Text pr={4}>Request an invite for</Text>
-        <Field name="user" render={({ input, meta }) => (
+        <Field name="user" defaultValue={isRequester ? username: '' }  render={({ input, meta }) => (
             <Box alignItems="center" pr={4}>
-              <Input placeholder="github id" {...input} width={[400, 300, 400]} />
+              {isRequester ? (
+                <React.Fragment>
+                  <input type="hidden" {...input} />
+                  <Text color="secondary" sx={{textDecoration: 'underline'}}>myself</Text>
+                </React.Fragment>
+              )
+            :
+            (
+              <Input placeholder="github id" {...input} maxWidth={[400, 300, 400]} />
+            )}
               {meta.touched && meta.error && <span>{meta.error}</span>}
             </Box>
           )} />
@@ -42,7 +52,7 @@ const RequestForm = ({organizations, onSubmit}) => (
 
       ))}
           </Box>
-        <Button onClick={() => handleSubmit()} bg="text" p={3} fontSize={5} style={{cursor: 'pointer'}}>Request</Button>
+        <Button onClick={() => handleSubmit()} bg="secondary" p={3} fontSize={5} style={{cursor: 'pointer'}}>Request</Button>
     </Flex>
   )}
 />

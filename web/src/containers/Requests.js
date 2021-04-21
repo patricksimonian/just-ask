@@ -3,12 +3,14 @@ import { useContext, useState } from "react";
 import { Box, Button, Text } from "rebass";
 import { WidthControlledContainer } from "../components/Containers";
 import RequestForm from "../components/RequestForm";
+import { ROLES } from "../constants";
 import { AuthContext } from "../providers/AuthContext";
-import { useGetOrganizations } from "../utils/hooks"
+import { useAuth, useGetOrganizations } from "../utils/hooks"
 
 
 const Requests = () => {
   const { state } = useContext(AuthContext)
+  const {auth: role, fetching: authFetching} = useAuth();
   const [formSubmitted, setFormSubmitted] = useState(false);
   const {orgs, fetching} =  useGetOrganizations(state.token.access_token);
   const orgsFound = !fetching && orgs && orgs.length;
@@ -25,8 +27,8 @@ const Requests = () => {
         {orgsFound && <Text fontSize={4}>There are <Text color="green" as="span">{orgs.length}</Text> org{orgs.length > 1 ? "s": ""} that this github app has been installed on.</Text>}
       </Box>
       <Box fontSize={5}>
-        {orgsFound && !formSubmitted && <RequestForm organizations={orgs} onSubmit={async data => {
-          const response = await axios.post('http://localhost:3001/requests',  
+        {orgsFound && !formSubmitted && !authFetching && role && <RequestForm username={state.isLoggedIn && state.user.login} organizations={orgs} isRequester={!authFetching && role === ROLES.REQUESTER} onSubmit={async data => {
+          await axios.post('http://localhost:3001/requests',  
             data
           , {
             headers: {
@@ -34,7 +36,6 @@ const Requests = () => {
             }
           })
           setFormSubmitted(true);
-          console.log(response);
         }}/>}
       </Box>
       {orgsFound && formSubmitted && <Box>

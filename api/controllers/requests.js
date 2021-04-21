@@ -155,7 +155,7 @@ export const getInvitationRequests = async (req, res) => {
   const stateParamValid = Object.keys(INVITATION_REQUEST_STATES).includes(
     req.query.state
   )
-  console.log(req.query)
+
   if (!stateParamValid || !req.query.state) {
     log.warn(
       `user ${req.auth.user} requests with state=${req.query.state} is invalid`

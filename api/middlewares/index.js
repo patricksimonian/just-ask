@@ -23,7 +23,7 @@ export const getUserFromToken = async (req, res, next) => {
       const user = await getUserFromBearerToken(req.token)
 
       const role = await getRole(user.login)
-      console.log('ROLE', role)
+
       req.auth = {
         user: user.login,
         id: user.id,

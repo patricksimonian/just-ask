@@ -8,6 +8,8 @@ import Layout from './components/Layout';
 import { useContext } from 'react';
 import { AuthContext } from './providers/AuthContext';
 import NotLoggedIn from './components/NotLoggedIn';
+import { Approvals } from './containers/Approvals';
+import ApprovalRequestManager from './containers/ApprovalRequestManager';
 
 function App() {
   const {state} = useContext(AuthContext);
@@ -15,8 +17,10 @@ function App() {
     <Layout>
 
       <Router>
-        {state.isLoggedIn && <Requests path="/" /> }
+        {state.isLoggedIn && <ApprovalRequestManager path="/" />}
+
         {!state.isLoggedIn && <NotLoggedIn path="/" />}
+
         <Auth path="/auth" />
         <Logout path="/logout" />
       </Router>

@@ -16,6 +16,7 @@ export const inviteUserToOrgs = async (userId, orgs) => {
 export const getUserByName = async (username) => {
   const installations = await getAuthenticatedApps()
   const config = getConfig()
+
   const response = await installations.apps[
     config.primaryOrg
   ].authenticatedRequest('GET /users/{username}', {

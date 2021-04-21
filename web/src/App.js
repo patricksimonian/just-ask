@@ -1,18 +1,22 @@
-import logo from './logo.svg';
+
 import './App.css';
-import axios from 'axios'
-import {useEffect} from 'react';
-import Header from './components/Header';
 import { Router } from '@reach/router';
 import Auth from './containers/Auth';
 import Logout from './containers/Logout';
+import Requests from './containers/Requests';
 import Layout from './components/Layout';
+import { useContext } from 'react';
+import { AuthContext } from './providers/AuthContext';
+import NotLoggedIn from './components/NotLoggedIn';
 
 function App() {
-
+  const {state} = useContext(AuthContext);
   return (
     <Layout>
+
       <Router>
+        {state.isLoggedIn && <Requests path="/" /> }
+        {!state.isLoggedIn && <NotLoggedIn path="/" />}
         <Auth path="/auth" />
         <Logout path="/logout" />
       </Router>

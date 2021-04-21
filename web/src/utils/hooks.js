@@ -60,3 +60,21 @@ export const useOAuth = code => {
   }, [])
   return {OAuth, error}
 }
+
+export const useGetOrganizations =  (accessToken) => {
+  const [orgs, setOrgs] = useState(null);
+  const [fetching, setFetching] = useState(null);
+  useEffect(() => {
+    setFetching(true);
+    axios.get('http://localhost:3001/organizations', {
+      headers: {
+        authorization: `Bearer ${accessToken}`
+      }
+    }).then(res => {
+      setOrgs(res.data);
+      setFetching(false);
+    })
+  }, [accessToken])
+
+  return {orgs, fetching}
+}

@@ -18,13 +18,23 @@ export const ROLE_MAPPING_KINDS = {
 export const RULES = {
   approvals: 'approvals', // can approve requests
   requests: 'requests', // can make requests for themselves
-  invitations: 'invitations', // can invite other users to orgs
+  invitations: 'invitations', // can invite other users to orgs,
+  organizations: 'organizations', // can view organizations
 }
 
 export const ROLE_RULES = {
-  [ROLES.APPROVER]: [RULES.approvals, RULES.requests, RULES.invitations],
-  [ROLES.COLLABORATOR]: [RULES.requests, RULES.invitations],
-  [ROLES.REQUESTER]: [RULES.requests],
+  [ROLES.APPROVER]: [
+    RULES.approvals,
+    RULES.requests,
+    RULES.invitations,
+    RULES.organizations,
+  ],
+  [ROLES.COLLABORATOR]: [
+    RULES.requests,
+    RULES.invitations,
+    RULES.organizations,
+  ],
+  [ROLES.REQUESTER]: [RULES.requests, RULES.organizations],
   [undefined]: [], // stub role
 }
 

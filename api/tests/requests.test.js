@@ -12,6 +12,7 @@ import githubPrivateKey from '../fixtures/githubPrivateKey'
 import installations from '../fixtures/installations'
 import modelsInvitationRequest from '../fixtures/models.InvitationRequest'
 import orgInvitation from '../fixtures/orgInvitation'
+import userFixture from '../fixtures/user'
 import { getConfig, getGithubPrivateKey } from '../utils/config'
 
 jest.mock('../utils/config')
@@ -169,6 +170,7 @@ describe('Invitation Request Controllers', () => {
     })
 
     it('sends 200 if request is for someone else', async () => {
+      const recipient = 'shmatsaymon'
       nock('https://api.github.com')
         .get('/app/installations')
         .reply(200, installations)
@@ -176,19 +178,25 @@ describe('Invitation Request Controllers', () => {
         .reply(201, accessToken)
         .post(/orgs\/[a-zA-Z-]+\/invitations/)
         .reply(201, orgInvitation)
+        .get(`/users/${recipient}`)
+        .reply(200, userFixture)
 
       const orgs = installations.filter(
         (installation) => installation.target_type === 'Organization'
       )
+      getConfig.mockReset()
+      getConfig.mockReturnValue({
+        orgs: orgs.map((o) => o.account.login),
+        primaryOrg: orgs[0].account.login,
+      })
 
-      getConfig.mockReturnValueOnce({ orgs: orgs.map((o) => o.account.login) })
       const req = {
         auth: {
-          user: 'matt damon',
+          user: 'mattdamon',
           role: ROLES.COLLABORATOR,
         },
         body: {
-          user: 'shmat saymon',
+          user: recipient,
           organizations: [orgs[0].account.login], // opting for one org here to not need to multiple nock replies
         },
       }

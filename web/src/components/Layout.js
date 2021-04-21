@@ -5,7 +5,7 @@ import Header from "./Header";
 const Layout = ({children}) => (
   <Box>
     <Header />
-    <main>
+    <main style={{height: '100vh'}}>
       {children}
     </main>
   </Box>

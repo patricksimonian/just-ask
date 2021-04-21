@@ -337,7 +337,6 @@ export const createInvitationRequest = async (req, res) => {
       }created`,
     })
   } catch (e) {
-    console.log(e)
     log.warn(`user ${req.auth.user} request failed`)
     res.status(500).send({
       message: 'Unable to create invitation',

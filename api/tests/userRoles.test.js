@@ -354,6 +354,7 @@ describe('Invitation Request Controllers', () => {
 
       const res = {
         status: jest.fn().mockImplementation(() => ({
+          json: jest.fn(),
           send: jest.fn(),
         })),
       }
@@ -387,7 +388,7 @@ describe('Invitation Request Controllers', () => {
 
       const res = {
         status: jest.fn().mockImplementation(() => ({
-          send: jest.fn(),
+          json: jest.fn(),
         })),
       }
 

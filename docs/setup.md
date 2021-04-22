@@ -1,5 +1,6 @@
 ---
 title: Setup
+nav_order: 2
 ---
 ## Setting Up the Github App
 

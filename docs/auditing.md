@@ -1,3 +1,6 @@
+---
+title: Auditing
+---
 ## Auditing
 
 The mongo database contains a collection called `audits`. This collection contains a timestamped record of important events that occur during the runtime of the webserver. 

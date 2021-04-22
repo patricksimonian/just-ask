@@ -1,3 +1,6 @@
+---
+title: Setup
+---
 ## Setting Up the Github App
 
 First things first, your organization will need to create a new Github App.

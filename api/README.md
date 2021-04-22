@@ -1,38 +1,36 @@
-# Just Ask! Front end
+## Just Ask API
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is the API component that serves to track/approve requests as well as create audit trails. It is designed to closely couple to a Mongo Database
 
-## Setup
-- copy and fill in the environment variables `cp .env.local.example .env.local`
-- install packages `npm install`
+## To Run Locally
 
-## Available Scripts
+Pre-reqs:
+1. You have a github have created
+2. Obtain the Client Secret, Client Id, App Id, and Private Key from the Github App
 
-In the project directory, you can run:
+Running Locally:
+1. Run a Mongo Instance (docker being the quickest) `docker run mongo:4.4.5`
+2. change into api directory and update env information
+```sh
+cd api
+# fill in env 
+cp .env.example .env
 
-### `npm start`
+### Sample env contents
+CLIENT_ID=foo
+CLIENT_SECRET=bar
+APP_ID=baz
+PORT=3001
+WEB_URL=http://localhost:3000
+MONGO_URL=mongodb://localhost:27017/dbname
+```
+3. Copy and configure your config and rolemapper files `cp config/config.example.json config/config.json` etc.
+4. Ensure you have your github app private key located at `config/github-private-key.pem
+3. run api in dev mode `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Testing
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
+Tests are with `jest`. To run tests `npm run test` !
 
 ## Deployment
 
@@ -43,22 +41,29 @@ Running this application in production mode requires further configuration
 Apply these configurations to your container runtime
 ```yaml
   envVars:
-    - REACT_APP_CLIENT_ID {String}
-    - REACT_APP_API_URL {String}
+    - CLIENT_SECRET {String}
+    - CLIENT_ID {String}
+    - APP_ID {Number}
+    - PORT {Number} defaults to 3001
+    - MONGO_URL {String} fully qualified mongo url
+    - WEB_URL {String fully qualified path to web for CORS}
   volumes:
-    - name: pallete.json
+    - name: role-mappers.json
       mountPath: /var/opt/config/role-mappers.json
-    - name: content.json
+    - name: github-private-key.pem
+      mountPath: /var/opt/config/github-private-key.pem
+    - name: config.json
       mountPath: /var/opt/config/config.json
 ```
 
 eg: Docker
 
 ```sh
-  docker run just-ask-web:<tag> \
-  -e REACT_APP_CLIENT_ID=... \
-  -e REACT_APP_API_URL=... \
-  -v path-to/content.json:/var/opt/config/content.json \ 
+  docker run just-ask-server:<tag> \
+  -e CLIENT_SECRET=... \
+  -e CLIENT_ID=... 
+  ... 
+  -v path-to/role-mappers.json:/var/opt/config/role-mappers.json \ 
   ...
 ```
 
@@ -138,7 +143,7 @@ spec:
         configMap: 
           name: app-config
       containers:
-      - image: just-ask-web:latest
+      - image: just-ask-server:latest
         name: just-ask
         volumeMounts:
           - name: github-private-key

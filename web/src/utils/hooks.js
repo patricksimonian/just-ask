@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import axios from "../axios";
+import { GITHUB_API_URL } from "../constants";
 import { AuthContext } from "../providers/AuthContext";
 
 /**
@@ -41,7 +42,7 @@ export const useOAuth = code => {
       const code = window.location.search.replace('?code=', '');
       axios.post('/auth', {code})
       .then(async res => {
-        const apiResponse = await axios.get('https://api.github.com/user', {
+        const apiResponse = await axios.get(`${GITHUB_API_URL}/user`, {
           headers: {
             authorization: `Bearer ${res.data.access_token}`
           }
@@ -109,7 +110,7 @@ export const useGetUser = (username) => {
     if(!user) {
 
       setFetching(true);
-      axios.get(`https://api.github.com/users/${username}`)
+      axios.get(`${GITHUB_API_URL}/users/${username}`)
       .then(res => {
         setUser(res.data)
       })

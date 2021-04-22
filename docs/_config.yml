@@ -1,5 +1,7 @@
 remote_theme: pmarsceill/just-the-docs
 search_enabled: true
+title: Just Ask!
+desription: A github app designed to bridge github membership between multiple organizations
 search:
   # Split pages into sections that can be searched individually
   # Supports 1 - 6, default: 2

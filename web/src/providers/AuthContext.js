@@ -1,4 +1,5 @@
 import React, { createContext, useReducer } from 'react';
+import { authInterceptor } from '../axios';
 
 
 export const initialState = {
@@ -8,11 +9,13 @@ export const initialState = {
 };
 
 export const reducer = (state, action) => {
+  console.log(state, action);
   switch (action.type) {
     case "LOGIN": {
       localStorage.setItem("isLoggedIn", true)
       localStorage.setItem("user", JSON.stringify(action.payload.user))
       localStorage.setItem("token", JSON.stringify(action.payload.token))
+      authInterceptor.register(action.payload.token.access_token);
       return {
         ...state,
         isLoggedIn: true,
@@ -21,6 +24,7 @@ export const reducer = (state, action) => {
       };
     }
     case "LOGOUT": {
+      authInterceptor.unregister();
       localStorage.clear()
       return {
         ...state,
@@ -39,7 +43,7 @@ export const AuthContext = createContext();
 
 const AuthProvider = ({children}) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-
+  
   return <AuthContext.Provider value={{state, dispatch}}>{children}</AuthContext.Provider>
 }
 

@@ -62,7 +62,7 @@ export const FONT_SIZES = getSpacingFactors(baseFontSize, 20);
 export const Z_SPACING = getSpacingFactors(100, 10, '');
 
 export const baseTheme = {
-  breakpoints: Object.keys(BREAKPOINT_VALUES).map(k => BREAKPOINT_VALUES[k]),
+  breakpoints: Object.keys(BREAKPOINT_VALUES).map(k => BREAKPOINT_VALUES[k] + 'px'),
   mediaQueries: {
     ...BREAKPOINTS,
   },

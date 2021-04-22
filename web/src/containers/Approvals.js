@@ -1,12 +1,11 @@
-import axios from 'axios';
 import { useContext, useEffect, useState } from 'react';
 import {Box, Flex, Text} from 'rebass';
+import axios from '../axios';
 import { WidthControlledContainer } from '../components/Containers';
 import { Notice } from '../components/Notice';
 import Request from '../components/Request';
 import { AuthContext } from '../providers/AuthContext';
 import { approveRequest, denyRequest } from '../utils/api';
-import { useGetPendingRequests } from '../utils/hooks';
 
 export const Approvals = () => {
   const { state } = useContext(AuthContext)
@@ -19,11 +18,7 @@ export const Approvals = () => {
   useEffect(() => {
     if(refetchRequests || !requests) {
       setFetching(true);
-      axios.get('http://localhost:3001/requests?state=PENDING', {
-        headers: {
-          authorization: `Bearer ${token}`
-        }
-      }).then(res => {
+      axios.get('/requests?state=PENDING').then(res => {
         setRequests(res.data);
       })
       .finally(() => {

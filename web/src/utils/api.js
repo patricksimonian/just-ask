@@ -1,7 +1,7 @@
-import axios from "axios";
+import axios from "../axios"
 
 
-export const approveRequest = (requestId, accessToken) => axios.patch(`http://localhost:3001/requests/${requestId}`, {
+export const approveRequest = (requestId, accessToken) => axios.patch(`/requests/${requestId}`, {
   state: 'APPROVED'
 }, {
   headers: {
@@ -9,7 +9,7 @@ export const approveRequest = (requestId, accessToken) => axios.patch(`http://lo
   }
 })
 
-export const denyRequest = (requestId, accessToken) => axios.patch(`http://localhost:3001/requests/${requestId}`, {
+export const denyRequest = (requestId, accessToken) => axios.patch(`/requests/${requestId}`, {
   state: 'DENIED'
 }, {
   headers: {

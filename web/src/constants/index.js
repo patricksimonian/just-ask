@@ -25,3 +25,5 @@ export const ROLE_RULES = {
   [ROLES.COLLABORATER]: [RULES.organizations.list, RULES.requests.create],
   [ROLES.REQUESTER]: [RULES.organizations.list],
 }
+
+export const GITHUB_API_URL = 'https://api.github.com';

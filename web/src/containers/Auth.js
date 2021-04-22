@@ -1,31 +1,47 @@
 
-import { Redirect } from '@reach/router';
+import { Redirect, redirectTo } from '@reach/router';
+import axios from '../axios';
 import { useContext, useEffect, useState } from 'react';
 import { WidthControlledContainer } from '../components/Containers';
 import { Notice } from '../components/Notice';
+import { GITHUB_API_URL } from '../constants';
 import { AuthContext } from '../providers/AuthContext';
-import { useOAuth } from '../utils/hooks';
 
-const Auth = () => {
+const Auth = ({navigate}) => {
+  const [error, setError] = useState(null);
+  const { dispatch, state} = useContext(AuthContext);
+
+  
   const params = new URLSearchParams(window.location.search);
-  const { OAuth, error } = useOAuth(params.get('code'))
-
-  const {state, dispatch} = useContext(AuthContext);
-  
+  const code = params.get('code');
   useEffect(() => {
-    if(OAuth !== null) {
-      dispatch({type: 'LOGIN', payload: OAuth})
+    if(code) {
+      axios.post('/auth', {code})
+      .then(async res => {
+        const apiResponse = await axios.get(`${GITHUB_API_URL}/user`, {
+          headers: {
+            authorization: `Bearer ${res.data.access_token}`
+          }
+        })
+        dispatch({
+          type: 'LOGIN', 
+          payload: {
+            token: res.data,
+            user: apiResponse.data
+        }
+      })
+      navigate('/')
+      })
+      .catch(e => {
+        setError(e)
+      })
+  
+    } else {
+      setError(new Error('Github did not return a code'))
     }
-  }, [OAuth, dispatch]);
+  }, [dispatch, code, navigate]);
   
-
-  if(state.isLoggedIn) {
-    window.location.search = ''
-    return <Redirect to="/"  noThrow/>
-  }
-
   
-
   return <WidthControlledContainer>{error ? <Notice type="error">{error.message}</Notice> : <h1>logging in</h1>}</WidthControlledContainer>
 }
 

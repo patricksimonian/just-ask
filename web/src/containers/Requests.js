@@ -13,7 +13,7 @@ const Requests = () => {
   const {auth: role, fetching: authFetching} = useAuth();
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
-  const {orgs, fetching} =  useGetOrganizations(state.token.access_token);
+  const {orgs, fetching} =  useGetOrganizations();
   const orgsFound = !fetching && orgs && orgs.length;
 
   return (
@@ -25,7 +25,7 @@ const Requests = () => {
         {loading && <Text> Loading !</Text>}
         {orgsFound && !formSubmitted && !authFetching && role && <RequestForm username={state.isLoggedIn && state.user.login} organizations={orgs} isRequester={!authFetching && role === ROLES.REQUESTER} onSubmit={data => {
           setLoading(true);
-          axios.post('http://localhost:3001/requests',  
+          axios.post('/requests',  
             data
           , {
             headers: {

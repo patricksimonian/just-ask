@@ -1,6 +1,7 @@
-import axios from "axios";
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../providers/AuthContext";
+import { useEffect, useState } from "react";
+import axios from "../axios";
+import Axios from 'axios';
+import { GITHUB_API_URL } from "../constants";
 
 /**
  * react hook to get our app config from a static path
@@ -13,7 +14,7 @@ import { AuthContext } from "../providers/AuthContext";
   useEffect(() => {
     if(!config && !error) {
       setFetching(false);
-      axios.get(filePath, {
+      Axios.get(filePath, {
         headers: {
           accept: 'application/json'
         }
@@ -39,9 +40,9 @@ export const useOAuth = code => {
   useEffect(() => {
     if(code) {
       const code = window.location.search.replace('?code=', '');
-      axios.post('http://localhost:3001/auth', {code})
+      axios.post('/auth', {code})
       .then(async res => {
-        const apiResponse = await axios.get('https://api.github.com/user', {
+        const apiResponse = await axios.get(`${GITHUB_API_URL}/user`, {
           headers: {
             authorization: `Bearer ${res.data.access_token}`
           }
@@ -63,23 +64,19 @@ export const useOAuth = code => {
   return {OAuth, error}
 }
 
-export const useGetOrganizations =  (accessToken) => {
+export const useGetOrganizations =  () => {
   const [orgs, setOrgs] = useState(null);
   const [fetching, setFetching] = useState(null);
   useEffect(() => {
     setFetching(true);
-    axios.get('http://localhost:3001/organizations', {
-      headers: {
-        authorization: `Bearer ${accessToken}`
-      }
-    }).then(res => {
+    axios.get('/organizations').then(res => {
       setOrgs(res.data);
       setFetching(false);
     })
     .finally(() => {
       setFetching(false);
     })
-  }, [accessToken])
+  }, [])
 
   return {orgs, fetching}
 }
@@ -89,15 +86,10 @@ export const useGetOrganizations =  (accessToken) => {
 export const useAuth = () => {
   const [auth, setAuth] = useState(null);
   const [fetching, setFetching] = useState(false);
-  const { state: {token: {access_token: accessToken }}} = useContext(AuthContext);
   useEffect(() => {
-    if(!auth && accessToken) {
+    if(!auth) {
       setFetching(true);
-      axios.get('http://localhost:3001/roles', {
-        headers: {
-          authorization: `Bearer ${accessToken}`
-        }
-      })
+      axios.get('/roles')
       .then(res => {
         setAuth(res.data.role);
       })
@@ -105,12 +97,12 @@ export const useAuth = () => {
         setFetching(false);
       })
     }
-  }, [auth, accessToken]);
+  }, [auth]);
   
   return { auth, fetching };
 }
 
-export const useGetUser = (accessToken, username) => {
+export const useGetUser = (username) => {
   const [user, setUser] = useState(null);
   const [fetching, setFetching] = useState(false);
 
@@ -118,11 +110,7 @@ export const useGetUser = (accessToken, username) => {
     if(!user) {
 
       setFetching(true);
-      axios.get(`https://api.github.com/users/${username}`, {
-        headers: {
-          authorization: `Bearer ${accessToken}`
-        }
-      })
+      axios.get(`${GITHUB_API_URL}/users/${username}`)
       .then(res => {
         setUser(res.data)
       })
@@ -130,7 +118,7 @@ export const useGetUser = (accessToken, username) => {
         setFetching(false);
       })
     }
-  }, [user, accessToken, username])
+  }, [user, username])
 
   return {user, fetching}
 }

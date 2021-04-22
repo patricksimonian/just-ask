@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "../axios";
+import Axios from 'axios';
 import { GITHUB_API_URL } from "../constants";
 
 /**
@@ -13,7 +14,7 @@ import { GITHUB_API_URL } from "../constants";
   useEffect(() => {
     if(!config && !error) {
       setFetching(false);
-      axios.get(filePath, {
+      Axios.get(filePath, {
         headers: {
           accept: 'application/json'
         }

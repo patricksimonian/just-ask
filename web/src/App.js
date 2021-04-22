@@ -1,5 +1,4 @@
 
-import './App.css';
 import { Router } from '@reach/router';
 import Auth from './containers/Auth';
 import Logout from './containers/Logout';
@@ -8,7 +7,11 @@ import { useContext, useEffect } from 'react';
 import { AuthContext } from './providers/AuthContext';
 import NotLoggedIn from './components/NotLoggedIn';
 import ApprovalRequestManager from './containers/ApprovalRequestManager';
-import axios from './axios';
+import axios, { authInterceptor } from './axios';
+import Shpeel from './components/Shpeel';
+import Brand from './components/Brand';
+import { WidthControlledContainer } from './components/Containers';
+import { Box } from 'rebass';
 
 
 function App() {
@@ -17,22 +20,19 @@ function App() {
   useEffect(() => {
     if(state.isLoggedIn) {
       // check if token is still working
-      axios.get('/verify', {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
+      axios.get('/verify')
       .then(res => {
         if(res.status !== 200) dispatch({type: 'LOGOUT'})
-        if(res.status === 200) dispatch ({type: 'LOGIN', payload: {...state}})
+        authInterceptor.register(token);
       })
       .catch(() => {
         dispatch({type: 'LOGOUT'})
       })
     }
-  }, [dispatch, state, state.isLoggedIn, token])
+  }, [dispatch, state.isLoggedIn, token])
   return (
     <Layout>
+      
       <Router>
         {state.isLoggedIn && <ApprovalRequestManager path="/" />}
 
@@ -40,7 +40,14 @@ function App() {
         <Auth path="/auth" />
 
         <Logout path="/logout" />
+        <Shpeel path="/about" />
       </Router>
+      <Box as="footer" sx={{position: 'fixed', bottom: 0, left: 0, right: 0}}>
+        <WidthControlledContainer>
+
+          <Brand />
+        </WidthControlledContainer>
+      </Box>
     </Layout>
   );
 }

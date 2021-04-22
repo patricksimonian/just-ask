@@ -1,3 +1,7 @@
+---
+nav_order: 1
+permalink: /
+---
 ## Just Ask!
 
 Just Ask! Is a Node JS based Github App that aims to solve membership access into an enterprises' organizations. 
@@ -16,3 +20,4 @@ The application reduces barriers for your clients to gain access by
 2. automating invitations based on 'who asked' (what their rbac is)
 3. creating clever mappings of roles to already established pattern in your org (Org roles, and Github Teams)
 4. establishing an audit trail of 'who-did-what' so that administrators of the application may gain insight into who has been granted access into their orgs. 
+

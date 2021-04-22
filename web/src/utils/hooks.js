@@ -1,7 +1,6 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "../axios";
 import { GITHUB_API_URL } from "../constants";
-import { AuthContext } from "../providers/AuthContext";
 
 /**
  * react hook to get our app config from a static path

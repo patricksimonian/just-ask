@@ -8,7 +8,8 @@ import { useContext, useEffect } from 'react';
 import { AuthContext } from './providers/AuthContext';
 import NotLoggedIn from './components/NotLoggedIn';
 import ApprovalRequestManager from './containers/ApprovalRequestManager';
-import axios from 'axios';
+import axios from './axios';
+
 
 function App() {
   const {state, dispatch} = useContext(AuthContext);
@@ -16,19 +17,20 @@ function App() {
   useEffect(() => {
     if(state.isLoggedIn) {
       // check if token is still working
-      axios.get('http://localhost:3001/verify', {
+      axios.get('/verify', {
         headers: {
           Authorization: `Bearer ${token}`
         }
       })
       .then(res => {
         if(res.status !== 200) dispatch({type: 'LOGOUT'})
+        if(res.status === 200) dispatch ({type: 'LOGIN', payload: {...state}})
       })
       .catch(() => {
         dispatch({type: 'LOGOUT'})
       })
     }
-  }, [dispatch, state.isLoggedIn, token])
+  }, [dispatch, state, state.isLoggedIn, token])
   return (
     <Layout>
       <Router>

@@ -1,6 +1,6 @@
 
 import { Redirect } from '@reach/router';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import { WidthControlledContainer } from '../components/Containers';
 import { Notice } from '../components/Notice';
 import { AuthContext } from '../providers/AuthContext';

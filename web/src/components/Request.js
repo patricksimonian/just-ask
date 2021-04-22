@@ -1,14 +1,11 @@
-import { useContext } from "react"
+
 import { Box, Button, Flex, Image, Link, Text } from "rebass"
-import { AuthContext } from "../providers/AuthContext"
 import { useGetUser } from "../utils/hooks"
 
 
 
-const Request = ({username, organization, state: requestState, onApprove, onDeny}) => {
-  const { state } = useContext(AuthContext)
-  const {user, fetching} = useGetUser(state.token.access_token, username)
-
+const Request = ({username, organization, onApprove, onDeny}) => {
+  const {user, fetching} = useGetUser( username)
   return (
     <Box with={300} p={3} m={3} sx={{border: '1px solid', borderColor: 'primary'}}>
       <Flex alignItems="center">

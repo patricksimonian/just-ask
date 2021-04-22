@@ -1,6 +1,10 @@
-# Getting Started with Create React App
+# Just Ask! Front end
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## Setup
+- copy and fill in the environment variables `cp .env.local.example .env.local`
+- install packages `npm install`
 
 ## Available Scripts
 
@@ -29,42 +33,128 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Deployment
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Running this application in production mode requires further configuration
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Running Single Container Instances via Docker
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Apply these configurations to your container runtime
+```yaml
+  envVars:
+    - REACT_APP_CLIENT_ID {String}
+    - REACT_APP_API_URL {String}
+  volumes:
+    - name: pallete.json
+      mountPath: /var/opt/config/role-mappers.json
+    - name: content.json
+      mountPath: /var/opt/config/config.json
+```
 
-## Learn More
+eg: Docker
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```sh
+  docker run just-ask-web:<tag> \
+  -e REACT_APP_CLIENT_ID=... \
+  -e REACT_APP_API_URL=... \
+  -v path-to/content.json:/var/opt/config/content.json \ 
+  ...
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Running In K8s
 
-### Code Splitting
+Ideally you will want to abstract away all configuration as ConfigMaps, Env Vars, and Secrets
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```yaml
+apiVersion: v1
+stringData:
+  GITHUB_PRIVATE_KEY: |
+    BEGIN_PRIVATE_KEY
+      ultrasecretkey
+    END_PRIVATE_KEY
+kind: Secret
+metadata:
+  creationTimestamp: null
+  name: github-private-key
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+---
+apiVersion: v1
+stringData:
+  role-mappers.json: |
+    {
+      "APPROVER": [
+        {
+          "kind": "OrgRole",
+          "role": "owner",
+          "name": "bcgov"
+        },
+        {
+          "kind": "GithubTeam",
+          "value": "OrgApprovers",
+          "organization": "bcgov"
+        }
+      ],
+      "REQUESTER": [null],
+      "COLLABORATOR": [
+        {
+          "kind": "OrgRole",
+          "role": "member",
+          "name": "bcgov"
+        }
+      ]
+    }
+  config.json: |
+    similar
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: app-config
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: just-ask
+  name: just-ask
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: just-ask
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: just-ask
+    spec:
+      volumes:
+      - name: github-private-key
+        secret: 
+          secretName: github-private-key
+      - name: app-config
+        configMap: 
+          name: app-config
+      containers:
+      - image: just-ask-web:latest
+        name: just-ask
+        volumeMounts:
+          - name: github-private-key
+            mountPath: /var/opt/config
+          - name: app-config
+            mountPath: /var/opt/config
+        env:
+          - name: PORT
+            value: 3001
+          - name: CLIENT_ID
+            value: foo
+          - name: CLIENT_SECRET
+            value: foo
+          - name: APP_ID
+            value: 3434
+          # remaining env
+        resources: {}
+status: {}
+```

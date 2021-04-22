@@ -32,7 +32,7 @@ MONGO_URL=mongodb://localhost:27017/dbname
 
 Tests are with `jest`. To run tests `npm run test` !
 
-## Running in Production mode
+## Deployment
 
 Running this application in production mode requires further configuration
 
@@ -59,7 +59,7 @@ Apply these configurations to your container runtime
 eg: Docker
 
 ```sh
-  docker run just-ask:<tag> \
+  docker run just-ask-server:<tag> \
   -e CLIENT_SECRET=... \
   -e CLIENT_ID=... 
   ... 
@@ -143,7 +143,7 @@ spec:
         configMap: 
           name: app-config
       containers:
-      - image: just-ask:latest
+      - image: just-ask-server:latest
         name: just-ask
         volumeMounts:
           - name: github-private-key

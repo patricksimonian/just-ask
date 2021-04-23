@@ -1,13 +1,12 @@
 import { useTheme } from 'emotion-theming';
 import { useContext } from 'react';
 import { Flex, Image, Text } from 'rebass';
+import { Link } from '@reach/router';
 import { AuthContext } from '../providers/AuthContext';
 import { ContentContext } from '../providers/ContentProvider';
 import { WidthControlledContainer } from './Containers';
 
-
-import { Link } from '@reach/router';
-import Brand from './Brand';
+import githubLogo from '../images/github.png';
 import config from '../config';
 
 const Header = () =>{
@@ -23,7 +22,7 @@ const Header = () =>{
             <Text as="h1" mb={0} fontSize={[7, 4, 5, 6]} >{content.brandTitle}</Text>
           </Flex>
         </Link>
-        {state.isLoggedIn ? <Link to="/logout" >Logout {state.user.login}</Link> : <a style={{display: 'flex', alignItems: 'center'}} href={`https://github.com/login/oauth/authorize?client_id=${config.CLIENT_ID}&redirect_uri=${window.location.origin}/auth&callback_url=${window.location.origin}/auth`} ><Image mr={3} src="/github.png" alt="github" width={25}/>Login</a>}
+        {state.isLoggedIn ? <Link to="/logout" >Logout {state.user.login}</Link> : <a style={{display: 'flex', alignItems: 'center'}} href={`https://github.com/login/oauth/authorize?client_id=${config.CLIENT_ID}&redirect_uri=${window.location.origin}/auth&callback_url=${window.location.origin}/auth`} ><Image mr={3} src={githubLogo} alt="github" width={25}/>Login</a>}
 
       </Flex>
     </WidthControlledContainer>

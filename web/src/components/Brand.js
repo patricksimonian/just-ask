@@ -6,7 +6,7 @@ const Brand = () => (
   <Link to="/about">
 
     <Box pr={10} mr={4} sx={{position: 'relative', display: 'inline-block', transition: 'all .25s', ':hover': {
-      transform: 'translateY(4px)', 
+      transform: 'translateY(-4px)', 
     }}}>
       <Image width={[80 ]} src={robot} alt="Just Ask!" />
       <Text as="span" mb={0} color="secondary" fontSize={3} sx={{
@@ -14,6 +14,9 @@ const Brand = () => (
         top: 0,
         right: 0,
         transform: 'rotateZ(-12deg)', 
+        ':hover': {
+          transform: 'rotateZ(-16deg)', 
+        }
       }} >Just Ask!</Text>
     </Box>
   </Link>

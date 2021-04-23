@@ -4,6 +4,7 @@ permalink: /
 ---
 ## Just Ask!
 
+![./images/brand.png](just-ask)
 Just Ask! Is a Node JS based Github App that aims to solve membership access into an enterprises' organizations. 
 
 It is often the case where enterprises may want to open the doors to contribution, repo create, or otherwise without giving __too much__ access to the org. This is challenging for a few reasons:

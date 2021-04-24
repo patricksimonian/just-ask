@@ -4,21 +4,15 @@
 file_server
 
 templates {
-  mime text/javascript
+  mime application/javascript
+  between <% %>
 }
 # The site root
-root * /opt/app-root/src
+root * /opt/app-root/www
 # Because we should
 encode zstd gzip
-# This rewrite rule may be required to get React apps
-# to deal with trailing slashes properly.
-@filter {
-  not path_regexp ^\/0.0.0.0
-  file {
-    try_files {path} {path}/ /?url={uri}
-  }
-}
-# rewrite @try_files {http.matchers.file.relative}
+
+
 try_files {path} {path}/ index.html
 header /service-worker.js {
 # all static assets SHOULD be cached

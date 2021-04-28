@@ -108,5 +108,8 @@ If you are concerned with fetching an image from the internet, the `brandLogo` p
 
 The app is designed using microservice architecture and so the three components (front end, backend, database) must be deployed seperately using your preferred hosting environments. Each component contains a README explaining some considerations for a production installation. 
 
+- [back end installation](../api/README.md)
+- [front end installation](../web/README.md)
+
 
 

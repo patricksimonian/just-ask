@@ -96,7 +96,7 @@ stringData:
         },
         {
           "kind": "GithubTeam",
-          "value": "OrgApprovers",
+          "team": "OrgApprovers",
           "organization": "bcgov"
         }
       ],

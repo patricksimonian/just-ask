@@ -60,7 +60,7 @@ Role mappings can be created from specific org roles in an org or membership in 
     },
     {
       "kind": "GithubTeam",
-      "value": "OrgApprovers",
+      "team": "OrgApprovers",
       "organization": "bcgov"
     }
   ],

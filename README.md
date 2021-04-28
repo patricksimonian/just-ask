@@ -1,2 +1,6 @@
-# just-ask
-A management api/interface for organizations to manage self-serve invitations
+# [Just Ask](justask.cloud)
+
+A management api/interface for organizations to self-serve org membership
+
+
+## 

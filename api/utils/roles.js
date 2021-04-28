@@ -32,6 +32,7 @@ export const resolveOrgRole = async (username, org, role) => {
  */
 export const resolveGithubTeam = async (username, org, team) => {
   try {
+    log.info(`Checking if ${username} has membership in team ${team} in ${org}`)
     const user = await getTeamMembershipForOrg(username, org, team)
 
     return !!user
@@ -89,7 +90,7 @@ export const getTeamMembershipForOrg = async (username, org, team) => {
   const installation = installations.apps[org]
 
   const response = await installation.authenticatedRequest(
-    'GET /orgs/{org}/teams/{team}',
+    'GET /orgs/{org}/teams/{team}/members',
     {
       org,
       team,

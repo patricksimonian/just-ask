@@ -69,43 +69,16 @@ Ideally you will want to abstract away all configuration as ConfigMaps, Env Vars
 ```yaml
 apiVersion: v1
 stringData:
-  GITHUB_PRIVATE_KEY: |
-    BEGIN_PRIVATE_KEY
-      ultrasecretkey
-    END_PRIVATE_KEY
-kind: Secret
-metadata:
-  creationTimestamp: null
-  name: github-private-key
-
----
-apiVersion: v1
-stringData:
-  role-mappers.json: |
+  palette.json: |
     {
-      "APPROVER": [
-        {
-          "kind": "OrgRole",
-          "role": "owner",
-          "name": "bcgov"
-        },
-        {
-          "kind": "GithubTeam",
-          "value": "OrgApprovers",
-          "organization": "bcgov"
-        }
-      ],
-      "REQUESTER": [null],
-      "COLLABORATOR": [
-        {
-          "kind": "OrgRole",
-          "role": "member",
-          "name": "bcgov"
-        }
-      ]
+      "primary": "#00ffdd",
+      "secondary": "#ae33da"
     }
-  config.json: |
-    similar
+  content.json: |
+    {
+      "brandTitle": "Just Ask!",
+      "brandLogo": null
+    }
 kind: ConfigMap
 metadata:
   creationTimestamp: null
@@ -131,9 +104,6 @@ spec:
         app: just-ask
     spec:
       volumes:
-      - name: github-private-key
-        secret: 
-          secretName: github-private-key
       - name: app-config
         configMap: 
           name: app-config
@@ -141,20 +111,13 @@ spec:
       - image: just-ask-web:latest
         name: just-ask
         volumeMounts:
-          - name: github-private-key
-            mountPath: /var/opt/config
           - name: app-config
-            mountPath: /var/opt/config
+            mountPath: /opt/app-root/www/public/config
         env:
-          - name: PORT
-            value: 3001
-          - name: CLIENT_ID
+          - name: REACT_APP_CLIENT_ID
             value: foo
-          - name: CLIENT_SECRET
-            value: foo
-          - name: APP_ID
-            value: 3434
-          # remaining env
+          - name: REACT_APP_API_BASE_URL
+            value: http://localhost:3001
         resources: {}
 status: {}
 ```

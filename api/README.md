@@ -36,6 +36,10 @@ Tests are with `jest`. To run tests `npm run test` !
 
 Running this application in production mode requires further configuration
 
+### Default Config Path
+
+The default path the api will look up your config files is at `/var/opt/config`. This is where you can mount your files to. If you wish to change the directory update the enviromnent variable `CONFIG_PATH`
+
 ### Running Single Container Instances via Docker in production
 
 Apply these configurations to your container runtime
@@ -44,7 +48,7 @@ Apply these configurations to your container runtime
     - CLIENT_SECRET {String}
     - CLIENT_ID {String}
     - APP_ID {Number}
-    - CONFIG_PATH {String} the path where the node app will look for role-mappers, github-private-key, config.json etc
+    - CONFIG_PATH {String} the path where the node app will look for role-mappers, github-private-key, config.json etc (defaults to /var/opt/config)
     - PORT {Number} defaults to 3001
     - MONGO_URL {String} fully qualified mongo url
     - WEB_URL {String fully qualified path to web for CORS}

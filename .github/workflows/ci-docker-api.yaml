@@ -1,11 +1,8 @@
 name: ci
 
 on: 
-  pull_request:
-    paths:
-      - 'api'
-  # release:
-  #   types: [published]
+  release:
+    types: [published]
   
 
 jobs:

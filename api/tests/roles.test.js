@@ -83,7 +83,7 @@ describe('Role utilities tests', () => {
         .reply(200, installations)
         .post('/app/installations/15321559/access_tokens')
         .reply(201, accessToken)
-        .get(`/orgs/${orgs[0].account.login}/teams/team`)
+        .get(`/orgs/${orgs[0].account.login}/teams/team/members`)
         .reply(200, orgTeamMembership)
 
       const user = await getTeamMembershipForOrg(
@@ -143,7 +143,7 @@ describe('Role utilities tests', () => {
         .reply(200, installations)
         .post('/app/installations/15321559/access_tokens')
         .reply(201, accessToken)
-        .get(`/orgs/${orgs[0].account.login}/teams/team`)
+        .get(`/orgs/${orgs[0].account.login}/teams/team/members`)
         .reply(200, orgTeamMembership)
 
       await expect(

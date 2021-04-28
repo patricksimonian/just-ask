@@ -34,7 +34,9 @@ const Header = () =>{
         </StyledLink>
 
         {state.isLoggedIn ? <Link to="/logout" >Logout {state.user.login}</Link> : 
-          <RebassLink sx={{display: 'flex', alignItems: 'center', color: theme.colors.primaryText}} href={`https://github.com/login/oauth/authorize?client_id=${config.CLIENT_ID}&redirect_uri=${window.location.origin}/auth&callback_url=${window.location.origin}/auth`} ><Image color={theme.colors.primaryText} mr={3} src={githubLogo} alt="github" width={25}/>Login</RebassLink>}
+          <RebassLink sx={{display: 'flex', textDecoration: 'none', alignItems: 'center', color: theme.colors.primaryText, ':visited': {
+            color: theme.colors.primaryText
+          }}} href={`https://github.com/login/oauth/authorize?client_id=${config.CLIENT_ID}&redirect_uri=${window.location.origin}/auth&callback_url=${window.location.origin}/auth`} ><Image color={theme.colors.primaryText} mr={3} src={githubLogo} alt="github" width={25}/>Login</RebassLink>}
 
       </Flex>
     </WidthControlledContainer>

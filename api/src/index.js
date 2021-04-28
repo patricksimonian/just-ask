@@ -66,8 +66,9 @@ async function initailize() {
   app.use('/organizations', orgRouters)
   app.use('/requests', requestRouters)
 
-  app.listen(process.env.PORT || 3000, () => {
-    console.log('Listening')
+  const PORT = process.env.PORT || 3000
+  app.listen(PORT, () => {
+    console.log(`Listening on ${PORT}`)
   })
 }
 

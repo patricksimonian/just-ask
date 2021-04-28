@@ -1,0 +1,17 @@
+{
+  "APPROVER": [
+    {
+      "kind": "GithubTeam",
+      "team": "OrgApprovers",
+      "organization": "patrick-org-test"
+    }
+  ],
+  "REQUESTER": [null],
+  "COLLABORATOR": [
+    {
+      "kind": "OrgRole",
+      "role": "member",
+      "name": "patrick-org-test"
+    }
+  ]
+}

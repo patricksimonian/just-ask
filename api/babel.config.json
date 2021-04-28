@@ -3,5 +3,6 @@
     "targets": {
       "node": "current"
     }
-  }]]
+  }]],
+  "ignore": ["**/*.test.js", "src/fixtures/*.js"]
 }

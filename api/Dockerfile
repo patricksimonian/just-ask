@@ -1,17 +1,19 @@
 FROM node:14
 
 RUN mkdir /var/opt/server
-
 RUN mkdir /var/opt/config
 
-WORKDIR /var/opt/server
+WORKDIR /var/opt/build
 
 COPY . .
 
 RUN npm install
+RUN npm run build
+RUN rm -rf src
 
 ENV CONFIG_PATH=/var/opt/config
+ENV NODE_ENV=production
 
 EXPOSE 3001
 
-CMD ["node", "bundle.js"]
+CMD ["npm", "run", "start"]

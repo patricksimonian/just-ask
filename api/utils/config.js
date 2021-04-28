@@ -2,7 +2,7 @@ import { readFileSync } from 'fs'
 import path from 'path'
 
 const getBasePathWithFile = (file) => {
-  process.env.NODE_ENV === 'production'
+  return process.env.NODE_ENV === 'production'
     ? `${process.env.CONFIG_PATH}/${file}`
     : path.join(__dirname, `../config/${file}`)
 }

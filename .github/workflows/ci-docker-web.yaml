@@ -1,4 +1,4 @@
-name: WEB - Docker Publish
+name: API - Docker Publish
 
 on: 
   release:
@@ -18,4 +18,4 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: my-docker-hub-namespace/my-docker-hub-repository
           tag_with_ref: true
-          context: web
+          context: api

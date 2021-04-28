@@ -3,7 +3,6 @@ import { useContext } from 'react';
 import { Flex, Image, Text, Link as RebassLink } from 'rebass';
 import { Link } from '@reach/router';
 import styled from '@emotion/styled'
-import Color from 'color';
 import { AuthContext } from '../providers/AuthContext';
 import { ContentContext } from '../providers/ContentProvider';
 import { WidthControlledContainer } from './Containers';
@@ -33,7 +32,7 @@ const Header = () =>{
           </Flex>
         </StyledLink>
 
-        {state.isLoggedIn ? <Link to="/logout" >Logout {state.user.login}</Link> : 
+        {state.isLoggedIn ? <StyledLink to="/logout" >Logout {state.user.login}</StyledLink> : 
           <RebassLink sx={{display: 'flex', textDecoration: 'none', alignItems: 'center', color: theme.colors.primaryText, ':visited': {
             color: theme.colors.primaryText
           }}} href={`https://github.com/login/oauth/authorize?client_id=${config.CLIENT_ID}&redirect_uri=${window.location.origin}/auth&callback_url=${window.location.origin}/auth`} ><Image color={theme.colors.primaryText} mr={3} src={githubLogo} alt="github" width={25}/>Login</RebassLink>}

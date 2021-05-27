@@ -14,8 +14,8 @@ import { getAuthenticatedApps } from './init'
 export const resolveOrgRole = async (username, org, role) => {
   try {
     log.info(`Checking if ${username} has role ${role} in ${org}`)
-    const orgMembershipRole = await getOrgRoleForUser(username, org)
 
+    const orgMembershipRole = await getOrgRoleForUser(username, org)
     return role === orgMembershipRole
   } catch (e) {
     log.error(e.message)
@@ -124,7 +124,6 @@ export const getOrgRoleForUser = async (username, org) => {
       username,
     }
   )
-
   return response.data.role
 }
 

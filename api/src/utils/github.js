@@ -1,7 +1,9 @@
+import log from 'log'
 import { getConfig } from './config'
 import { getAuthenticatedApps } from './init'
 
 export const inviteUserToOrgs = async (userId, orgs) => {
+  log.debug(`inviteUserToOrg ${userId} ${orgs}`)
   const installations = await getAuthenticatedApps()
   const promises = orgs.map((org) => {
     const app = installations.apps[org]
@@ -14,6 +16,7 @@ export const inviteUserToOrgs = async (userId, orgs) => {
 }
 
 export const getUserByName = async (username) => {
+  log.debug(`getUserByName ${username}`)
   const installations = await getAuthenticatedApps()
   const config = getConfig()
 

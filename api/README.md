@@ -60,11 +60,15 @@ Apply these configurations to your container runtime
     - name: config.json
       mountPath: /var/opt/config/config.json
 ```
-
-eg: Docker
+#### Examples
+1. Docker
 
 ```sh
-  docker run just-ask-server:<tag> \
+  # run an instance of mongo
+  # take note you'd want to set passwords and users in a production scenario
+  docker network create just-ask-network
+  docker run --network just-ask-network mongo:4.4.5 
+  docker run --network just-ask-network
   -e CLIENT_SECRET=... \
   -e CLIENT_ID=... 
   ... 
@@ -87,7 +91,9 @@ kind: Secret
 metadata:
   creationTimestamp: null
   name: github-private-key
-
+---
+apiVersion: v1
+stringData
 ---
 apiVersion: v1
 stringData:

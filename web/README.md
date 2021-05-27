@@ -108,7 +108,7 @@ spec:
         configMap: 
           name: app-config
       containers:
-      - image: just-ask-web:latest
+      - image: docker.io/wazzacky/just-ask-web:latest
         name: just-ask
         volumeMounts:
           - name: app-config

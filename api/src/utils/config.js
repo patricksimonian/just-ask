@@ -1,10 +1,16 @@
 import { readFileSync } from 'fs'
+import log from 'log'
 import path from 'path'
 
 const getBasePathWithFile = (file) => {
-  return process.env.NODE_ENV === 'production'
-    ? `${process.env.CONFIG_PATH}/${file}`
-    : path.join(__dirname, `../config/${file}`)
+  let filePath
+  if (process.env.NODE_ENV === 'production' && process.env.CONFIG_PATH) {
+    filePath = `${process.env.CONFIG_PATH}/${file}`
+  } else {
+    filePath = path.join(__dirname, `../config/${file}`)
+  }
+  log.info(`Loading ${file} from ${filePath}`)
+  return filePath
 }
 /**
  * returns the config file, opting to use a wrapper funciton over direct import to allow for

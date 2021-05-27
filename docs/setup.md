@@ -15,10 +15,9 @@ First things first, your organization will need to create a new Github App.
 2. Setup a Callback URL to the frontend of the Just Ask! This should url that the front end compnent will be accessible by.
 
 3. Setup a description explaining what your version of Just Ask! is used for so that your clients can understand why they are granting access to your Github App
-
-4. Create and save the github app private key, this will be needed to deploy the server
-
-5. Install the application on your desired github organizations
+4. Create and save a client secret, this will be needed to deploy the server
+5. Create and save the github app private key, this will be needed to deploy the server
+6. Install the application on your desired github organizations
 
 ## Server Configuration
 
@@ -77,6 +76,17 @@ Role mappings can be created from specific org roles in an org or membership in 
 
 **Take note of the `null`** field. This is a SPECIAL CASE for `REQUESTER`. If the `index 0` position of `REQUESTER` is `null`. Than any github user is granted that role implicitly. 
 
+The app also takes several environment variables:
+
+1. `APP_ID`: __required__ the github application id
+2. `CLIENT_SECRET`: __required__ the github application client secret
+3. `CLIENT_ID`: __required__ the github application client id
+4. `LOG_LEVEL`: defaults to `notice` but can be escalated to `info`, `debug` etc. For more details see [`log` docs](https://github.com/medikoo/log#readme)
+5. `LOG_TIME`: defaults to `null` but can be set to `rel` or `abs`. For production installations `abs` is recommended
+6. `PORT`: defaults to 3000 when `null`.
+7. `MONGO_URL`: __required__ the fully qualified mongo connection string to your mongo database
+8. `WEB_URL`: __required__ to enable cors, the frontend components' origin of Just-ask! needs to be set
+9. `CONFIG_PATH`: __production only__ allows you to change the path of where the api should look for its config files. Only works if `NODE_ENV=production`
 
 ## Web Configuration
 

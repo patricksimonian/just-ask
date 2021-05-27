@@ -17,6 +17,7 @@ const installationApps = {
  * @returns a non installed github app
  */
 export const getNonInstallationApp = () => {
+  log.debug('getNonInstallationApp')
   // caches a non installed app
   if (!installationApps.nonInstallatedApp) {
     const auth = createAppAuth({
@@ -46,7 +47,9 @@ const newAuthorizedApp = (installationId) => {
     clientSecret: process.env.CLIENT_SECRET,
     installationId,
   })
-  log.info(`authorized application created for installation ${installationId}`)
+  log.notice(
+    `Authorized application created for installation ${installationId}`
+  )
   return {
     initialized: Date.now(),
     app,
@@ -63,13 +66,14 @@ const newAuthorizedApp = (installationId) => {
 }
 
 export const getInstallations = async () => {
-  log.info('getInstallations')
+  log.debug('getInstallations')
   const nonInstallationRequest = getNonInstallationApp()
   const response = await nonInstallationRequest('GET /app/installations')
   return response.data
 }
 
 export const getOrgInstallations = async () => {
+  log.debug('getOrgInstallations')
   const config = getConfig()
 
   if (
@@ -91,7 +95,7 @@ export const getOrgInstallations = async () => {
     'account.login'
   ).filter((installation) => installation.target_type === 'Organization')
   if (matchedInstallations.length === 0) {
-    log.info(`This github app has no public org installations yet`)
+    log.notice(`This github app has no public org installations yet`)
   }
 
   return matchedInstallations
@@ -101,8 +105,9 @@ export const getOrgInstallations = async () => {
  * a new authenticated app must be created for every installation in order to invite users
  */
 export const getAuthenticatedApps = async () => {
+  log.debug('getAuthenticatedApps')
   if (!installationApps.initialized) {
-    log.info('Initializing Authenticated Apps')
+    log.notice('Initializing Authenticated Apps')
     installationApps.initialized = Date.now()
     const installations = await getOrgInstallations()
 
@@ -113,7 +118,7 @@ export const getAuthenticatedApps = async () => {
       }
     })
   } else {
-    log.info(
+    log.notice(
       `Authenticated Apps were cached, reusing the ones initialized on ${installationApps.initialized}`
     )
   }

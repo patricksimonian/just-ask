@@ -80,7 +80,13 @@ The app also takes several environment variables:
 
 1. `APP_ID`: __required__ the github application id
 2. `CLIENT_SECRET`: __required__ the github application client secret
-3. TO DO IMPROVE DOCUMENTATION
+3. `CLIENT_ID`: __required__ the github application client id
+4. `LOG_LEVEL`: defaults to `notice` but can be escalated to `info`, `debug` etc. For more details see [`log` docs](https://github.com/medikoo/log#readme)
+5. `LOG_TIME`: defaults to `null` but can be set to `rel` or `abs`. For production installations `abs` is recommended
+6. `PORT`: defaults to 3000 when `null`.
+7. `MONGO_URL`: __required__ the fully qualified mongo connection string to your mongo database
+8. `WEB_URL`: __required__ to enable cors, the frontend components' origin of Just-ask! needs to be set
+9. `CONFIG_PATH`: __production only__ allows you to change the path of where the api should look for its config files. Only works if `NODE_ENV=production`
 
 ## Web Configuration
 

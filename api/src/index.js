@@ -10,13 +10,17 @@ import connect from './db/connect.js'
 import orgRouters from './routes/organizations'
 import userRoleRouters from './routes/userRoles'
 import requestRouters from './routes/requests'
-import { getUserFromToken } from './middlewares/index.js'
+import { getUserFromToken, logMiddleware } from './middlewares/index.js'
 
 async function initailize() {
   logNode()
 
+  log.notice(`Attempting to connect to database`)
+
   await connect()
+  log.notice(`Database connection established`)
   try {
+    log.notice(`Initializing Github App`)
     await init()
   } catch (e) {
     console.error(e)
@@ -29,6 +33,7 @@ async function initailize() {
   // middlewares
   app.use(express.json())
   app.use(cors({ origin: process.env.WEB_URL }))
+  app.use(logMiddleware)
   app.get('/server-health', (req, res) =>
     res.send(process.env.SERVER_HEALTHY_MESSAGE || 'ok')
   )
@@ -73,8 +78,9 @@ async function initailize() {
   app.use('/requests', requestRouters)
 
   const PORT = process.env.PORT || 3000
+
   app.listen(PORT, () => {
-    console.log(`Listening on ${PORT}`)
+    log.notice(`Listening on ${PORT}`)
   })
 }
 

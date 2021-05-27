@@ -1,6 +1,12 @@
+import log from 'log'
 import { ROLES, ROLE_PRESCEDENT } from '../constants'
 import { doesUserHaveRole, getUserFromBearerToken } from '../utils/roles'
 
+export const logMiddleware = (req, res, next) => {
+  log.info(`${req.method} ${req.originalUrl}`)
+
+  next()
+}
 /**
  * sets user and role in req.auth
  * @param {*} req

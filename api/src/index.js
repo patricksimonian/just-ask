@@ -30,6 +30,7 @@ async function initailize() {
 
   const app = express()
 
+  const PORT = process.env.PORT || 3000
   // middlewares
   app.use(express.json())
 
@@ -45,8 +46,13 @@ async function initailize() {
   app.post('/auth', async (req, res) => {
     if (!req.body.code) {
       res.status(400).send('auth requires code')
+      return
     }
 
+    if (!req.body.state) {
+      res.status(400).send('auth requires state')
+      return
+    }
     try {
       const response = await axios.post(
         'https://github.com/login/oauth/access_token',
@@ -54,6 +60,8 @@ async function initailize() {
           client_id: process.env.CLIENT_ID,
           client_secret: process.env.CLIENT_SECRET,
           code: req.body.code,
+          redirect_uri: process.env.HOST_URL || `http://localhost:${PORT}`,
+          state: req.body.state,
         },
         {
           headers: {
@@ -80,8 +88,6 @@ async function initailize() {
   app.use('/roles', userRoleRouters)
   app.use('/organizations', orgRouters)
   app.use('/requests', requestRouters)
-
-  const PORT = process.env.PORT || 3000
 
   app.listen(PORT, () => {
     log.notice(`Listening on ${PORT}`)

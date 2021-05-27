@@ -46,7 +46,7 @@ async function initailize() {
     if (!req.body.code) {
       res.status(400).send('auth requires code')
     }
-    console.log('CHECKING AUTH')
+
     try {
       const response = await axios.post(
         'https://github.com/login/oauth/access_token',

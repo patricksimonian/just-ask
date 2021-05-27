@@ -20,7 +20,7 @@ export const organizations = async (req, res) => {
     log.warn(
       `user ${req.auth.user} does not have sufficient priviledge for ${AUDIT_ACTIONS.api.organizations.list}`
     )
-    console.log(req.auth.role)
+
     await createAudit({
       apiVersion: 'v1',
       action: AUDIT_ACTIONS.api.requests.list,

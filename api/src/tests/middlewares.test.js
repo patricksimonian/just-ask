@@ -63,8 +63,9 @@ describe('Express Custom Middlewares', () => {
       expect(res.status).toHaveBeenCalledWith(401)
     })
 
-    it('returns the user as approve if they are one', async () => {
+    it('returns the user as approver if they are one', async () => {
       getRoleMapping.mockReturnValue(roleMapping)
+
       getConfig.mockReturnValueOnce({ orgs: orgs.map((o) => o.account.login) })
       const res = {
         status: jest.fn(() => ({ send: jest.fn() })),

@@ -11,6 +11,8 @@ jest.mock('log', () => ({
   warn: jest.fn(),
   error: jest.fn(),
   info: jest.fn(),
+  debug: jest.fn(),
+  notice: jest.fn(),
 }))
 
 getGithubPrivateKey.mockReturnValue(githubPrivateKey)
@@ -66,7 +68,7 @@ describe('Octokit initialization', () => {
       nock('https://api.github.com').get('/app/installations').reply(200, [])
       getConfig.mockReturnValue({ orgs: ['hello world'] })
       await getOrgInstallations()
-      expect(log.info).toHaveBeenCalledWith(
+      expect(log.notice).toHaveBeenCalledWith(
         'This github app has no public org installations yet'
       )
     })
@@ -77,7 +79,7 @@ describe('Octokit initialization', () => {
         .reply(200, installations)
       getConfig.mockReturnValueOnce({ orgs: [Math.random() * 100 + ''] })
       await getOrgInstallations()
-      expect(log.info).toHaveBeenCalledWith(
+      expect(log.notice).toHaveBeenCalledWith(
         'This github app has no public org installations yet'
       )
     })

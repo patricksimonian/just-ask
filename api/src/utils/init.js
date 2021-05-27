@@ -4,7 +4,6 @@ import { every, intersectionBy, isArray, isObject, isString } from 'lodash'
 import { getConfig, getGithubPrivateKey } from './config'
 import log from 'log'
 
-const privateKey = getGithubPrivateKey()
 // cached value
 const installationApps = {
   initialized: null,
@@ -22,7 +21,7 @@ export const getNonInstallationApp = () => {
   if (!installationApps.nonInstallatedApp) {
     const auth = createAppAuth({
       appId: process.env.APP_ID,
-      privateKey,
+      privateKey: getGithubPrivateKey(),
       clientId: process.env.CLIENT_ID,
       clientSecret: process.env.CLIENT_SECRET,
     })
@@ -42,7 +41,7 @@ export const getNonInstallationApp = () => {
 const newAuthorizedApp = (installationId) => {
   const app = createAppAuth({
     appId: process.env.APP_ID,
-    privateKey,
+    privateKey: getGithubPrivateKey(),
     clientId: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
     installationId,
@@ -67,8 +66,11 @@ const newAuthorizedApp = (installationId) => {
 
 export const getInstallations = async () => {
   log.debug('getInstallations')
+
   const nonInstallationRequest = getNonInstallationApp()
+
   const response = await nonInstallationRequest('GET /app/installations')
+
   return response.data
 }
 
@@ -109,8 +111,8 @@ export const getAuthenticatedApps = async () => {
   if (!installationApps.initialized) {
     log.notice('Initializing Authenticated Apps')
     installationApps.initialized = Date.now()
+    console.log('initializing')
     const installations = await getOrgInstallations()
-
     installations.forEach((installation) => {
       const name = installation.account.login.toLowerCase()
       if (!installationApps.apps[name]) {

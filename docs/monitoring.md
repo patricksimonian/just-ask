@@ -1,5 +1,9 @@
+---
+nav_order: 4
+permalink: /monitoring
+title: Application Monitoring
+---
 ## Application Monitoring
-
 
 Each component of the application can be individually monitored. There are already some preset defaults for logging for each component. 
 

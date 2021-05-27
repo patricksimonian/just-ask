@@ -57,7 +57,11 @@ export const doesUserHaveRole = async (role, username) => {
     mappings[role].map(async (mapper) => {
       switch (mapper.kind) {
         case ROLE_MAPPING_KINDS.OrgRole:
-          return resolveOrgRole(username, mapper.organization, mapper.role)
+          return resolveOrgRole(
+            username,
+            mapper.organization,
+            mapper.role.toLowerCase()
+          )
 
         case ROLE_MAPPING_KINDS.GithubTeam:
           return resolveGithubTeam(username, mapper.organization, mapper.team)

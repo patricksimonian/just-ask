@@ -68,7 +68,7 @@ Role mappings can be created from specific org roles in an org or membership in 
     {
       "kind": "OrgRole",
       "role": "member",
-      "name": "bcgov"
+      "organization": "bcgov"
     }
   ]
 }
@@ -87,6 +87,7 @@ The app also takes several environment variables:
 7. `MONGO_URL`: __required__ the fully qualified mongo connection string to your mongo database
 8. `WEB_URL`: __required__ to enable cors, the frontend components' origin of Just-ask! needs to be set
 9. `CONFIG_PATH`: __production only__ allows you to change the path of where the api should look for its config files. Only works if `NODE_ENV=production`
+
 
 ## Web Configuration
 

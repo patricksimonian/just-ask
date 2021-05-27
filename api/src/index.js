@@ -60,7 +60,6 @@ async function initailize() {
           client_id: process.env.CLIENT_ID,
           client_secret: process.env.CLIENT_SECRET,
           code: req.body.code,
-          redirect_uri: process.env.HOST_URL || `http://localhost:${PORT}`,
           state: req.body.state,
         },
         {

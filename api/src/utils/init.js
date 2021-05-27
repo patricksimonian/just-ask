@@ -111,7 +111,7 @@ export const getAuthenticatedApps = async () => {
   if (!installationApps.initialized) {
     log.notice('Initializing Authenticated Apps')
     installationApps.initialized = Date.now()
-    console.log('initializing')
+
     const installations = await getOrgInstallations()
     installations.forEach((installation) => {
       const name = installation.account.login.toLowerCase()

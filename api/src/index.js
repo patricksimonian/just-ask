@@ -63,7 +63,7 @@ async function initailize() {
       )
       res.status(201).send(response.data)
     } catch (e) {
-      log.error(e)
+      log.error(e.message)
       res.status(400).send({
         message: 'Unable to authenticate user using web application oauth flow',
       })

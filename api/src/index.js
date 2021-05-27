@@ -46,6 +46,7 @@ async function initailize() {
     if (!req.body.code) {
       res.status(400).send('auth requires code')
     }
+    console.log('CHECKING AUTH')
     try {
       const response = await axios.post(
         'https://github.com/login/oauth/access_token',
@@ -62,8 +63,7 @@ async function initailize() {
       )
       res.status(201).send(response.data)
     } catch (e) {
-      log.error('unable to authenticate user')
-
+      log.error(e)
       res.status(400).send({
         message: 'Unable to authenticate user using web application oauth flow',
       })

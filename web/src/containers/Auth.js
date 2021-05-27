@@ -9,14 +9,15 @@ import { AuthContext } from '../providers/AuthContext';
 
 const Auth = ({navigate}) => {
   const [error, setError] = useState(null);
-  const { dispatch, state} = useContext(AuthContext);
+  const { dispatch } = useContext(AuthContext);
 
   
   const params = new URLSearchParams(window.location.search);
   const code = params.get('code');
+  const state = params.get('state');
   useEffect(() => {
     if(code) {
-      axios.post('/auth', {code})
+      axios.post('/auth', { code, state })
       .then(async res => {
         const apiResponse = await axios.get(`${GITHUB_API_URL}/user`, {
           headers: {
@@ -27,7 +28,8 @@ const Auth = ({navigate}) => {
           type: 'LOGIN', 
           payload: {
             token: res.data,
-            user: apiResponse.data
+            user: apiResponse.data,
+            
         }
       })
       navigate('/')

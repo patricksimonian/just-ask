@@ -32,8 +32,12 @@ async function initailize() {
 
   // middlewares
   app.use(express.json())
+
+  log.notice(`Cors enabled for ${process.env.WEB_URL}`)
+
   app.use(cors({ origin: process.env.WEB_URL }))
   app.use(logMiddleware)
+
   app.get('/server-health', (req, res) =>
     res.send(process.env.SERVER_HEALTHY_MESSAGE || 'ok')
   )

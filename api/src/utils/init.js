@@ -117,9 +117,13 @@ export const getAuthenticatedApps = async () => {
       const name = installation.account.login.toLowerCase()
       if (!installationApps.apps[name]) {
         installationApps.apps[name] = newAuthorizedApp(installation.id)
+        log.debug(`newAuthorizedApp created for ${installation.id}`)
       }
     })
   } else {
+    log.debug(
+      `Installation Apps returned: ${Object.keys(installationApps.apps)}`
+    )
     log.notice(
       `Authenticated Apps were cached, reusing the ones initialized on ${installationApps.initialized}`
     )

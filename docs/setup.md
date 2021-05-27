@@ -88,6 +88,7 @@ The app also takes several environment variables:
 8. `WEB_URL`: __required__ to enable cors, the frontend components' origin of Just-ask! needs to be set
 9. `CONFIG_PATH`: __production only__ allows you to change the path of where the api should look for its config files. Only works if `NODE_ENV=production`
 
+
 ## Web Configuration
 
 The web allows some small configuration to have the Github App look and feel more like your organizations branding. This comes into the form of two configuration files:

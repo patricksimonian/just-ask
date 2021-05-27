@@ -50,6 +50,8 @@ export const resolveGithubTeam = async (username, org, team) => {
  */
 export const doesUserHaveRole = async (role, username) => {
   const mappings = getRoleMapping()
+
+  log.debug(`configured role mappings: \n ${JSON.stringify(mappings, null, 2)}`)
   // special case where you can grant access to role if configured to not look for anything special
   if (role !== ROLES.APPROVER && mappings[role][0] === null) return true
 
@@ -59,12 +61,16 @@ export const doesUserHaveRole = async (role, username) => {
         case ROLE_MAPPING_KINDS.OrgRole:
           return resolveOrgRole(
             username,
-            mapper.organization,
-            mapper.role.toLowerCase()
+            mapper.organization.toLowerCase(),
+            mapper.role
           )
 
         case ROLE_MAPPING_KINDS.GithubTeam:
-          return resolveGithubTeam(username, mapper.organization, mapper.team)
+          return resolveGithubTeam(
+            username,
+            mapper.organization.toLowerCase(),
+            mapper.team
+          )
 
         default:
           return false

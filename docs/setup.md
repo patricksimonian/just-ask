@@ -68,7 +68,7 @@ Role mappings can be created from specific org roles in an org or membership in 
     {
       "kind": "OrgRole",
       "role": "member",
-      "name": "bcgov"
+      "organization": "bcgov"
     }
   ]
 }

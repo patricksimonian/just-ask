@@ -16,7 +16,13 @@ async function initailize() {
   logNode()
 
   await connect()
-  await init()
+  try {
+    await init()
+  } catch (e) {
+    console.error(e)
+    log.error('Failed to initialize, exiting')
+    process.exit(1)
+  }
 
   const app = express()
 

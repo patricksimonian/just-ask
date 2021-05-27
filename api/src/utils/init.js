@@ -4,6 +4,7 @@ import { every, intersectionBy, isArray, isObject, isString } from 'lodash'
 import { getConfig, getGithubPrivateKey } from './config'
 import log from 'log'
 
+const privateKey = getGithubPrivateKey()
 // cached value
 const installationApps = {
   initialized: null,
@@ -20,7 +21,7 @@ export const getNonInstallationApp = () => {
   if (!installationApps.nonInstallatedApp) {
     const auth = createAppAuth({
       appId: process.env.APP_ID,
-      privateKey: getGithubPrivateKey(),
+      privateKey,
       clientId: process.env.CLIENT_ID,
       clientSecret: process.env.CLIENT_SECRET,
     })
@@ -40,7 +41,7 @@ export const getNonInstallationApp = () => {
 const newAuthorizedApp = (installationId) => {
   const app = createAppAuth({
     appId: process.env.APP_ID,
-    privateKey: getGithubPrivateKey(),
+    privateKey,
     clientId: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
     installationId,

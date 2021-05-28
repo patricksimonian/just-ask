@@ -116,7 +116,7 @@ stringData:
         {
           "kind": "OrgRole",
           "role": "member",
-          "name": "bcgov"
+          "organization": "bcgov"
         }
       ]
     }

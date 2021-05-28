@@ -32,7 +32,7 @@ export const Notice = ({type, children, ...rest}) => (
    
       borderRadius: 0,
       ...typeMapping[type]
-    }}>
+    }} {...rest}>
     {children}
   </Box>
 )

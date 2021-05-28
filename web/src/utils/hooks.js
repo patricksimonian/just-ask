@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "../axios";
 import Axios from 'axios';
 import { GITHUB_API_URL } from "../constants";
+import { AuthContext } from "../providers/AuthContext";
 
 /**
  * react hook to get our app config from a static path
@@ -86,18 +87,22 @@ export const useGetOrganizations =  () => {
 export const useAuth = () => {
   const [auth, setAuth] = useState(null);
   const [fetching, setFetching] = useState(false);
+  const {state, dispatch} = useContext(AuthContext);
   useEffect(() => {
-    if(!auth) {
+    if(state.role) {
+      setAuth(state.role)
+    } else if (!auth) {
       setFetching(true);
       axios.get('/roles')
       .then(res => {
+        dispatch({type: 'SET_ROLE', payload: {role: res.data.role}})
         setAuth(res.data.role);
       })
       .finally(() => {
         setFetching(false);
       })
     }
-  }, [auth]);
+  }, [auth, dispatch, state.role]);
   
   return { auth, fetching };
 }

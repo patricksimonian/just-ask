@@ -240,7 +240,10 @@ export const createInvitationRequest = async (req, res) => {
   const requestingForSelf = recipient.toLowerCase() === requester.toLowerCase()
   const installations = Object.keys(authApps.apps)
   // if user is requesting invites to orgs that have not been installed
-  const diff = difference(organizations, installations)
+  const diff = difference(
+    organizations.map((o) => o.toLowerCase()),
+    installations
+  )
 
   if (diff.length > 0) {
     log.warn(
@@ -272,9 +275,10 @@ export const createInvitationRequest = async (req, res) => {
 
     if (pendingRequest) {
       log.info(`user ${req.auth.user} is already has request for own behalf`)
-      res
-        .status(400)
-        .send({ message: 'Pending request for yourself already exists' })
+      res.status(400).send({
+        message:
+          'Pending request for yourself already exists. It must be approved/denied before you can make another.',
+      })
       return
     }
     // check if there is a difference between requested orgs and current installations

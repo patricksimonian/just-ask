@@ -31,7 +31,11 @@ export const Approvals = () => {
   const thereArePendingRequests = !fetching && requests && requests.length > 0;
 
   const handleApprove = async id => {
-    await approveRequest(id, token)
+    try {
+      await approveRequest(id, token)
+    } catch(e) {
+      // if something went wrong is most likely the user was already in the organization
+    }
     setRefetchRequests(true)
   }
 

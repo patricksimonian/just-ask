@@ -40,7 +40,9 @@ export const resolveGithubTeam = async (username, org, team) => {
     log.debug(`${username} is ${user ? 'is' : 'is not'} in ${team}`)
     return !!user
   } catch (e) {
-    log.error(e)
+    log.error(
+      `Issue getting team membership for team ${team}. Error: ${e.message}`
+    )
     return false
   }
 }
@@ -53,8 +55,6 @@ export const resolveGithubTeam = async (username, org, team) => {
  */
 export const doesUserHaveRole = async (role, username) => {
   const mappings = getRoleMapping()
-
-  log.debug(`configured role mappings: \n ${JSON.stringify(mappings, null, 2)}`)
   // special case where you can grant access to role if configured to not look for anything special
   if (role !== ROLES.APPROVER && mappings[role][0] === null) return true
 

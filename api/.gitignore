@@ -3,5 +3,7 @@ node_modules
 dist
 *.pem
 
-config/config.json
-config/role-mappers.json
+**/**/config.json
+**/**/role-mappers.json
+src/config/config.json
+src/config/role-mappers.json

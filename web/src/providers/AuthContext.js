@@ -3,9 +3,10 @@ import { authInterceptor } from '../axios';
 
 
 export const initialState = {
-  isLoggedIn: JSON.parse(localStorage.getItem("isLoggedIn")) || false,
+  isLoggedIn: localStorage.getItem("isLoggedIn") || false,
   user: JSON.parse(localStorage.getItem("user")) || null,
   token: JSON.parse(localStorage.getItem('token')) || null,
+  role: null,
 };
 
 export const reducer = (state, action) => {
@@ -32,6 +33,12 @@ export const reducer = (state, action) => {
         user: null,
         token: null,
       };
+    }
+    case "SET_ROLE": {
+      return {
+        ...state,
+        role: action.payload.role
+      }
     }
     default:
       return state;

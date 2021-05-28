@@ -14,7 +14,7 @@ export const DynamicThemeProvider = ({children}) => {
   let primaryText = '#fff';
   let secondaryText  = '#000';
   if(fetched && palette) {
-    console.log(palette);
+
      primaryText = Color(palette.primary).isDark ? defaultCreatedPallete.white : defaultCreatedPallete.text;
      secondaryText = Color(palette.secondary).isDark ? defaultCreatedPallete.white : defaultCreatedPallete.text;
 

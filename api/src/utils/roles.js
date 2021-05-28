@@ -16,7 +16,10 @@ export const resolveOrgRole = async (username, org, role) => {
     log.info(`Checking if ${username} has role ${role} in ${org}`)
 
     const orgMembershipRole = await getOrgRoleForUser(username, org)
-    return role === orgMembershipRole
+    log.debug(`${username} has role ${orgMembershipRole}`)
+    const hasRole = role === orgMembershipRole
+    log.debug(`Checking if ${role} equals ${orgMembershipRole}: ${hasRole}`)
+    return hasRole
   } catch (e) {
     log.error(e.message)
     return false
@@ -34,7 +37,7 @@ export const resolveGithubTeam = async (username, org, team) => {
   try {
     log.info(`Checking if ${username} has membership in team ${team} in ${org}`)
     const user = await getTeamMembershipForOrg(username, org, team)
-
+    log.debug(`${username} is ${user ? 'is' : 'is not'} in ${team}`)
     return !!user
   } catch (e) {
     log.error(e)

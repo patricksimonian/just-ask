@@ -6,7 +6,7 @@ export const inviteUserToOrgs = async (userId, orgs) => {
   log.debug(`inviteUserToOrg ${userId} ${orgs}`)
   const installations = await getAuthenticatedApps()
   const promises = orgs.map((org) => {
-    const app = installations.apps[org]
+    const app = installations.apps[org.toLowerCase()]
     return app.authenticatedRequest('POST /orgs/{org}/invitations', {
       org,
       invitee_id: userId,

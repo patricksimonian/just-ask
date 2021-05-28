@@ -254,7 +254,7 @@ export const createInvitationRequest = async (req, res) => {
   }
 
   const requests = organizations.map((organization) => ({
-    organization,
+    organization: organization.toLowerCase(),
     recipient,
     requester,
     apiVersion: 'v1',

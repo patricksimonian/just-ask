@@ -9,7 +9,7 @@ export const initialState = {
 };
 
 export const reducer = (state, action) => {
-  console.log(state, action);
+
   switch (action.type) {
     case "LOGIN": {
       localStorage.setItem("isLoggedIn", true)

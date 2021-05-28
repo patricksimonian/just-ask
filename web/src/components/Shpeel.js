@@ -31,7 +31,7 @@ const Shpeel = () => (
 
     <Text  as="h2" fontWeight={400} fontSize={[5,4,5]} mb={3} maxWidth={1200}>If there's a<Text as="em" color="red" fontStyle="normal">problem</Text></Text>
     <Text as="p" mb={8} maxWidth={1200}>
-      If you find a problem with Just Ask! Make a <Text as="a" href="https://github.com/patricksimonian/just-ask/issues">Github Issue</Text> so that it can be resolved. Pull requests are also welcome!
+      If you find a problem with Just Ask! Make a <Text as="a" href="https://github.com/patricksimonian/just-ask/issues">Github Issue </Text> so that it can be resolved. Pull requests are also welcome!
     </Text>
   </WidthControlledContainer>
 )

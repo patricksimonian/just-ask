@@ -1,5 +1,4 @@
 
-import { Redirect, redirectTo } from '@reach/router';
 import axios from '../axios';
 import { useContext, useEffect, useState } from 'react';
 import { WidthControlledContainer } from '../components/Containers';
@@ -41,7 +40,7 @@ const Auth = ({navigate}) => {
     } else {
       setError(new Error('Github did not return a code'))
     }
-  }, [dispatch, code, navigate]);
+  }, [dispatch, code, navigate, state]);
   
   
   return <WidthControlledContainer>{error ? <Notice type="error">{error.message}</Notice> : <h1>logging in</h1>}</WidthControlledContainer>

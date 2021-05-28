@@ -1,6 +1,4 @@
 import React from 'react';
-import { Text } from 'rebass';
-import { WidthControlledContainer } from '../components/Containers';
 import WithRole from '../components/WithRole';
 import { ROLES } from '../constants';
 import Approvals from "./Approvals";

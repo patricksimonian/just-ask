@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../axios";
 import { useContext, useState } from "react";
 import { Box, Button, Text } from "rebass";
 import { WidthControlledContainer } from "../components/Containers";
@@ -6,6 +6,7 @@ import RequestForm from "../components/RequestForm";
 import { ROLES } from "../constants";
 import { AuthContext } from "../providers/AuthContext";
 import { useAuth, useGetOrganizations } from "../utils/hooks"
+import { Notice } from "../components/Notice";
 
 
 const Requests = () => {
@@ -19,10 +20,12 @@ const Requests = () => {
   return (
     <WidthControlledContainer>
       <Box py={6} maxWidth={[800, 400, 600]} >
-        {orgsFound && <Text fontSize={4}>There are <Text color="green" as="span">{orgs.length}</Text> org{orgs.length > 1 ? "s": ""} that this github app has been installed on.</Text>}
+        {!orgsFound && !loading && !fetching && <Text fontSize={4}>Just.Ask has been misconfigured. Double check if the github app has been installed on at least one organization</Text>}
+        <Text as="h2">Invitations</Text>
       </Box>
+      
       <Box fontSize={5}>
-        {loading && <Text> Loading !</Text>}
+        {(loading || fetching) && <Text> Loading...</Text>}
         {orgsFound && !formSubmitted && !authFetching && role && <RequestForm username={state.isLoggedIn && state.user.login} organizations={orgs} isRequester={!authFetching && role === ROLES.REQUESTER} onSubmit={data => {
           setLoading(true);
           axios.post('/requests',  
@@ -41,7 +44,8 @@ const Requests = () => {
         }}/>}
       </Box>
       {orgsFound && formSubmitted && <Box>
-        <Button bg="secondary" color="primary" onClick={() => setFormSubmitted(false)}>Request another invite</Button>
+        <Notice type="info" mb={4}>Invitation Created!</Notice>
+        <Button bg="secondary" color="primary" sx={{cursor: 'pointer'}} onClick={() => setFormSubmitted(false)}>Request another invite</Button>
       </Box>}
     </WidthControlledContainer>)
 }

@@ -43,8 +43,9 @@ export const Approvals = () => {
   return (
     <WidthControlledContainer>
       <Box pt={4}>
-        {!thereArePendingRequests && !refetchRequests && <Notice type="info">No Pending Requests!</Notice>}
-        {thereArePendingRequests && <Text fontSize={5}>Pending Requests:</Text>}
+        <Text as="h2" mb={14}>Approve an Invite Request</Text>
+        {fetching && <Text fontSize={5}>Loading...</Text>}
+        {!thereArePendingRequests && !refetchRequests && <Notice type="info">No Pending Requests to approve!</Notice>}
         <Flex>
           {thereArePendingRequests && requests.map(r => 
             <Request 

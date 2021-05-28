@@ -46,9 +46,7 @@ const newAuthorizedApp = (installationId) => {
     clientSecret: process.env.CLIENT_SECRET,
     installationId,
   })
-  log.notice(
-    `Authorized application created for installation ${installationId}`
-  )
+
   return {
     initialized: Date.now(),
     app,
@@ -90,7 +88,11 @@ export const getOrgInstallations = async () => {
     )
   }
   const installations = await getInstallations()
-
+  log.debug(
+    `This github app has been installed on ${installations.map(
+      (i) => i.account.login
+    )}`
+  )
   const matchedInstallations = intersectionBy(
     installations,
     config.orgs.map((org) => ({ account: { login: org } })),
@@ -116,8 +118,10 @@ export const getAuthenticatedApps = async () => {
     installations.forEach((installation) => {
       const name = installation.account.login.toLowerCase()
       if (!installationApps.apps[name]) {
+        log.info(
+          `newAuthorizedApp created for ${name} installation: ${installation.id}`
+        )
         installationApps.apps[name] = newAuthorizedApp(installation.id)
-        log.debug(`newAuthorizedApp created for ${installation.id}`)
       }
     })
   } else {

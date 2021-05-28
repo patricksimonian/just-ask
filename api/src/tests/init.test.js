@@ -96,5 +96,22 @@ describe('Octokit initialization', () => {
       getConfig.mockReturnValueOnce({ orgs: orgs.map((o) => o.account.login) })
       await expect(getOrgInstallations()).resolves.toEqual(orgs)
     })
+
+    it('ignores case for orgs', async () => {
+      const casedInstallation = installations.map((i) => ({
+        ...i,
+        account: { ...i.account, login: i.account.login.toUpperCase() },
+      }))
+      nock('https://api.github.com')
+        .get('/app/installations')
+        .reply(200, casedInstallation)
+
+      const orgs = installations.filter(
+        (installation) => installation.target_type === 'Organization'
+      )
+
+      getConfig.mockReturnValueOnce({ orgs: orgs.map((o) => o.account.login) })
+      await expect(getOrgInstallations()).resolves.toEqual(orgs)
+    })
   })
 })

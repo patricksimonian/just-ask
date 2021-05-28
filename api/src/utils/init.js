@@ -88,14 +88,21 @@ export const getOrgInstallations = async () => {
     )
   }
   const installations = await getInstallations()
+  // lower case installation login names
+  const loweredInstallations = installations.map((i) => ({
+    ...i,
+    account: { ...i.account, login: i.account.login.toLowerCase() },
+  }))
+
   log.debug(
-    `This github app has been installed on ${installations.map(
+    `This github app has been installed on ${loweredInstallations.map(
       (i) => i.account.login
     )}`
   )
+
   const matchedInstallations = intersectionBy(
-    installations,
-    config.orgs.map((org) => ({ account: { login: org } })),
+    loweredInstallations,
+    config.orgs.map((org) => ({ account: { login: org.toLowerCase() } })),
     'account.login'
   ).filter((installation) => installation.target_type === 'Organization')
   if (matchedInstallations.length === 0) {

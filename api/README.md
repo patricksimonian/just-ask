@@ -49,6 +49,7 @@ Apply these configurations to your container runtime
     - CLIENT_ID {String}
     - APP_ID {Number}
     - CONFIG_PATH {String} the path where the node app will look for role-mappers, github-private-key, config.json etc (defaults to /var/opt/config)
+    - PRIVATE_KEY_PATH {String} the path where the github-preivate-key.pem file is located. In production environments if this is not set it will look for this file at CONFIG_PATH instead
     - PORT {Number} defaults to 3001
     - MONGO_URL {String} fully qualified mongo url
     - WEB_URL {String fully qualified path to web for CORS}

@@ -4,7 +4,13 @@ import path from 'path'
 
 const getBasePathWithFile = (file) => {
   let filePath
-  if (process.env.NODE_ENV === 'production' && process.env.CONFIG_PATH) {
+  if (
+    process.env.NODE_ENV === 'production' &&
+    process.env.PRIVATE_KEY_PATH &&
+    file === 'github-private-key.pem'
+  ) {
+    filePath = `${process.env.PRIVATE_KEY_PATH}/${file}`
+  } else if (process.env.NODE_ENV === 'production' && process.env.CONFIG_PATH) {
     filePath = `${process.env.CONFIG_PATH}/${file}`
   } else {
     filePath = path.join(__dirname, `../config/${file}`)

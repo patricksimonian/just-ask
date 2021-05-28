@@ -102,7 +102,7 @@ stringData:
       "APPROVER": [
         {
           "kind": "OrgRole",
-          "role": "owner",
+          "role": "admin",
           "name": "bcgov"
         },
         {

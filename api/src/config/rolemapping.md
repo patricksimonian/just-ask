@@ -17,7 +17,7 @@ The config `role-mappers.json` can map a list of org level roles as well as gith
   "APPROVER": [
     {
       "kind": "OrgRole",
-      "role": "owner",
+      "role": "admin",
       "organization": "bcgov"
     },
     {

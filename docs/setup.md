@@ -54,7 +54,7 @@ Role mappings can be created from specific org roles in an org or membership in 
   "APPROVER": [
     {
       "kind": "OrgRole",
-      "role": "owner",
+      "role": "admin",
       "name": "bcgov"
     },
     {

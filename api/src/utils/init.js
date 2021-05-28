@@ -102,7 +102,7 @@ export const getOrgInstallations = async () => {
 
   const matchedInstallations = intersectionBy(
     loweredInstallations,
-    config.orgs.map((org) => ({ account: { login: org } })),
+    config.orgs.map((org) => ({ account: { login: org.toLowerCase() } })),
     'account.login'
   ).filter((installation) => installation.target_type === 'Organization')
   if (matchedInstallations.length === 0) {

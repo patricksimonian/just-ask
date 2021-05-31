@@ -44,7 +44,7 @@ Sample config.json:
 
 `role-mappers.json` is a description of the three main workflows that a user can take when using this application: APPROVER, COLLABORATOR, REQUESTER. Simply put:
 1. Approvers can: automatically invite users into the orgs, approve pending requests
-2. Collaboraters can: automatically invite users into the org
+2. Collaborators can: automatically invite users into the org
 3. Requesters can: ask for an invite that requires approval from an APPROVER
 
 Role mappings can be created from specific org roles in an org or membership in a github team. 
@@ -87,6 +87,7 @@ The app also takes several environment variables:
 7. `MONGO_URL`: __required__ the fully qualified mongo connection string to your mongo database
 8. `WEB_URL`: __required__ to enable cors, the frontend components' origin of Just-ask! needs to be set
 9. `CONFIG_PATH`: __production only__ allows you to change the path of where the api should look for its config files. Only works if `NODE_ENV=production`
+10. PRIVATE_KEY_PATH: __production only__ allows you to change the path of where the private key is located. This is important in k8s based deployments as typically the API config and the private key would be in a configmap and secret respectively.  Only useable when `NODE_ENV=production`
 
 
 ## Web Configuration
@@ -114,6 +115,17 @@ The web allows some small configuration to have the Github App look and feel mor
 ```
 
 If you are concerned with fetching an image from the internet, the `brandLogo` path can be absolute (`/path/to/image.png`) and you may mount an image into the run time `public` folder of the web component as you would these two config files. 
+
+The web component also takes a couple of environment variables depending on environment:
+If you are running the application locally, the environment variables are surfaced through node js and so you will require:
+
+1. `REACT_APP_CLIENT_ID` the github app client id
+2. `REACT_APP_API_BASE_URL` host of the just ask api
+
+If you are running the production image which is a caddy server the environment variables are different:
+
+1. `CLIENT_ID` the github app client id
+2. `API_BASE_URL` host of the just ask api
 
 ## App Installation
 

@@ -20,7 +20,7 @@ const Shpeel = () => (
     
     <Text as="h2" fontWeight={400} fontSize={[5,4,5]} mb={3} maxWidth={1200}><Text as="em" color="secondary" fontStyle="normal">Just Ask!</Text> extends the basic role based access of your github orgs</Text>
     <Text as="p" mb={8} maxWidth={1200}>
-      With the three membership request workflows (Approvals, Requesters, Collaboraters), users have a self-serve path to
+      With the three membership request workflows (Approvals, Requesters, Collaborators), users have a self-serve path to
       gaining access to your organizations. Requests are backed by an audit trail to keep track of access incidents.
     </Text>
 

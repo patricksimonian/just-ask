@@ -177,7 +177,7 @@ export const getInvitationRequests = async (req, res) => {
     }).exec()
 
     log.info(
-      `user ${req.auth.user} found requests with state=${req.query.state}`
+      `user ${req.auth.user} found ${requests.length} requests with state=${req.query.state}`
     )
 
     res.status(200).json(requests)

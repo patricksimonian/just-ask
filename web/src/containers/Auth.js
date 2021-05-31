@@ -8,7 +8,7 @@ import { AuthContext } from '../providers/AuthContext';
 
 const Auth = ({navigate}) => {
   const [error, setError] = useState(null);
-  const { dispatch, state: authState } = useContext(AuthContext);
+  const { dispatch } = useContext(AuthContext);
   const [requested, setRequested] = useState(false);
   
   const params = new URLSearchParams(window.location.search);
@@ -43,7 +43,7 @@ const Auth = ({navigate}) => {
         setError(new Error('Github did not return a code'))
       }
     }
-  }, [code, dispatch, navigate, requested, state]);
+  }, [code, dispatch, error, navigate, requested, state]);
   
   
   return <WidthControlledContainer>{error ? <Notice type="error">{error.message}</Notice> : <h1>logging in</h1>}</WidthControlledContainer>

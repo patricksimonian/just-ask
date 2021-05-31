@@ -7,7 +7,7 @@ import Requests from "./Requests";
 const ApprovalRequestManager = () => {
   return (
   <React.Fragment>
-    <WithRole roles={[ROLES.APPROVER, ROLES.COLLABORATER, ROLES.REQUESTER, ROLES.AUDITER]}>
+    <WithRole roles={[ROLES.APPROVER, ROLES.COLLABORATOR, ROLES.REQUESTER, ROLES.AUDITER]}>
       <Requests />
     </WithRole>
     <WithRole roles={[ROLES.APPROVER]}>

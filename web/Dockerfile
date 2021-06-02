@@ -30,6 +30,8 @@ RUN mv build/* /opt/app-root/www
 RUN cp Caddyfile /opt/app-root/etc/
 # cleanup react app
 RUN rm -rf /opt/app 
+# delete node runtime
+RUN rm -rf /usr/local/bin/node
 
 RUN chmod -R 775 /opt/app-root/*
 WORKDIR /opt/app-root/www

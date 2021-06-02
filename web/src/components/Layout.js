@@ -1,4 +1,5 @@
 import { Box } from "rebass";
+import Footer from "./Footer";
 import Header from "./Header";
 
 
@@ -8,6 +9,7 @@ const Layout = ({children}) => (
     <main >
       {children}
     </main>
+    <Footer />
   </Box>
 )
 

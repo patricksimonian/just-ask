@@ -110,7 +110,8 @@ The web allows some small configuration to have the Github App look and feel mor
 ```json
 {
   "brandTitle": "Platform Services' Github Access Management",
-  "brandLogo": "path to my png"
+  "brandLogo": "path to my png",
+  "issuesLink": "path to where you track your issues"
 }
 ```
 

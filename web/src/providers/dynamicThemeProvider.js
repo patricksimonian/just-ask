@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ThemeProvider } from 'emotion-theming';
 import { baseTheme } from '../theme';
 import { luminosities } from '../defaults/theme.json';
@@ -10,19 +10,26 @@ import Color from 'color';
 const defaultCreatedPallete = createPalette(defaultPallete, luminosities);
 
 export const DynamicThemeProvider = ({children}) => {
-  const [ palette, fetched] = useConfig('/config/pallete.json')
-  let primaryText = '#fff';
-  let secondaryText  = '#000';
-  if(fetched && palette) {
+  const [ palette, fetched, error] = useConfig('/config/pallete.json')
+  const [colors, setColors] = useState({...defaultCreatedPallete,
+    primaryText: Color(defaultCreatedPallete.primary).isDark() ? defaultCreatedPallete.white : defaultCreatedPallete.text,
+    secondaryText: Color(defaultCreatedPallete.secondary).isDark() ? defaultCreatedPallete.white : defaultCreatedPallete.text,
+  });
 
-     primaryText = Color(palette.primary).isDark ? defaultCreatedPallete.white : defaultCreatedPallete.text;
-     secondaryText = Color(palette.secondary).isDark ? defaultCreatedPallete.white : defaultCreatedPallete.text;
+  useEffect(() => {
+    if(fetched && palette && !error) {
 
-  }
+      setColors({...defaultCreatedPallete, ...palette, primaryText: Color(palette.primary).isDark() ? defaultCreatedPallete.white : defaultCreatedPallete.text,
+
+        secondaryText: Color(palette.secondary).isDark() ? defaultCreatedPallete.white : defaultCreatedPallete.text })
+    }
+  }, [error, fetched, palette])
+
+  console.log(colors)
  return (
     <ThemeProvider theme={{
         ...baseTheme, 
-        colors: {...defaultCreatedPallete, ...palette, primaryText, secondaryText}
+        colors
       }}>
       {children}
     </ThemeProvider>

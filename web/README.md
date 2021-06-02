@@ -77,7 +77,8 @@ stringData:
   content.json: |
     {
       "brandTitle": "Just Ask!",
-      "brandLogo": null
+      "brandLogo": null,
+      "issuesLink": "https://github.com/foo/bar/issues"
     }
 kind: ConfigMap
 metadata:

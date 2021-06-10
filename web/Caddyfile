@@ -13,7 +13,7 @@ root * /opt/app-root/www
 encode zstd gzip
 
 
-try_files {path} {path}/ index.html
+try_files {path} {path}/ /public/{path} index.html
 header /service-worker.js {
 # all static assets SHOULD be cached
   Content-Type "text/javascript"

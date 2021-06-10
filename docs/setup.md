@@ -95,6 +95,7 @@ The app also takes several environment variables:
 The web allows some small configuration to have the Github App look and feel more like your organizations branding. This comes into the form of two configuration files:
 1. pallete.json
 2. content.json
+3. config.json
 
 `pallete.json` allows you to adjust the colour scheme of the front end. There is a base scheme and whatever colors you choose to add will override the default ones. It is recommended that you only adjust the `primary` and `secondary` colors.
 
@@ -117,6 +118,15 @@ The web allows some small configuration to have the Github App look and feel mor
 
 If you are concerned with fetching an image from the internet, the `brandLogo` path can be absolute (`/path/to/image.png`) and you may mount an image into the run time `public` folder of the web component as you would these two config files. 
 
+`config.json` is for misc. application configuration.
+
+```json 
+  // noIndividualOrgRequests: prevents users from individually selecting org requests. They can only request access to all orgs.
+  // defaults to false
+  {
+    "noIndividualOrgRequests": false
+  }
+```
 The web component also takes a couple of environment variables depending on environment:
 If you are running the application locally, the environment variables are surfaced through node js and so you will require:
 

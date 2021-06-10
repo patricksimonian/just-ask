@@ -7,10 +7,12 @@ import { ROLES } from "../constants";
 import { AuthContext } from "../providers/AuthContext";
 import { useAuth, useGetOrganizations } from "../utils/hooks"
 import { Notice } from "../components/Notice";
+import { ConfigContext } from "../providers/ConfigProvider";
 
 
 const Requests = () => {
   const { state } = useContext(AuthContext)
+  const { noIndividualOrgRequests } = useContext(ConfigContext);
   const {auth: role, fetching: authFetching} = useAuth();
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -27,7 +29,7 @@ const Requests = () => {
       
       <Box fontSize={5}>
         {(loading || fetching) && <Text> Loading...</Text>}
-        {orgsFound && !formSubmitted && !authFetching && role && <RequestForm username={state.isLoggedIn && state.user.login} organizations={orgs} isRequester={!authFetching && role === ROLES.REQUESTER} onSubmit={data => {
+        {orgsFound && !formSubmitted && !authFetching && role && <RequestForm autoSelectCheckboxes={noIndividualOrgRequests} username={state.isLoggedIn && state.user.login} organizations={orgs} isRequester={!authFetching && role === ROLES.REQUESTER} onSubmit={data => {
           setLoading(true);
           setError(null);
           axios.post('/requests',  

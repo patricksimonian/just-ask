@@ -5,57 +5,80 @@ import { Box, Button, Flex, Image, Text } from 'rebass';
 import React from 'react';
 
 
-const RequestForm = ({organizations, onSubmit, isRequester, username = ''}) => (
-  <Form
-  onSubmit={onSubmit}
-  render={({ handleSubmit }) => (
-    <Flex onSubmit={handleSubmit} alignItems="center" py={4} flexWrap="wrap">
-      
-        <Text pr={4}>Request an invite for</Text>
-        <Field name="user" defaultValue={isRequester ? username: '' }  render={({ input, meta }) => (
-            <Box alignItems="center" pr={4}>
-              {isRequester ? (
-                <React.Fragment>
-                  <input type="hidden" {...input} />
-                  <Text color="secondary" sx={{textDecoration: 'underline'}}>myself</Text>
-                </React.Fragment>
-              )
-            :
-            (
-              <Input placeholder="github id" {...input} maxWidth={[400, 300, 400]} />
-            )}
-              {meta.touched && meta.error && <span>{meta.error}</span>}
-            </Box>
-          )} />
+const RequestForm = ({autoSelectCheckboxes, organizations, onSubmit, isRequester, username = ''}) => {
 
-            <Text pr={3}>to organizations: </Text>
-          <Box  mr={4}>
-
-      {organizations.map(org => (
-        <Field type="checkbox"  label={org.name} value={org.name} key={org.id} name="organizations"
+  return (
+    <Form
+    onSubmit={onSubmit}
+    initialValues={{
+      organizations: autoSelectCheckboxes ? organizations.map(o => o.name): []
+    }}
+    render={({ handleSubmit }) => (
+      <Flex onSubmit={handleSubmit} alignItems="center" py={4} flexWrap="wrap">
         
-        render={({ input, meta }) => (
-          <Flex alignItems="center" flexDirection="column" py={1}>
-
-                <Label  alignItems="center" justifyContent="space-between">
-                  <Image src={org.image} alt={org.name} width={35} />
-                  <Text px={3}>
-                    {org.name}
-
-                  </Text>
-                
-                <Checkbox  {...input} bg="secondary" color="black"/>
-                </Label>
+          <Text pr={4}>Request an invite for</Text>
+          <Field name="user" defaultValue={isRequester ? username: '' }  render={({ input, meta }) => (
+              <Box alignItems="center" pr={4}>
+                {isRequester ? (
+                  <React.Fragment>
+                    <input type="hidden" {...input} />
+                    <Text color="secondary" sx={{textDecoration: 'underline'}}>myself</Text>
+                  </React.Fragment>
+                )
+              :
+              (
+                <Input placeholder="github id" {...input} maxWidth={[400, 300, 400]} />
+              )}
                 {meta.touched && meta.error && <span>{meta.error}</span>}
-              </Flex>
-            )}/>
-
-      ))}
-          </Box>
-        <Button onClick={() => handleSubmit()} bg="secondary" p={3} fontSize={5} style={{cursor: 'pointer'}}>Request</Button>
-    </Flex>
-  )}
-/>
-)
+              </Box>
+            )} />
+  
+              <Text pr={3}>to organizations: </Text>
+            <Box  mr={4}>
+  
+        {organizations.map(org => (
+          <Field type="checkbox" label={org.name} value={org.name} key={org.id} name="organizations"
+          
+          render={({ input, meta }) => (
+            <Flex alignItems="center" flexDirection="column" py={1}>
+  
+                  <Label  alignItems="center" justifyContent="space-between">
+                    <Image src={org.image} alt={org.name} width={35} />
+                    <Text px={3}>
+                      {org.name}
+  
+                    </Text>
+                  <Checkbox  {...input} disabled={autoSelectCheckboxes} sx={{
+                    bg: 'primary',
+                    color: 'secondary',
+                    outline: 'none',
+                    'input:checked ~ &': {
+                      bg: 'primary',
+                      color: 'secondary'
+                    },
+                    'input:focus ~ &, input:active ~ &': {
+                      bg: 'primary',
+                      color: 'secondary'
+                    },
+                    'input:disabled ~ &': {
+                      cursor: 'not-allowed',
+                      bg: 'lightgrey',
+                      color: 'grey',
+                      opacity: .4,
+                    },
+                  }}/>
+                  </Label>
+                  {meta.touched && meta.error && <span>{meta.error}</span>}
+                </Flex>
+              )}/>
+  
+        ))}
+            </Box>
+          <Button onClick={() => handleSubmit()} bg="secondary" p={3} fontSize={5} style={{cursor: 'pointer'}}>Request</Button>
+      </Flex>
+    )}
+  />
+  )
+}
 
 export default RequestForm

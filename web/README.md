@@ -80,6 +80,10 @@ stringData:
       "brandLogo": null,
       "issuesLink": "https://github.com/foo/bar/issues"
     }
+  config.json: |
+    {
+      "noIndividualOrgRequests": true
+    }
 kind: ConfigMap
 metadata:
   creationTimestamp: null

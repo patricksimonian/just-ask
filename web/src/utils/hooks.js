@@ -13,8 +13,10 @@ import { AuthContext } from "../providers/AuthContext";
   const [ fetching, setFetching ] = useState(false);
   const [ error, setError ] = useState(null);
   useEffect(() => {
+
     if(!config && !error) {
       setFetching(false);
+
       Axios.get(filePath, {
         headers: {
           accept: 'application/json'
@@ -22,6 +24,7 @@ import { AuthContext } from "../providers/AuthContext";
       }).then(response => {
         setFetched(true);
         setConfig(response.data)
+
       }).catch(e => {
         setFetched(false);
         setFetching(false);

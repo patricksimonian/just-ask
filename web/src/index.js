@@ -7,14 +7,17 @@ import reportWebVitals from './reportWebVitals';
 import { DynamicThemeProvider } from './providers/dynamicThemeProvider';
 import { ContentProvider } from './providers/ContentProvider';
 import AuthProvider from './providers/AuthContext';
+import { ConfigProvider } from './providers/ConfigProvider';
 
 ReactDOM.render(
   <React.StrictMode>
     <DynamicThemeProvider>
       <ContentProvider>
-        <AuthProvider>
-          <App />
-        </AuthProvider>
+        <ConfigProvider>
+          <AuthProvider>
+            <App />
+          </AuthProvider>
+        </ConfigProvider>
       </ContentProvider>
     </DynamicThemeProvider>
   </React.StrictMode>,

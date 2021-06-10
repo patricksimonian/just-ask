@@ -3,7 +3,7 @@
     {
       "kind": "OrgRole",
       "role": "owner",
-      "name": "bcgov"
+      "organization": "bcgov"
     },
     {
       "kind": "GithubTeam",
@@ -16,7 +16,7 @@
     {
       "kind": "OrgRole",
       "role": "member",
-      "name": "bcgov"
+      "organization": "bcgov"
     }
   ]
 }

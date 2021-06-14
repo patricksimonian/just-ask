@@ -54,7 +54,7 @@ const Requests = () => {
         }}/>}
       </Box>
       {orgsFound && formSubmitted && !error && <Box>
-        <Notice type="info" mb={4}>You request for the org membership has been submitted successfully. An email with the org invite(s) will be sent to the email associated with the provided GitHub account. Once the invite is accepted, the GitHub ID will be added to the org(s).</Notice>
+        <Notice type="info" mb={4}>You request for the org membership has been submitted successfully. An email with the org invites will be sent to the email associated with the provided GitHub account. Once both invites are accepted, the GitHub ID will be added to the orgs.</Notice>
         <Button bg="secondary" color="primary" sx={{cursor: 'pointer'}} onClick={() => setFormSubmitted(false)}>Request another invite</Button>
       </Box>}
       {error && <Box>

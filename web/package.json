@@ -1,6 +1,6 @@
 {
-  "name": "clubmatic",
-  "version": "0.1.0",
+  "name": "just-ask-web",
+  "version": "1.0.105",
   "private": true,
   "dependencies": {
     "@emotion/core": "^10.1.1",

@@ -25,7 +25,7 @@ export const DynamicThemeProvider = ({children}) => {
     }
   }, [error, fetched, palette])
 
-  console.log(colors)
+
  return (
     <ThemeProvider theme={{
         ...baseTheme, 

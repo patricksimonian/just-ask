@@ -1,7 +1,7 @@
 {
-  "name": "api",
-  "version": "1.0.0",
-  "description": "api for clubmatic",
+  "name": "just-ask-api",
+  "version": "1.0.105",
+  "description": "api for just-ask",
   "main": "index.js",
   "dependencies": {
     "@octokit/auth": "^3.0.3",

@@ -2,10 +2,12 @@ export const ROLES = {
   APPROVER: 'APPROVER',
   COLLABORATOR: 'COLLABORATOR',
   REQUESTER: 'REQUESTER',
+  ADMINISTRATOR: 'ADMINISTRATOR',
 }
 
 export const ROLE_PRESCEDENT = [
   ROLES.APPROVER,
+  ROLES.ADMINISTRATOR,
   ROLES.COLLABORATOR,
   ROLES.REQUESTER,
 ]
@@ -20,6 +22,8 @@ export const RULES = {
   requests: 'requests', // can make requests for themselves
   invitations: 'invitations', // can invite other users to orgs,
   organizations: 'organizations', // can view organizations
+  delete_requested: 'delete_requested' // 
+
 }
 
 export const ROLE_RULES = {

@@ -76,6 +76,7 @@ export const patchInvitationRequest = async (req, res) => {
       `user ${req.auth.user} patched request ${req.param.id} to state=${req.body.state}`
     )
   } catch (e) {
+    log.debug(e.message)
     log.warn(
       `user ${req.auth.user} request ${req.param.id} could not be updated to ${req.body.state}`
     )
@@ -94,6 +95,7 @@ export const patchInvitationRequest = async (req, res) => {
       const { id } = await getUserByName(request.recipient)
       await inviteUserToOrgs(id, [request.organization])
     } catch (e) {
+      log.debug(e.message)
       log.warn(
         `unable to invite recipient ${request.recipient} to organizations from request`
       )
@@ -183,6 +185,7 @@ export const getInvitationRequests = async (req, res) => {
     res.status(200).json(requests)
     return
   } catch (e) {
+    log.debug(e.message)
     log.error(`unable to find requests`)
 
     res.status(400).send({

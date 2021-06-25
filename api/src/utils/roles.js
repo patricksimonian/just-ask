@@ -1,8 +1,16 @@
 import axios from 'axios'
 import log from 'log'
-import { ROLES, ROLE_MAPPING_KINDS, ROLE_RULES } from '../constants'
+import {
+  ALLOWABLE_ROLE_MAPPINGS,
+  ROLES,
+  ROLE_MAPPING_KINDS,
+  ROLE_RULES,
+} from '../constants'
 import { getRoleMapping } from './config'
 import { getAuthenticatedApps } from './init'
+
+export const isRoleAllowableInMapping = (role, roleMappingKind) =>
+  ALLOWABLE_ROLE_MAPPINGS[role].includes(roleMappingKind)
 
 /**
  * checks a user against an org role and returns boolean if they meet the spec
@@ -62,6 +70,12 @@ export const doesUserHaveRole = async (role, username) => {
 
   const checks = await Promise.all(
     mappings[role].map(async (mapper) => {
+      if (!isRoleAllowableInMapping(role, mapper.kind)) {
+        log.notice(
+          `Role ${role} does not allow a mapping of ${mapper.kind} to verify against, returning false`
+        )
+        return false
+      }
       switch (mapper.kind) {
         case ROLE_MAPPING_KINDS.OrgRole:
           return await resolveOrgRole(

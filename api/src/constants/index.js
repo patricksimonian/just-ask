@@ -3,11 +3,13 @@ export const ROLES = {
   COLLABORATOR: 'COLLABORATOR',
   REQUESTER: 'REQUESTER',
   ADMINISTRATOR: 'ADMINISTRATOR',
+  AUDITOR: 'AUDITOR',
 }
 
 export const ROLE_PRESCEDENT = [
   ROLES.APPROVER,
   ROLES.ADMINISTRATOR,
+  ROLES.AUDITOR,
   ROLES.COLLABORATOR,
   ROLES.REQUESTER,
 ]
@@ -17,13 +19,26 @@ export const ROLE_MAPPING_KINDS = {
   GithubTeam: 'GithubTeam',
 }
 
+export const ALLOWABLE_ROLE_MAPPINGS = {
+  [ROLES.ADMINISTRATOR]: [ROLE_MAPPING_KINDS.GithubTeam],
+  [ROLES.AUDITOR]: [ROLE_MAPPING_KINDS.GithubTeam],
+  [ROLES.APPROVER]: [ROLE_MAPPING_KINDS.OrgRole, ROLE_MAPPING_KINDS.GithubTeam],
+  [ROLES.COLLABORATOR]: [
+    ROLE_MAPPING_KINDS.OrgRole,
+    ROLE_MAPPING_KINDS.GithubTeam,
+  ],
+  [ROLES.REQUESTER]: [
+    ROLE_MAPPING_KINDS.OrgRole,
+    ROLE_MAPPING_KINDS.GithubTeam,
+  ],
+}
+
 export const RULES = {
   approvals: 'approvals', // can approve requests
   requests: 'requests', // can make requests for themselves
   invitations: 'invitations', // can invite other users to orgs,
   organizations: 'organizations', // can view organizations
-  delete_requested: 'delete_requested' // 
-
+  delete_requested: 'delete_requested', //
 }
 
 export const ROLE_RULES = {

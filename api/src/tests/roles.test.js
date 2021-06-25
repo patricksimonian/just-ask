@@ -1,5 +1,9 @@
 import nock from 'nock'
-import { ROLES } from '../constants'
+import {
+  ALLOWABLE_ROLE_MAPPINGS,
+  ROLES,
+  ROLE_MAPPING_KINDS,
+} from '../constants'
 import accessToken from '../fixtures/accessToken'
 import githubPrivateKey from '../fixtures/githubPrivateKey'
 import installations from '../fixtures/installations'
@@ -13,6 +17,7 @@ import {
   getTeamMembershipForOrg,
   resolveGithubTeam,
   resolveOrgRole,
+  isRoleAllowableInMapping,
 } from '../utils/roles'
 
 jest.mock('../utils/config.js')
@@ -27,7 +32,24 @@ describe('Role utilities tests', () => {
   afterEach(() => {
     nock.cleanAll()
   })
-
+  describe('isRoleAllowableInMapping', () => {
+    it('returns true if allowed', () => {
+      expect(
+        isRoleAllowableInMapping(
+          ROLES.APPROVER,
+          ALLOWABLE_ROLE_MAPPINGS[ROLES.APPROVER][0]
+        )
+      ).toBe(true)
+    })
+    it('returns false if not allowed', () => {
+      expect(
+        isRoleAllowableInMapping(
+          ROLES.ADMINISTRATOR,
+          ROLE_MAPPING_KINDS.OrgRole // know for sure admins cant have org roles
+        )
+      ).toBe(false)
+    })
+  })
   describe('getOrgRoleForUser', () => {
     it('throws if the team membership org is not a valid installation', async () => {
       jest.unmock('../utils/init')

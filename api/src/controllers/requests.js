@@ -324,6 +324,20 @@ export const createInvitationRequest = async (req, res) => {
           requests.length > 1 ? 's' : ''
         }created`,
       })
+
+      await createAudit({
+        apiVersion: 'v1',
+        action: AUDIT_ACTIONS.api.requests.update,
+        data: JSON.stringify({
+          message: `user created invitationRequest for theirself`,
+          user: req.auth.user,
+          payload: {
+            recipient: recipient,
+            organizations: organizations,
+          },
+          type: 'error',
+        }),
+      })
     } catch (e) {
       log.debug(e.message)
       log.warn(`user ${req.auth.user} request failed`)
@@ -371,6 +385,19 @@ export const createInvitationRequest = async (req, res) => {
       message: `${requests.length} approved invitation${
         requests.length > 1 ? 's' : ''
       }created`,
+    })
+    await createAudit({
+      apiVersion: 'v1',
+      action: AUDIT_ACTIONS.api.requests.update,
+      data: JSON.stringify({
+        message: `user created invitationRequest`,
+        user: req.auth.user,
+        payload: {
+          recipient: recipient,
+          organizations: organizations,
+        },
+        type: 'error',
+      }),
     })
   } catch (e) {
     log.warn(`user ${req.auth.user} request failed`)

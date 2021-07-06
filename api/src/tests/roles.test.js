@@ -32,6 +32,7 @@ describe('Role utilities tests', () => {
   afterEach(() => {
     nock.cleanAll()
   })
+
   describe('isRoleAllowableInMapping', () => {
     it('returns true if allowed', () => {
       expect(
@@ -41,6 +42,7 @@ describe('Role utilities tests', () => {
         )
       ).toBe(true)
     })
+
     it('returns false if not allowed', () => {
       expect(
         isRoleAllowableInMapping(
@@ -50,6 +52,7 @@ describe('Role utilities tests', () => {
       ).toBe(false)
     })
   })
+
   describe('getOrgRoleForUser', () => {
     it('throws if the team membership org is not a valid installation', async () => {
       jest.unmock('../utils/init')

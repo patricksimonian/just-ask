@@ -16,7 +16,8 @@
     "lodash": "^4.17.21",
     "log": "^6.0.0",
     "log-node": "^7.0.0",
-    "mongoose": "^5.12.3"
+    "mongoose": "^5.12.3",
+    "query-string": "^7.0.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.13.16",

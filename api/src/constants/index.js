@@ -7,9 +7,9 @@ export const ROLES = {
 }
 
 export const ROLE_PRESCEDENT = [
-  ROLES.APPROVER,
   ROLES.ADMINISTRATOR,
   ROLES.AUDITOR,
+  ROLES.APPROVER,
   ROLES.COLLABORATOR,
   ROLES.REQUESTER,
 ]
@@ -39,6 +39,7 @@ export const RULES = {
   invitations: 'invitations', // can invite other users to orgs,
   organizations: 'organizations', // can view organizations
   delete_requested: 'delete_requested', //
+  view_audits: 'view_audits',
 }
 
 export const ROLE_RULES = {
@@ -54,6 +55,13 @@ export const ROLE_RULES = {
     RULES.organizations,
   ],
   [ROLES.REQUESTER]: [RULES.requests, RULES.organizations],
+  [ROLES.AUDITOR]: [
+    RULES.approvals,
+    RULES.requests,
+    RULES.invitations,
+    RULES.organizations,
+    RULES.view_audits,
+  ],
   [undefined]: [], // stub role
 }
 
@@ -74,6 +82,9 @@ export const AUDIT_ACTIONS = {
       update: 'requests.update',
       patch: 'requests.patch',
       list: 'requests.list',
+    },
+    audits: {
+      list: 'audits.list',
     },
   },
 }

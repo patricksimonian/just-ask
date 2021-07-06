@@ -12,6 +12,7 @@ import Shpeel from './components/Shpeel';
 import Brand from './components/Brand';
 import { WidthControlledContainer } from './components/Containers';
 import { Box } from 'rebass';
+import { Audits } from './containers/Audits';
 
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
 
         <Logout path="/logout" />
         <Shpeel path="/about" />
+        <Audits path="/audits" /> 
       </Router>
       
     </Layout>

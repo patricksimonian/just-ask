@@ -94,6 +94,20 @@ export const patchInvitationRequest = async (req, res) => {
     try {
       const { id } = await getUserByName(request.recipient)
       await inviteUserToOrgs(id, [request.organization])
+
+      await createAudit({
+        apiVersion: 'v1',
+        action: AUDIT_ACTIONS.api.requests.update,
+        data: JSON.stringify({
+          message: `user patched invitationRequest`,
+          user: req.auth.user,
+          payload: {
+            recipient: request.recipient,
+            organizations: [request.organization],
+          },
+          type: 'error',
+        }),
+      })
     } catch (e) {
       log.debug(e.message)
       log.warn(
@@ -111,6 +125,20 @@ export const patchInvitationRequest = async (req, res) => {
           state: INVITATION_REQUEST_STATES.FAILED,
         }
       ).exec()
+
+      await createAudit({
+        apiVersion: 'v1',
+        action: AUDIT_ACTIONS.api.requests.update,
+        data: JSON.stringify({
+          message: `user failed to patch invitationRequest`,
+          user: req.auth.user,
+          payload: {
+            recipient: request.recipient,
+            organizations: [request.organization],
+          },
+          type: 'error',
+        }),
+      })
       return
     }
   }

@@ -35,13 +35,13 @@ export const getAudits = async (req, res) => {
     return
   }
 
-  let skip = Math.floor(actualPage * pageLimit)
+  let skip = Math.floor((actualPage - 1) * pageLimit)
   skip = skip > pageLimit ? skip : 0
   const audits = await Audit.find(
     {},
     {},
     { limit: Math.floor(pageLimit), skip }
-  )
+  ).sort({ createdAt: -1 })
   const count = await Audit.count()
 
   res.status(200).json({

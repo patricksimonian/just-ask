@@ -17,7 +17,7 @@ getGithubPrivateKey.mockReturnValue(githubPrivateKey)
 describe('Audits Request Controllers', () => {
   describe('GET /audits', () => {
     it('returns audits', async () => {
-      Audit.find.mockReturnValue(Promise.resolve(audits))
+      Audit.find.mockReturnValue({ sort: () => Promise.resolve(audits) })
       Audit.count.mockReturnValue(Promise.resolve(audits.length))
       const req = {
         auth: {

@@ -74,7 +74,7 @@ export const Audits = () => {
     rows,
     prepareRow,
   } = useTable({columns, data})
-  console.log(audits.count, validatedPage, PAGE_LIMIT)
+
   return (
     <WithRole roles={[ROLES.AUDITOR, ROLES.ADMINISTRATOR]}>
 

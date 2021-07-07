@@ -335,7 +335,7 @@ export const createInvitationRequest = async (req, res) => {
             recipient: recipient,
             organizations: organizations,
           },
-          type: 'error',
+          type: 'info',
         }),
       })
     } catch (e) {
@@ -396,7 +396,7 @@ export const createInvitationRequest = async (req, res) => {
           recipient: recipient,
           organizations: organizations,
         },
-        type: 'error',
+        type: 'info',
       }),
     })
   } catch (e) {

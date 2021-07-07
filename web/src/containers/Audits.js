@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react"
-import {Box} from 'rebass';
+import {Box, Text} from 'rebass';
 import {useTable} from 'react-table';
 import axios from '../axios'
 import { WidthControlledContainer } from "../components/Containers"
@@ -21,6 +21,9 @@ export const Audits = () => {
       axios.get(`/audits?page=${validatedPage}&limit=${PAGE_LIMIT}`).then((res) => {
         setFetched(true);
         setAudits(res.data)
+      })
+      .catch(() => {
+        setFetched(true);
       })
 
     }
@@ -67,9 +70,10 @@ export const Audits = () => {
     <WithRole roles={[ROLES.AUDITOR, ROLES.ADMINISTRATOR]}>
 
       <WidthControlledContainer>
-        {audits.count > validatedPage * PAGE_LIMIT && <Link to={`?page=${validatedPage + 1}`}>Next Page</Link>}
+        {!fetched && <Text> Loading...</Text>}
+        {audits && audits.count > validatedPage * PAGE_LIMIT && <Link to={`?page=${validatedPage + 1}`}>Next Page</Link>}
         {validatedPage > 1 && <Link to={`?page=${validatedPage - 1}`}>Previous Page</Link>}
-        <Box as="table" sx={{
+        { audits && <Box as="table" sx={{
           borderSpacing: 0,
           border: '1px solid',
           borderColor: 'primary',
@@ -107,7 +111,7 @@ export const Audits = () => {
               )
             })}
           </tbody>
-        </Box>
+        </Box> }
       </WidthControlledContainer>
     </WithRole>
 

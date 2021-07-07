@@ -229,21 +229,7 @@ export const getInvitationRequests = async (req, res) => {
  */
 export const createInvitationRequest = async (req, res) => {
   log.info('createInvitationRequest')
-  for (let i = 0; i < 200; i++) {
-    createAudit({
-      apiVersion: 'v1',
-      action: AUDIT_ACTIONS.api.requests.update,
-      data: JSON.stringify({
-        message: `user created invitationRequest`,
-        user: req.auth.user,
-        payload: {
-          recipient: 'test',
-          organizations: 'foo',
-        },
-        type: 'info',
-      }),
-    })
-  }
+
   await createAudit({
     apiVersion: 'v1',
     action: AUDIT_ACTIONS.api.requests.create,

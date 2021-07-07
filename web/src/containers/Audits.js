@@ -11,18 +11,26 @@ export const Audits = () => {
   
   const [audits, setAudits] = useState(null)
   const [fetched, setFetched] = useState(false)
-  const PAGE_LIMIT = 100;
   const { page } = useQueryParams(['page']);
+  const validatedPage = isNaN(parseInt(page)) ? 1 : parseInt(page)
+  const [fetchedPage, setFetchedPage] = useState(validatedPage);
+  const PAGE_LIMIT = 100;
 
-  const validatedPage = isNaN(parseInt(page)) ? 1 : page
+  useEffect(() => {
+    if(fetchedPage !== validatedPage) {
+      setFetched(false);
+    }
+  }, [fetchedPage, validatedPage])
 
   useEffect(() => {
     if(!fetched) {
       axios.get(`/audits?page=${validatedPage}&limit=${PAGE_LIMIT}`).then((res) => {
+        setFetchedPage(validatedPage)
         setFetched(true);
         setAudits(res.data)
       })
       .catch(() => {
+        setFetchedPage(validatedPage)
         setFetched(true);
       })
 
@@ -66,18 +74,25 @@ export const Audits = () => {
     rows,
     prepareRow,
   } = useTable({columns, data})
+  console.log(audits.count, validatedPage, PAGE_LIMIT)
   return (
     <WithRole roles={[ROLES.AUDITOR, ROLES.ADMINISTRATOR]}>
 
       <WidthControlledContainer>
-        {!fetched && <Text> Loading...</Text>}
+        <Box pb={3}>
+
+        {validatedPage > 1 && <Box  as="span" pr={3}> <Link to={`?page=${validatedPage - 1}`} >Previous Page</Link> </Box>}
         {audits && audits.count > validatedPage * PAGE_LIMIT && <Link to={`?page=${validatedPage + 1}`}>Next Page</Link>}
-        {validatedPage > 1 && <Link to={`?page=${validatedPage - 1}`}>Previous Page</Link>}
-        { audits && <Box as="table" sx={{
+        </Box>
+        <Box  sx={{maxHeight: '75vh',
+          overflow: 'auto'}}>
+          {!fetched && <Text> Loading...</Text>}
+{ audits && fetched && <Box as="table" sx={{
           borderSpacing: 0,
           border: '1px solid',
           borderColor: 'primary',
-          borderCollapse: 'collapse'
+          borderCollapse: 'collapse',
+          
         }} {...getTableProps()}>
           <Box as="thead" sx={{
             borderBottom: '1px solid',
@@ -112,6 +127,8 @@ export const Audits = () => {
             })}
           </tbody>
         </Box> }
+        </Box>
+        
       </WidthControlledContainer>
     </WithRole>
 

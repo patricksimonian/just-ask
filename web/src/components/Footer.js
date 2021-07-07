@@ -8,7 +8,7 @@ const Footer = () => {
   const content = useContext(ContentContext);
 
   return (
-    <Box as="footer" sx={{position: 'fixed', bottom: 0, left: 0, right: 0}}>
+    <Box as="footer" sx={{position: 'fixed', bottom: 0, left: 0, right: 0}} >
       <WidthControlledContainer>
         <Flex alignItems="center">
           <Brand />

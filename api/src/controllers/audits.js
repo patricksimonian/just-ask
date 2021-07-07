@@ -20,7 +20,7 @@ export const getAudits = async (req, res) => {
   const pageLimit = limit && limit < MAX_LIMIT ? limit : MAX_LIMIT
 
   if (isNaN(parseInt(actualPage)) || isNaN(parseInt(pageLimit))) {
-    res.status(400).send({ message: 'invalid page parameters' })
+    res.status(400).json({ message: 'invalid page parameters' })
     return
   }
 
@@ -29,13 +29,12 @@ export const getAudits = async (req, res) => {
       `user ${req.auth.user} does not have sufficient priviledge for ${AUDIT_ACTIONS.api.audits.list}`
     )
 
-    res.status(403).send({
+    res.status(403).json({
       message: 'user does not have permission to list audits',
     })
     return
   }
 
-  console.log(pageLimit, actualPage * pageLimit, actualPage)
   let skip = Math.floor(actualPage * pageLimit)
   skip = skip > pageLimit ? skip : 0
   const audits = await Audit.find(
@@ -45,7 +44,7 @@ export const getAudits = async (req, res) => {
   )
   const count = await Audit.count()
 
-  res.status(200).send({
+  res.status(200).json({
     message: 'found',
     data: audits.map((a) => ({
       id: a._id,

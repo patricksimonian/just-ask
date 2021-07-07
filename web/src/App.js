@@ -1,5 +1,5 @@
 
-import { Router } from '@reach/router';
+import { Router, Link } from '@reach/router';
 import Auth from './containers/Auth';
 import Logout from './containers/Logout';
 import Layout from './components/Layout';
@@ -12,6 +12,10 @@ import Shpeel from './components/Shpeel';
 import Brand from './components/Brand';
 import { WidthControlledContainer } from './components/Containers';
 import { Box } from 'rebass';
+import { Audits } from './containers/Audits';
+import WithRole from './components/WithRole';
+import { ROLES } from './constants';
+import Toolbar from './components/Toolbar';
 
 
 function App() {
@@ -32,7 +36,7 @@ function App() {
   }, [dispatch, state.isLoggedIn, token])
   return (
     <Layout>
-      
+      <Toolbar />
       <Router>
         {state.isLoggedIn && <ApprovalRequestManager path="/" />}
 
@@ -41,6 +45,7 @@ function App() {
 
         <Logout path="/logout" />
         <Shpeel path="/about" />
+        <Audits path="/audits" /> 
       </Router>
       
     </Layout>

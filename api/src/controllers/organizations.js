@@ -6,16 +6,6 @@ import { hasRule } from '../utils/roles'
 
 export const organizations = async (req, res) => {
   // gets available orgs to make requests too
-  await createAudit({
-    apiVersion: 'v1',
-    action: AUDIT_ACTIONS.api.organizations.list,
-    data: JSON.stringify({
-      message: `user attempting to get organizations`,
-      user: req.auth.user,
-      type: 'info',
-    }),
-  })
-
   if (!hasRule(req.auth.role, RULES.organizations)) {
     log.warn(
       `user ${req.auth.user} does not have sufficient priviledge for ${AUDIT_ACTIONS.api.organizations.list}`

@@ -10,6 +10,7 @@ import connect from './db/connect.js'
 import orgRouters from './routes/organizations'
 import userRoleRouters from './routes/userRoles'
 import requestRouters from './routes/requests'
+import auditRouters from './routes/audits'
 import { getUserFromToken, logMiddleware } from './middlewares/index.js'
 
 async function initailize() {
@@ -87,6 +88,7 @@ async function initailize() {
   app.use('/roles', userRoleRouters)
   app.use('/organizations', orgRouters)
   app.use('/requests', requestRouters)
+  app.use('/audits', auditRouters)
 
   app.listen(PORT, () => {
     log.notice(`Listening on ${PORT}`)

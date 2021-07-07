@@ -1,9 +1,26 @@
 import { useContext, useEffect, useState } from "react";
 import axios from "../axios";
 import Axios from 'axios';
+import { parse } from "query-string"
 import { GITHUB_API_URL } from "../constants";
 import { AuthContext } from "../providers/AuthContext";
+import { useLocation } from "@reach/router";
 
+
+/**
+ * 
+ * @param {Array} params string of search params you want
+ * @returns {Object} 
+ */
+export const useQueryParams = (params) => {
+  const location = useLocation()
+  const search = parse(location.search);
+
+  return params.reduce((acc, p) => {
+    acc[p] = search[p];
+    return acc;
+  }, {})
+} 
 /**
  * react hook to get our app config from a static path
  */

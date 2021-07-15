@@ -1,5 +1,5 @@
 import log from 'log'
-import { ROLES, ROLE_PRESCEDENT } from '../constants'
+import { ROLES, ROLE_PRESCEDENT, ROLE_RULES } from '../constants'
 import { doesUserHaveRole, getUserFromBearerToken } from '../utils/roles'
 
 export const logMiddleware = (req, res, next) => {
@@ -15,6 +15,20 @@ export const logMiddleware = (req, res, next) => {
  */
 export const getUserFromToken = async (req, res, next) => {
   const getRole = async (user) => {
+    const rolePromises = ROLE_PRESCEDENT.map(async role => {
+      if(await doesUserHaveRole(role, user) return role
+         
+      return null
+    })
+    
+    const userRoles = await Promise.all(rolePromises); // [role, null, role, null]
+    
+     const rules = userRoles.reduce((rules, role => {
+      if(role !== null) return rules.concat(ROLE_RULES[role]);
+     }), [])
+     
+     // flatten array and uniq
+    
     for (let role of ROLE_PRESCEDENT) {
       if (await doesUserHaveRole(role, user)) return role
     }

@@ -93,7 +93,14 @@ export const patchInvitationRequest = async (req, res) => {
 
     try {
       const { id } = await getUserByName(request.recipient)
-      await inviteUserToOrgs(id, [request.organization])
+
+      const promises = await inviteUserToOrgs(
+        id,
+        [request.organization],
+        request.recipient,
+        request.requester
+      )
+      await Promise.all(promises)
 
       await createAudit({
         apiVersion: 'v1',
@@ -371,20 +378,24 @@ export const createInvitationRequest = async (req, res) => {
   }
 
   try {
+    log.info(`user ${req.auth.user} approved request created for ${recipient}`)
     const { id } = await getUserByName(recipient)
-    await inviteUserToOrgs(id, organizations)
 
-    await InvitationRequest.create(
-      requests.map((r) => ({ ...r, state: INVITATION_REQUEST_STATES.APPROVED }))
+    const promises = await inviteUserToOrgs(
+      id,
+      organizations,
+      recipient,
+      requester
     )
 
-    log.info(`user ${req.auth.user} approved request created for ${recipient}`)
+    await Promise.all(promises)
+
     // this is where we could create the invitations for recipient
 
     res.status(201).send({
       message: `${requests.length} approved invitation${
         requests.length > 1 ? 's' : ''
-      }created`,
+      } created`,
     })
     await createAudit({
       apiVersion: 'v1',

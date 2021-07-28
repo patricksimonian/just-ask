@@ -148,3 +148,25 @@ export const useGetUser = (username) => {
   return {user, fetching}
 }
 
+
+
+export const useGetStats = () => {
+  const [stats, setStats] = useState(null);
+  const [fetching, setFetching] = useState(false);
+
+  useEffect(() => {
+    if(!stats) {
+
+      setFetching(true);
+      axios.get(`/stats`)
+      .then(res => {
+        setStats(res.data)
+      })
+      .finally(() => {
+        setFetching(false);
+      })
+    }
+  }, [stats])
+
+  return {stats, fetching}
+}

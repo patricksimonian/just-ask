@@ -22,7 +22,7 @@ export const patchInvitationRequest = async (req, res) => {
     data: JSON.stringify({
       message: `user attempting to patch invitationRequest`,
       user: req.auth.user,
-      payload: req.body,
+      payload: { ...req.body, id: req.param.id },
       type: 'info',
     }),
   })
@@ -88,7 +88,7 @@ export const patchInvitationRequest = async (req, res) => {
   if (req.body.state === INVITATION_REQUEST_STATES.APPROVED) {
     // get github user id
     const request = await InvitationRequest.findOne({
-      _id: req.params.id,
+      _id: req.param.id,
     })
 
     try {

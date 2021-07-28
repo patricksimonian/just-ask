@@ -14,12 +14,15 @@ export const logMiddleware = (req, res, next) => {
  * @param {*} next
  */
 export const getUserFromToken = async (req, res, next) => {
-  const getRole = async (user) => {
+  const getRoles = async (user) => {
+    let roles = []
     for (let role of ROLE_PRESCEDENT) {
-      if (await doesUserHaveRole(role, user)) return role
+      if (await doesUserHaveRole(role, user)) {
+        roles = roles.concat(role)
+      }
     }
 
-    return null
+    return roles
   }
 
   if (!req.token) {
@@ -28,12 +31,13 @@ export const getUserFromToken = async (req, res, next) => {
     try {
       const user = await getUserFromBearerToken(req.token)
 
-      const role = await getRole(user.login)
+      const roles = await getRoles(user.login)
 
       req.auth = {
         user: user.login,
         id: user.id,
-        role,
+        role: roles[0] || null, // backwards compatability
+        roles,
       }
       next()
     } catch (e) {

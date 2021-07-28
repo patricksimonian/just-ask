@@ -109,20 +109,20 @@ export const useAuth = () => {
   const [fetching, setFetching] = useState(false);
   const {state, dispatch} = useContext(AuthContext);
   useEffect(() => {
-    if(state.role) {
-      setAuth(state.role)
+    if(state.roles && state.roles.length > 0) {
+      setAuth(state.roles)
     } else if (!auth) {
       setFetching(true);
       axios.get('/roles')
       .then(res => {
-        dispatch({type: 'SET_ROLE', payload: {role: res.data.role}})
-        setAuth(res.data.role);
+        dispatch({type: 'SET_ROLE', payload: {role: res.data.roles}})
+        setAuth(res.data.roles);
       })
       .finally(() => {
         setFetching(false);
       })
     }
-  }, [auth, dispatch, state.role]);
+  }, [auth, dispatch, state.roles]);
   
   return { auth, fetching };
 }

@@ -2,10 +2,18 @@ import { useAuth } from "../utils/hooks"
 
 
 
-const WithRole = ({roles, children}) => {
-  const { auth: role, fetching } = useAuth()
+const intersection = (a, b) => {
+  return a.filter((x) => {
+      return b.some((y) => {
+          return Object.is(x, y);
+      });
+  });
+};
 
-  return !fetching && role && roles.includes(role) ? children : null;
+const WithRole = ({roles, children}) => {
+  const { auth: userRoles, fetching } = useAuth()
+
+  return !fetching && userRoles && intersection(roles, userRoles).length > 0 ? children : null;
 }
 
 

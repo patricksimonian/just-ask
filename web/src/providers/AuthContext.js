@@ -6,7 +6,7 @@ export const initialState = {
   isLoggedIn: localStorage.getItem("isLoggedIn") || false,
   user: JSON.parse(localStorage.getItem("user")) || null,
   token: JSON.parse(localStorage.getItem('token')) || null,
-  role: null,
+  roles: null,
 };
 
 export const reducer = (state, action) => {
@@ -37,7 +37,7 @@ export const reducer = (state, action) => {
     case "SET_ROLE": {
       return {
         ...state,
-        role: action.payload.role
+        roles: action.payload.roles
       }
     }
     default:

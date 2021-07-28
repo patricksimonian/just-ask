@@ -22,7 +22,7 @@ export const patchInvitationRequest = async (req, res) => {
     data: JSON.stringify({
       message: `user attempting to patch invitationRequest`,
       user: req.auth.user,
-      payload: { ...req.body, id: req.param.id },
+      payload: { ...req.body, id: req.params.id },
       type: 'info',
     }),
   })
@@ -64,7 +64,7 @@ export const patchInvitationRequest = async (req, res) => {
   try {
     await InvitationRequest.updateOne(
       {
-        id: req.param.id,
+        _id: req.params.id,
         state: INVITATION_REQUEST_STATES.PENDING, // only update pending requests
       },
       {
@@ -73,22 +73,22 @@ export const patchInvitationRequest = async (req, res) => {
     ).exec()
 
     log.info(
-      `user ${req.auth.user} patched request ${req.param.id} to state=${req.body.state}`
+      `user ${req.auth.user} patched request ${req.params.id} to state=${req.body.state}`
     )
   } catch (e) {
     log.debug(e.message)
     log.warn(
-      `user ${req.auth.user} request ${req.param.id} could not be updated to ${req.body.state}`
+      `user ${req.auth.user} request ${req.params.id} could not be updated to ${req.body.state}`
     )
     res.status(400).send({
-      message: `Unable to patch InvitationRequest ${req.param.id}`,
+      message: `Unable to patch InvitationRequest ${req.params.id}`,
     })
   }
   // if approved send the github org
   if (req.body.state === INVITATION_REQUEST_STATES.APPROVED) {
     // get github user id
     const request = await InvitationRequest.findOne({
-      _id: req.param.id,
+      _id: req.params.id,
     })
 
     try {
@@ -126,7 +126,7 @@ export const patchInvitationRequest = async (req, res) => {
       // fail request
       await InvitationRequest.updateOne(
         {
-          id: req.param.id,
+          _id: req.params.id,
         },
         {
           state: INVITATION_REQUEST_STATES.FAILED,

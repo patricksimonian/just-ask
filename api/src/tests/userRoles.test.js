@@ -32,7 +32,7 @@ describe('Invitation Request Controllers', () => {
         auth: {
           role: 'foo',
         },
-        param: {
+        params: {
           id: 'bar',
         },
       }
@@ -221,7 +221,7 @@ describe('Invitation Request Controllers', () => {
         auth: {
           role: 'foo',
         },
-        param: {
+        params: {
           id: 'bar',
         },
       }
@@ -301,7 +301,7 @@ describe('Invitation Request Controllers', () => {
         auth: {
           role: 'foo',
         },
-        param: {
+        params: {
           id: 'bar',
         },
       }
@@ -310,7 +310,7 @@ describe('Invitation Request Controllers', () => {
       }
       await patchInvitationRequest(req, res)
       await patchInvitationRequest(
-        { auth: { role: undefined }, param: { id: 'baz' } },
+        { auth: { role: undefined }, params: { id: 'baz' } },
         res
       )
       expect(res.status).toHaveBeenCalledWith(403)
@@ -323,7 +323,7 @@ describe('Invitation Request Controllers', () => {
           user: 'matt damon',
           role: ROLES.APPROVER,
         },
-        param: {
+        params: {
           id: 'baz',
         },
         body: {
@@ -344,7 +344,7 @@ describe('Invitation Request Controllers', () => {
             user: 'matt damon',
             role: ROLES.APPROVER,
           },
-          param: {
+          params: {
             id: 'baz',
           },
           body: {},
@@ -362,7 +362,7 @@ describe('Invitation Request Controllers', () => {
           user: 'matt damon',
           role: ROLES.APPROVER,
         },
-        param: {
+        params: {
           id: 'foo',
         },
         body: {
@@ -396,7 +396,7 @@ describe('Invitation Request Controllers', () => {
           user: 'matt damon',
           role: ROLES.APPROVER,
         },
-        param: {
+        params: {
           id: 'foo',
         },
         body: {

@@ -60,7 +60,7 @@ export const patchInvitationRequest = async (req, res) => {
     })
     return
   }
-
+  const sanitizedState = String(state)
   try {
     await InvitationRequest.updateOne(
       {
@@ -68,24 +68,24 @@ export const patchInvitationRequest = async (req, res) => {
         state: INVITATION_REQUEST_STATES.PENDING, // only update pending requests
       },
       {
-        state: req.body.state,
+        state: sanitizedState,
       }
     ).exec()
 
     log.info(
-      `user ${req.auth.user} patched request ${req.params.id} to state=${req.body.state}`
+      `user ${req.auth.user} patched request ${req.params.id} to state=${sanitizedState}`
     )
   } catch (e) {
     log.debug(e.message)
     log.warn(
-      `user ${req.auth.user} request ${req.params.id} could not be updated to ${req.body.state}`
+      `user ${req.auth.user} request ${req.params.id} could not be updated to ${sanitizedState}`
     )
     res.status(400).send({
       message: `Unable to patch InvitationRequest ${req.params.id}`,
     })
   }
   // if approved send the github org
-  if (req.body.state === INVITATION_REQUEST_STATES.APPROVED) {
+  if (sanitizedState === INVITATION_REQUEST_STATES.APPROVED) {
     // get github user id
     const request = await InvitationRequest.findOne({
       _id: req.params.id,

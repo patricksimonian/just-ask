@@ -32,6 +32,9 @@ describe('Invitation Request Controllers', () => {
         auth: {
           role: 'foo',
         },
+        params: {
+          id: 'bar',
+        },
       }
       const res = {
         status: jest.fn().mockImplementation(() => ({ send: jest.fn() })),
@@ -218,6 +221,9 @@ describe('Invitation Request Controllers', () => {
         auth: {
           role: 'foo',
         },
+        params: {
+          id: 'bar',
+        },
       }
       const res = {
         status: jest.fn().mockImplementation(() => ({ send: jest.fn() })),
@@ -295,12 +301,18 @@ describe('Invitation Request Controllers', () => {
         auth: {
           role: 'foo',
         },
+        params: {
+          id: 'bar',
+        },
       }
       const res = {
         status: jest.fn().mockImplementation(() => ({ send: jest.fn() })),
       }
       await patchInvitationRequest(req, res)
-      await patchInvitationRequest({ auth: { role: undefined } }, res)
+      await patchInvitationRequest(
+        { auth: { role: undefined }, params: { id: 'baz' } },
+        res
+      )
       expect(res.status).toHaveBeenCalledWith(403)
       expect(res.status).toHaveBeenCalledWith(403)
     })
@@ -310,6 +322,9 @@ describe('Invitation Request Controllers', () => {
         auth: {
           user: 'matt damon',
           role: ROLES.APPROVER,
+        },
+        params: {
+          id: 'baz',
         },
         body: {
           state: 'INVALID',
@@ -329,6 +344,9 @@ describe('Invitation Request Controllers', () => {
             user: 'matt damon',
             role: ROLES.APPROVER,
           },
+          params: {
+            id: 'baz',
+          },
           body: {},
         },
         res
@@ -344,7 +362,7 @@ describe('Invitation Request Controllers', () => {
           user: 'matt damon',
           role: ROLES.APPROVER,
         },
-        param: {
+        params: {
           id: 'foo',
         },
         body: {
@@ -378,7 +396,7 @@ describe('Invitation Request Controllers', () => {
           user: 'matt damon',
           role: ROLES.APPROVER,
         },
-        param: {
+        params: {
           id: 'foo',
         },
         body: {

@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from "react"
-import {Box, Text} from 'rebass';
+import {Box, Flex, Text} from 'rebass';
 import {useTable} from 'react-table';
 import axios from '../axios'
 import { WidthControlledContainer } from "../components/Containers"
 import WithRole from '../components/WithRole';
-import { useQueryParams } from "../utils/hooks"
+import { useGetStats, useQueryParams } from "../utils/hooks"
 import { ROLES } from "../constants";
 import { Link } from '@reach/router';
 export const Audits = () => {
@@ -15,7 +15,7 @@ export const Audits = () => {
   const validatedPage = isNaN(parseInt(page)) ? 1 : parseInt(page)
   const [fetchedPage, setFetchedPage] = useState(validatedPage);
   const PAGE_LIMIT = 100;
-
+  const { stats, fetching } = useGetStats();
   useEffect(() => {
     if(fetchedPage !== validatedPage) {
       setFetched(false);
@@ -79,6 +79,19 @@ export const Audits = () => {
     <WithRole roles={[ROLES.AUDITOR, ROLES.ADMINISTRATOR]}>
 
       <WidthControlledContainer>
+        <Box py={3}>
+          <Text as="h2">Invitation Request Stats: </Text> 
+          {fetching && <Text>Loading...</Text>}
+          {
+          stats &&
+            <Flex py={3}>
+              <Text mr={3} px={3} py={1} sx={{borderRadius: 4}} color="white" bg="green">Successful: <Text as="span">{stats.requests.successful} </Text></Text>
+              <Text mr={3} px={3} py={1} sx={{borderRadius: 4}} color="white" bg="text">Pending: <Text as="span">{stats.requests.pending} </Text></Text>
+              <Text mr={3} px={3} py={1} sx={{borderRadius: 4}} color="white" bg="red">Failed: <Text as="span">{stats.requests.failed} </Text></Text>
+              <Text mr={3} px={3} py={1} sx={{borderRadius: 4}} color="white" bg="orange">Denied: <Text as="span">{stats.requests.denied} </Text></Text>
+            </Flex>
+          }
+        </Box>
         <Box pb={3}>
 
         {validatedPage > 1 && <Box  as="span" pr={3}> <Link to={`?page=${validatedPage - 1}`} >Previous Page</Link> </Box>}

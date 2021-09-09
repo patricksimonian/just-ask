@@ -7,6 +7,7 @@ const InvitationRequest = new mongoose.Schema(
     requester: String,
     recipient: String,
     organization: String,
+    reason: String,
     state: {
       type: String,
       enum: [

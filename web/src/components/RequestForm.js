@@ -1,6 +1,6 @@
 
 import { Form, Field } from 'react-final-form'
-import { Input, Label, Checkbox } from '@rebass/forms';
+import { Input, Label, Checkbox, Textarea } from '@rebass/forms';
 import { Box, Button, Flex, Image, Text } from 'rebass';
 import React from 'react';
 
@@ -14,6 +14,7 @@ const RequestForm = ({autoSelectCheckboxes, organizations, onSubmit, isRequester
       organizations: autoSelectCheckboxes ? organizations.map(o => o.name): []
     }}
     render={({ handleSubmit }) => (
+      <Box>
       <Flex onSubmit={handleSubmit} alignItems="center" py={4} flexWrap="wrap">
         
           <Text pr={4}>Request an invite for</Text>
@@ -74,8 +75,22 @@ const RequestForm = ({autoSelectCheckboxes, organizations, onSubmit, isRequester
   
         ))}
             </Box>
-          <Button onClick={() => handleSubmit()} bg="secondary" p={3} fontSize={5} style={{cursor: 'pointer'}}>Request</Button>
       </Flex>
+      <Box>
+        <Box>
+          <Text pr={4}>Reason for request</Text>
+          <Field name="reason"  render={({ input, meta }) => (
+              <Box alignItems="center" pr={4} py={3}>
+                <Textarea placeholder="Inviting because.." {...input} width="100%"  sx={{ maxWidth: [800, 300, 500], resize: 'none', fontFamily: 'inherit'}}/>
+                {meta.touched && meta.error && <span>{meta.error}</span>}
+              </Box>
+            )} />
+        </Box>  
+        <Button onClick={() => handleSubmit()} bg="secondary" p={3} fontSize={5} style={{cursor: 'pointer'}}>Request</Button>
+      </Box>
+      
+
+      </Box>
     )}
   />
   )

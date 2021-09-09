@@ -4,10 +4,10 @@ import { useGetUser } from "../utils/hooks"
 
 
 
-const Request = ({username, organization, onApprove, onDeny}) => {
+const Request = ({username, organization, message, onApprove, onDeny}) => {
   const {user, fetching} = useGetUser( username)
   return (
-    <Box with={300} p={3} m={3} sx={{border: '1px solid', borderColor: 'primary'}}>
+    <Box width={300} p={3} m={3} sx={{border: '1px solid', borderColor: 'primary'}}>
       <Flex alignItems="center">
         <Link href={`https://github.com/${username}`} sx={{':visited': {
           textDecoration: 'none',
@@ -18,6 +18,7 @@ const Request = ({username, organization, onApprove, onDeny}) => {
         </Link>
         <Text as="span" ml={4} fontSize={4}>{username} to {organization}</Text>
       </Flex>
+      <Text as="p">{message}</Text>
       <Box py={4}>
         <Button mr={4} bg="primary" color="secondary" onClick={() => onApprove()}>Approve</Button>
         <Button bg="red" color="white" onClick={() => onDeny()}>Deny</Button>

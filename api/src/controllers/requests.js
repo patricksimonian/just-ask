@@ -272,7 +272,7 @@ export const createInvitationRequest = async (req, res) => {
 
   const authApps = await getAuthenticatedApps()
   // is request for self
-  const { user: recipient, organizations } = req.body
+  const { user: recipient, organizations, reason } = req.body
   const { user: requester } = req.auth
 
   const requestingForSelf = recipient.toLowerCase() === requester.toLowerCase()
@@ -300,6 +300,7 @@ export const createInvitationRequest = async (req, res) => {
     requester,
     apiVersion: 'v1',
     state: INVITATION_REQUEST_STATES.PENDING,
+    reason,
   }))
 
   // when requester is requesting for themselves then just create a pending request
@@ -341,6 +342,7 @@ export const createInvitationRequest = async (req, res) => {
           payload: {
             recipient: recipient,
             organizations: organizations,
+            reason,
           },
           type: 'info',
         }),
@@ -406,6 +408,7 @@ export const createInvitationRequest = async (req, res) => {
         payload: {
           recipient: recipient,
           organizations: organizations,
+          reason,
         },
         type: 'info',
       }),

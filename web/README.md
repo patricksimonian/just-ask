@@ -50,6 +50,8 @@ Apply these configurations to your container runtime
       mountPath: /var/opt/config/role-mappers.json
     - name: content.json
       mountPath: /var/opt/config/config.json
+    - name: entry.md
+      mountPath: /var/opt/config/entry.md
 ```
 
 eg: Docker
@@ -69,6 +71,10 @@ Ideally you will want to abstract away all configuration as ConfigMaps, Env Vars
 ```yaml
 apiVersion: v1
 stringData:
+  entry.md: |
+    ## This will replace
+    the default home page in just ask
+
   palette.json: |
     {
       "primary": "#00ffdd",

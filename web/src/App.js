@@ -11,16 +11,26 @@ import axios, { authInterceptor } from './axios';
 import Shpeel from './components/Shpeel';
 import Brand from './components/Brand';
 import { WidthControlledContainer } from './components/Containers';
+import ReactMarkdown from 'react-markdown'
 import { Box } from 'rebass';
 import { Audits } from './containers/Audits';
 import WithRole from './components/WithRole';
 import { ROLES } from './constants';
 import Toolbar from './components/Toolbar';
-
+import { useConfig } from './utils/hooks';
+import remarkGfm from 'remark-gfm'
+import CustomEntryPage from './components/CustomEntry';
 
 function App() {
+
   const {state, dispatch} = useContext(AuthContext);
   const token = state.token && state.token.access_token
+  const [ content, fetched,, error ] = useConfig('/config/entry.md', {
+    headers: {
+      accept: 'text/markdown'
+    }
+  })
+  console.log('CONTENT', content, fetched)
   useEffect(() => {
     if(state.isLoggedIn) {
       // check if token is still working
@@ -34,13 +44,16 @@ function App() {
       })
     }
   }, [dispatch, state.isLoggedIn, token])
+
   return (
     <Layout>
       <Toolbar />
       <Router>
-        {state.isLoggedIn && <ApprovalRequestManager path="/" />}
+        {state.isLoggedIn && <ApprovalRequestManager path="/requests" />}
 
-        {!state.isLoggedIn && <NotLoggedIn path="/" />}
+        {!state.isLoggedIn && error && <NotLoggedIn path="/" />}
+        {console.log(!error && content, 'CTES', typeof content)}
+        {!error && content && <CustomEntryPage path="/" content={content}/>}
         <Auth path="/auth" />
 
         <Logout path="/logout" />

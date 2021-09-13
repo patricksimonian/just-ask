@@ -10,7 +10,11 @@ import Color from 'color';
 const defaultCreatedPallete = createPalette(defaultPallete, luminosities);
 
 export const DynamicThemeProvider = ({children}) => {
-  const [ palette, fetched, error] = useConfig('/config/pallete.json')
+  const [ palette, fetched, error] = useConfig('/config/pallete.json', {
+    headers: {
+      accept: 'application/json'
+    }
+  })
   const [colors, setColors] = useState({...defaultCreatedPallete,
     primaryText: Color(defaultCreatedPallete.primary).isDark() ? defaultCreatedPallete.white : defaultCreatedPallete.text,
     secondaryText: Color(defaultCreatedPallete.secondary).isDark() ? defaultCreatedPallete.white : defaultCreatedPallete.text,

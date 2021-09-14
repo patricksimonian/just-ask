@@ -1,5 +1,5 @@
 
-import { Router, Link, Redirect, redirectTo, navigate } from '@reach/router';
+import { Router, navigate, redirectTo } from '@reach/router';
 import Auth from './containers/Auth';
 import Logout from './containers/Logout';
 import Layout from './components/Layout';
@@ -9,18 +9,13 @@ import NotLoggedIn from './components/NotLoggedIn';
 import ApprovalRequestManager from './containers/ApprovalRequestManager';
 import axios, { authInterceptor } from './axios';
 import Shpeel from './components/Shpeel';
-import Brand from './components/Brand';
-import { WidthControlledContainer } from './components/Containers';
-import ReactMarkdown from 'react-markdown'
-import { Box } from 'rebass';
 import { Audits } from './containers/Audits';
-import WithRole from './components/WithRole';
-import { ROLES } from './constants';
 import Toolbar from './components/Toolbar';
 import { useConfig } from './utils/hooks';
-import remarkGfm from 'remark-gfm'
+
 import CustomEntryPage from './components/CustomEntry';
 import Entry from './components/Entry';
+import PrivateRoute from './components/PrivateRoute';
 
 function App() {
 
@@ -37,17 +32,17 @@ function App() {
       // check if token is still working
       axios.get('/verify')
       .then(res => {
-        console.log(res)
         if(res.status !== 200) {
           dispatch({type: 'LOGOUT'})
-          navigate("/");
+          redirectTo("/");
+        } else {
+          authInterceptor.register(token);
         }
-        authInterceptor.register(token);
       })
       .catch((e) => {
-        console.log(e)
+        console.log('REDIRECTING')
         dispatch({type: 'LOGOUT'})
-        navigate("/");
+        redirectTo("/");
       })
     }
   }, [dispatch, state.isLoggedIn, token])
@@ -56,7 +51,6 @@ function App() {
     <Layout>
       <Toolbar />
       <Router>
-        {state.isLoggedIn && <ApprovalRequestManager path="/requests" />}
 
         {!state.isLoggedIn && !content && <NotLoggedIn path="/" />}
         
@@ -66,7 +60,8 @@ function App() {
 
         <Logout path="/logout" />
         <Shpeel path="/about" />
-        <Audits path="/audits" /> 
+        <PrivateRoute component={ApprovalRequestManager} path="/requests" />
+        <PrivateRoute component={Audits} path="/audits" /> 
       </Router>
       
     </Layout>

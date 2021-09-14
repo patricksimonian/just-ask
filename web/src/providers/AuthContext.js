@@ -3,9 +3,9 @@ import { authInterceptor } from '../axios';
 
 
 export const initialState = {
-  isLoggedIn: localStorage.getItem("isLoggedIn") || false,
-  user: JSON.parse(localStorage.getItem("user")) || null,
-  token: JSON.parse(localStorage.getItem('token')) || null,
+  isLoggedIn: false,
+  user:  null,
+  token:  null,
   roles: null,
 };
 
@@ -13,10 +13,6 @@ export const reducer = (state, action) => {
 
   switch (action.type) {
     case "LOGIN": {
-      localStorage.setItem("isLoggedIn", true)
-      localStorage.setItem("user", JSON.stringify(action.payload.user))
-      localStorage.setItem("token", JSON.stringify(action.payload.token))
-      localStorage.setItem("roles", action.payload.roles)
 
       return {
         ...state,
@@ -28,7 +24,7 @@ export const reducer = (state, action) => {
     }
     case "LOGOUT": {
       authInterceptor.unregister();
-      localStorage.clear()
+
       return initialState;
     }
     case "SET_ROLE": {

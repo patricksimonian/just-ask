@@ -9,7 +9,7 @@ const NavLink = props => {
 
     return isCurrent ? { 
       style: {
-        'text-decoration': 'underline',
+        textDecoration: 'underline',
         color: theme.colors.text,
 
       }
@@ -17,7 +17,7 @@ const NavLink = props => {
       style: {
         color: theme.colors.text,
         '&visited': theme.colors.text,
-        'text-decoration': 'none'
+        textDecoration: 'none'
 
       }
     }

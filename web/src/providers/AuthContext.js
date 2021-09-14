@@ -16,23 +16,20 @@ export const reducer = (state, action) => {
       localStorage.setItem("isLoggedIn", true)
       localStorage.setItem("user", JSON.stringify(action.payload.user))
       localStorage.setItem("token", JSON.stringify(action.payload.token))
-      authInterceptor.register(action.payload.token.access_token);
+      localStorage.setItem("roles", action.payload.roles)
+
       return {
         ...state,
         isLoggedIn: true,
         user: action.payload.user,
-        token: action.payload.token
+        token: action.payload.token,
+        roles: action.payload.roles
       };
     }
     case "LOGOUT": {
       authInterceptor.unregister();
       localStorage.clear()
-      return {
-        ...state,
-        isLoggedIn: false,
-        user: null,
-        token: null,
-      };
+      return initialState;
     }
     case "SET_ROLE": {
       return {

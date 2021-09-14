@@ -6,7 +6,7 @@ import { useConfig } from '../utils/hooks';
 export const ConfigContext = createContext();
 
 export const ConfigProvider = ({children}) => {
-  const [ content, fetched, fetching, error ] = useConfig('/config/config.json', {
+  const [ content,,,error ] = useConfig('/config/config.json', {
     headers: {
       accept: 'application/json'
     }

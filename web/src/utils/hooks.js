@@ -100,28 +100,7 @@ export const useGetOrganizations =  () => {
 
 
 
-export const useAuth = () => {
-  const [auth, setAuth] = useState(null);
-  const [fetching, setFetching] = useState(false);
-  const {state, dispatch} = useContext(AuthContext);
-  useEffect(() => {
-    if(state.roles && state.roles.length > 0) {
-      setAuth(state.roles)
-    } else if (!auth) {
-      setFetching(true);
-      axios.get('/roles')
-      .then(res => {
-        dispatch({type: 'SET_ROLE', payload: {role: res.data.roles}})
-        setAuth(res.data.roles);
-      })
-      .finally(() => {
-        setFetching(false);
-      })
-    }
-  }, [auth, dispatch, state.roles]);
-  
-  return { auth, fetching };
-}
+
 
 export const useGetUser = (username) => {
   const [user, setUser] = useState(null);

@@ -1,4 +1,6 @@
-import { useAuth } from "../utils/hooks"
+import { useContext } from "react";
+import { AuthContext } from "../providers/AuthContext";
+
 
 
 
@@ -11,9 +13,9 @@ const intersection = (a, b) => {
 };
 
 const WithRole = ({roles, children}) => {
-  const { auth: userRoles, fetching } = useAuth()
 
-  return !fetching && userRoles && intersection(roles, userRoles).length > 0 ? children : null;
+  const { state } = useContext(AuthContext);
+  return state.roles && intersection(roles, state.roles).length > 0 ? children : null;
 }
 
 

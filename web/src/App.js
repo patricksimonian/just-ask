@@ -1,5 +1,5 @@
 
-import { Router, Link } from '@reach/router';
+import { Router, Link, Redirect, redirectTo, navigate } from '@reach/router';
 import Auth from './containers/Auth';
 import Logout from './containers/Logout';
 import Layout from './components/Layout';
@@ -20,27 +20,34 @@ import Toolbar from './components/Toolbar';
 import { useConfig } from './utils/hooks';
 import remarkGfm from 'remark-gfm'
 import CustomEntryPage from './components/CustomEntry';
+import Entry from './components/Entry';
 
 function App() {
 
   const {state, dispatch} = useContext(AuthContext);
   const token = state.token && state.token.access_token
-  const [ content, fetched,, error ] = useConfig('/config/entry.md', {
+  const [ content, ,,, error ] = useConfig('/config/entry.md', {
     headers: {
       accept: 'text/markdown'
     }
   })
-  console.log('CONTENT', content, fetched)
+
   useEffect(() => {
     if(state.isLoggedIn) {
       // check if token is still working
       axios.get('/verify')
       .then(res => {
-        if(res.status !== 200) dispatch({type: 'LOGOUT'})
+        console.log(res)
+        if(res.status !== 200) {
+          dispatch({type: 'LOGOUT'})
+          navigate("/");
+        }
         authInterceptor.register(token);
       })
-      .catch(() => {
+      .catch((e) => {
+        console.log(e)
         dispatch({type: 'LOGOUT'})
+        navigate("/");
       })
     }
   }, [dispatch, state.isLoggedIn, token])
@@ -51,9 +58,10 @@ function App() {
       <Router>
         {state.isLoggedIn && <ApprovalRequestManager path="/requests" />}
 
-        {!state.isLoggedIn && error && <NotLoggedIn path="/" />}
-        {console.log(!error && content, 'CTES', typeof content)}
+        {!state.isLoggedIn && !content && <NotLoggedIn path="/" />}
+        
         {!error && content && <CustomEntryPage path="/" content={content}/>}
+        { !content && state.isLoggedIn && <Entry path="/"/>}
         <Auth path="/auth" />
 
         <Logout path="/logout" />
@@ -64,5 +72,6 @@ function App() {
     </Layout>
   );
 }
+
 
 export default App;

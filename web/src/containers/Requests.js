@@ -5,7 +5,7 @@ import { WidthControlledContainer } from "../components/Containers";
 import RequestForm from "../components/RequestForm";
 import { ROLES } from "../constants";
 import { AuthContext } from "../providers/AuthContext";
-import { useAuth, useGetOrganizations } from "../utils/hooks"
+import { useGetOrganizations } from "../utils/hooks"
 import { Notice } from "../components/Notice";
 import { ConfigContext } from "../providers/ConfigProvider";
 
@@ -13,13 +13,12 @@ import { ConfigContext } from "../providers/ConfigProvider";
 const Requests = () => {
   const { state } = useContext(AuthContext)
   const { noIndividualOrgRequests } = useContext(ConfigContext);
-  const {auth: roles, fetching: authFetching} = useAuth();
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const {orgs, fetching} =  useGetOrganizations();
   const orgsFound = !fetching && orgs && orgs.length;
-  console.log(roles)
+
   return (
     <WidthControlledContainer>
       <Box py={6} maxWidth={[800, 400, 600]} >
@@ -29,7 +28,7 @@ const Requests = () => {
       
       <Box fontSize={5}>
         {(loading || fetching) && <Text> Loading...</Text>}
-        {orgsFound && !formSubmitted && !authFetching && roles && <RequestForm autoSelectCheckboxes={noIndividualOrgRequests} username={state.isLoggedIn && state.user.login} organizations={orgs} isRequester={!authFetching && roles.length === 1 && roles[0] === ROLES.REQUESTER} onSubmit={data => {
+        {orgsFound && !formSubmitted && <RequestForm autoSelectCheckboxes={noIndividualOrgRequests} username={state.isLoggedIn && state.user.login} organizations={orgs} isRequester={state.roles && state.roles.length === 1 && state.roles[0] === ROLES.REQUESTER} onSubmit={data => {
           setLoading(true);
           setError(null);
           axios.post('/requests',  

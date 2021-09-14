@@ -4,3 +4,4 @@ fixtures
 .env* 
 .gitignore
 README.md
+public/config/*

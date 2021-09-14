@@ -92,10 +92,11 @@ The app also takes several environment variables:
 
 ## Web Configuration
 
-The web allows some small configuration to have the Github App look and feel more like your organizations branding. This comes into the form of two configuration files:
+The web allows some small configuration to have the Github App look and feel more like your organizations branding. This comes into the form of configuration files:
 1. pallete.json
 2. content.json
 3. config.json
+4. entry.md
 
 `pallete.json` allows you to adjust the colour scheme of the front end. There is a base scheme and whatever colors you choose to add will override the default ones. It is recommended that you only adjust the `primary` and `secondary` colors.
 
@@ -127,6 +128,15 @@ If you are concerned with fetching an image from the internet, the `brandLogo` p
     "noIndividualOrgRequests": false
   }
 ```
+
+`entry.md` is for a custom entry/homepage. If you do not supply one the default homepage will showup
+
+```md
+# Custom Homepage
+
+The meaning of life and everything is 42
+```
+
 The web component also takes a couple of environment variables depending on environment:
 If you are running the application locally, the environment variables are surfaced through node js and so you will require:
 

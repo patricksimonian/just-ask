@@ -6,7 +6,11 @@ import { useConfig } from '../utils/hooks';
 export const ContentContext = createContext();
 
 export const ContentProvider = ({children}) => {
-  const [ content ] = useConfig('/config/content.json')
+  const [ content ] = useConfig('/config/content.json', {
+    headers: {
+      accept: 'application/json'
+    }
+  })
   const value = content ? {...defaultContent, ...content}: defaultContent 
 
   return (

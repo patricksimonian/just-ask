@@ -24,7 +24,7 @@ export const useQueryParams = (params) => {
 /**
  * react hook to get our app config from a static path
  */
- export const useConfig = (filePath) => {
+ export const useConfig = (filePath, axiosConfig) => {
   const [ config, setConfig ] = useState(null);
   const [ fetched, setFetched ] = useState(false);
   const [ fetching, setFetching ] = useState(false);
@@ -34,11 +34,7 @@ export const useQueryParams = (params) => {
     if(!config && !error) {
       setFetching(false);
 
-      Axios.get(filePath, {
-        headers: {
-          accept: 'application/json'
-        }
-      }).then(response => {
+      Axios.get(filePath, axiosConfig).then(response => {
         setFetched(true);
         setConfig(response.data)
 
@@ -48,7 +44,7 @@ export const useQueryParams = (params) => {
         setError(e);
       })
     }
-  }, [config, filePath, error])
+  }, [config, filePath, error, axiosConfig])
 
   return [config, fetched, fetching, error];
 };
@@ -104,28 +100,7 @@ export const useGetOrganizations =  () => {
 
 
 
-export const useAuth = () => {
-  const [auth, setAuth] = useState(null);
-  const [fetching, setFetching] = useState(false);
-  const {state, dispatch} = useContext(AuthContext);
-  useEffect(() => {
-    if(state.roles && state.roles.length > 0) {
-      setAuth(state.roles)
-    } else if (!auth) {
-      setFetching(true);
-      axios.get('/roles')
-      .then(res => {
-        dispatch({type: 'SET_ROLE', payload: {role: res.data.roles}})
-        setAuth(res.data.roles);
-      })
-      .finally(() => {
-        setFetching(false);
-      })
-    }
-  }, [auth, dispatch, state.roles]);
-  
-  return { auth, fetching };
-}
+
 
 export const useGetUser = (username) => {
   const [user, setUser] = useState(null);

@@ -1,5 +1,5 @@
 
-import { Router, Link } from '@reach/router';
+import { Router, navigate, redirectTo } from '@reach/router';
 import Auth from './containers/Auth';
 import Logout from './containers/Logout';
 import Layout from './components/Layout';
@@ -9,47 +9,64 @@ import NotLoggedIn from './components/NotLoggedIn';
 import ApprovalRequestManager from './containers/ApprovalRequestManager';
 import axios, { authInterceptor } from './axios';
 import Shpeel from './components/Shpeel';
-import Brand from './components/Brand';
-import { WidthControlledContainer } from './components/Containers';
-import { Box } from 'rebass';
 import { Audits } from './containers/Audits';
-import WithRole from './components/WithRole';
-import { ROLES } from './constants';
 import Toolbar from './components/Toolbar';
+import { useConfig } from './utils/hooks';
 
+import CustomEntryPage from './components/CustomEntry';
+import Entry from './components/Entry';
+import PrivateRoute from './components/PrivateRoute';
 
 function App() {
+
   const {state, dispatch} = useContext(AuthContext);
   const token = state.token && state.token.access_token
+  const [ content, ,,, error ] = useConfig('/config/entry.md', {
+    headers: {
+      accept: 'text/markdown'
+    }
+  })
+
   useEffect(() => {
     if(state.isLoggedIn) {
       // check if token is still working
       axios.get('/verify')
       .then(res => {
-        if(res.status !== 200) dispatch({type: 'LOGOUT'})
-        authInterceptor.register(token);
+        if(res.status !== 200) {
+          dispatch({type: 'LOGOUT'})
+          redirectTo("/");
+        } else {
+          authInterceptor.register(token);
+        }
       })
-      .catch(() => {
+      .catch((e) => {
+        console.log('REDIRECTING')
         dispatch({type: 'LOGOUT'})
+        redirectTo("/");
       })
     }
   }, [dispatch, state.isLoggedIn, token])
+
   return (
     <Layout>
       <Toolbar />
       <Router>
-        {state.isLoggedIn && <ApprovalRequestManager path="/" />}
 
-        {!state.isLoggedIn && <NotLoggedIn path="/" />}
+        {!state.isLoggedIn && !content && <NotLoggedIn path="/" />}
+        
+        {!error && content && <CustomEntryPage path="/" content={content}/>}
+        { !content && state.isLoggedIn && <Entry path="/"/>}
         <Auth path="/auth" />
 
         <Logout path="/logout" />
         <Shpeel path="/about" />
-        <Audits path="/audits" /> 
+        <PrivateRoute component={ApprovalRequestManager} path="/requests" />
+        <PrivateRoute component={Audits} path="/audits" /> 
       </Router>
       
     </Layout>
   );
 }
+
 
 export default App;

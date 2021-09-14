@@ -1,4 +1,5 @@
 
+import { navigate } from '@reach/router';
 import { useContext, useEffect } from 'react';
 import { WidthControlledContainer } from '../components/Containers';
 import { AuthContext } from '../providers/AuthContext';
@@ -11,7 +12,7 @@ const Logout = () => {
   useEffect(() => {
 
       dispatch({type: 'LOGOUT',})
-
+      navigate("/")
   }, [dispatch]);
 
   

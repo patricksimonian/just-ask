@@ -5,6 +5,7 @@ import { WidthControlledContainer } from '../components/Containers';
 import { Notice } from '../components/Notice';
 import { GITHUB_API_URL } from '../constants';
 import { AuthContext } from '../providers/AuthContext';
+import { authInterceptor } from '../axios';
 
 const Auth = ({navigate}) => {
   const [error, setError] = useState(null);
@@ -25,15 +26,18 @@ const Auth = ({navigate}) => {
               authorization: `Bearer ${res.data.access_token}`
             }
           })
+          authInterceptor.register(res.data.access_token);
+          const roles = await axios.get('/roles')
+
           dispatch({
             type: 'LOGIN', 
             payload: {
               token: res.data,
               user: apiResponse.data,
-              
+              roles: roles.data.roles
           }
         })
-        navigate('/')
+        navigate('/requests')
         })
         .catch(e => {
           setError(e)

@@ -19,7 +19,7 @@ text-decoration: none;
 `;
 const Header = () =>{
   const content = useContext(ContentContext);
-  const {state} = useContext(AuthContext);
+  const { state } = useContext(AuthContext);
   const theme = useTheme();
   
     return  (

@@ -27,7 +27,7 @@ const Header = () =>{
       <Flex color="secondary" justifyContent="space-between" alignItems="center">
         <StyledLink to="/" alignItems="center" flex="1 1 auto" >
           <Flex alignItems="center" flex="1 1 auto" >
-            {content.brandLogo && <Image width={[75, 100 ]} src={content.brandLogo} alt={content.brandTitle} /> }
+            {content.brandLogo && <Image width={[75, 100 ]} pr={3} src={content.brandLogo} alt={content.brandTitle} /> }
             <Text as="h1" mb={0} fontSize={[7, 4, 5, 6]} >{content.brandTitle}</Text>
           </Flex>
         </StyledLink>

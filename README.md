@@ -1,4 +1,7 @@
 # [Just Ask](https://justask.cloud)
+[![Aqua Trivy Vulnerability Scanner](https://github.com/patricksimonian/just-ask/actions/workflows/trivy.yaml/badge.svg)](https://github.com/patricksimonian/just-ask/actions/workflows/trivy.yaml)
+[![CodeQL](https://github.com/patricksimonian/just-ask/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/patricksimonian/just-ask/actions/workflows/codeql-analysis.yml)
+
 
 A management api/interface for organizations to self-serve org membership. 
 

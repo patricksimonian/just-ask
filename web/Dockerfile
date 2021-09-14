@@ -23,7 +23,7 @@ RUN mkdir /opt/app-root/etc
 
 WORKDIR /opt/app-root/www
 
-COPY --from=builder /opt/app/build/* .
+COPY --from=builder /opt/app/build .
 COPY Caddyfile /opt/app-root/etc 
 
 RUN caddy fmt /opt/app-root/etc/Caddyfile --overwrite

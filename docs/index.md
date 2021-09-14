@@ -13,6 +13,7 @@ It is often the case where enterprises may want to open the doors to contributio
 
 2. If you manage multiple orgs, granting access to multiple orgs quickly becomes toil
 
+![just-ask-demo](./images/demo.png)
 ### Just Ask! solves this
 
 The application reduces barriers for your clients to gain access by

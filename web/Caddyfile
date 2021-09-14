@@ -4,25 +4,24 @@
 file_server
 
 templates {
-  mime application/javascript
-  between <% %>
+        mime application/javascript
+        between <% %>
 }
 # The site root
 root * /opt/app-root/www
 # Because we should
 encode zstd gzip
 
-
 try_files {path} {path}/ /public/{path} index.html
 header /service-worker.js {
-# all static assets SHOULD be cached
-  Content-Type "text/javascript"
+        # all static assets SHOULD be cached
+        Content-Type "text/javascript"
 }
-  # On OCP we should log to stdout so Prometheus can
+# On OCP we should log to stdout so Prometheus can
 # slurp up the logs for human consumption.
 log {
-  #errors stdout
-  output stdout 
-  format single_field common_log
-  level info
+        #errors stdout
+        output stdout
+        format single_field common_log
+        level info
 }

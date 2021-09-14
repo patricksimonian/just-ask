@@ -1,4 +1,4 @@
-FROM node:14
+FROM node:16.9-alpine
 
 RUN mkdir /var/opt/server
 RUN mkdir /var/opt/config

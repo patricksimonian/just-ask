@@ -2,7 +2,7 @@ name: WEB - Docker Publish
 
 on: 
   release:
-    types: [published]
+    types: [published, edited, released]
   
 
 jobs:

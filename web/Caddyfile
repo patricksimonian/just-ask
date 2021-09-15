@@ -12,6 +12,14 @@ root * /opt/app-root/www
 # Because we should
 encode zstd gzip
 
+handle /config/* {
+        try_files {path}            
+}
+
+handle {
+        try_files {path} /
+}
+
 
 header /service-worker.js {
         # all static assets SHOULD be cached

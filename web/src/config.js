@@ -5,8 +5,8 @@
 // templates directive to easily handle runtime variables
 
 const config = {
-  CLIENT_ID: process.env.REACT_APP_CLIENT_ID || '<% env "CLIENT_ID" %>',
-  API_BASE_URL: process.env.REACT_APP_API_BASE_URL || '<% env "API_BASE_URL" %>',
+  CLIENT_ID: process.env.REACT_APP_CLIENT_ID || '{{ env "CLIENT_ID" }}',
+  API_BASE_URL: process.env.REACT_APP_API_BASE_URL || '{{ env "API_BASE_URL" }}',
 }
 
 export default config;

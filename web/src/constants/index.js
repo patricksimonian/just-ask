@@ -1,3 +1,5 @@
+import config from '../config';
+
 export const ROLES = {
   APPROVER: 'APPROVER',
   COLLABORATOR: 'COLLABORATOR',
@@ -28,3 +30,5 @@ export const ROLE_RULES = {
 }
 
 export const GITHUB_API_URL = 'https://api.github.com';
+
+export const LOGIN_LINK = `https://github.com/login/oauth/authorize?client_id=${config.CLIENT_ID}&redirect_uri=${window.location.origin}/auth&callback_url=${window.location.origin}`

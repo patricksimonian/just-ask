@@ -43,8 +43,8 @@ Running this application in production mode requires further configuration
 Apply these configurations to your container runtime
 ```yaml
   envVars:
-    - REACT_APP_CLIENT_ID {String}
-    - REACT_APP_API_URL {String}
+    - CLIENT_ID {String}
+    - API_URL {String}
   volumes:
     - name: pallete.json
       mountPath: /var/opt/config/role-mappers.json
@@ -58,8 +58,8 @@ eg: Docker
 
 ```sh
   docker run just-ask-web:<tag> \
-  -e REACT_APP_CLIENT_ID=... \
-  -e REACT_APP_API_URL=... \
+  -e CLIENT_ID=... \
+  -e API_URL=... \
   -v path-to/content.json:/var/opt/config/content.json \ 
   ...
 ```
@@ -75,6 +75,7 @@ stringData:
     ## This will replace
     the default home page in just ask
 
+    more information can be found in the website docs
   palette.json: |
     {
       "primary": "#00ffdd",
@@ -125,9 +126,9 @@ spec:
           - name: app-config
             mountPath: /opt/app-root/www/public/config
         env:
-          - name: REACT_APP_CLIENT_ID
+          - name: CLIENT_ID
             value: foo
-          - name: REACT_APP_API_BASE_URL
+          - name: API_BASE_URL
             value: http://localhost:3001
         resources: {}
 status: {}

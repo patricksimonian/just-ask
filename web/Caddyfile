@@ -5,7 +5,6 @@ file_server
 
 templates {
         mime application/javascript
-        between <% %>
 }
 # The site root
 root * /opt/app-root/www

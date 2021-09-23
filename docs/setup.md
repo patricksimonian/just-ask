@@ -129,13 +129,21 @@ If you are concerned with fetching an image from the internet, the `brandLogo` p
   }
 ```
 
-`entry.md` is for a custom entry/homepage. If you do not supply one the default homepage will showup
+`entry.md` is for a custom entry/homepage. If you do not supply one the default homepage will be used. The custom entry page supports templating (in handlebars format).
 
 ```md
 # Custom Homepage
 
-The meaning of life and everything is 42
+The meaning of life and everything is 42. 
+
+[Login here!]({{ login_link }})
 ```
+
+__supported template variables__:
+
+- `login_link`: will render the github app login including a randomized state id
+
+---
 
 The web component also takes a couple of environment variables depending on environment:
 If you are running the application locally, the environment variables are surfaced through node js and so you will require:

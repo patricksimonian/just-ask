@@ -3,6 +3,7 @@ import { Form, Field } from 'react-final-form'
 import { Input, Label, Checkbox, Textarea } from '@rebass/forms';
 import { Box, Button, Flex, Image, Text } from 'rebass';
 import React from 'react';
+import PendingRequests from './PendingRequests';
 
 
 const RequestForm = ({autoSelectCheckboxes, organizations, onSubmit, isRequester, username = ''}) => {
@@ -88,7 +89,7 @@ const RequestForm = ({autoSelectCheckboxes, organizations, onSubmit, isRequester
         </Box>  
         <Button onClick={() => handleSubmit()} bg="secondary" p={3} fontSize={5} style={{cursor: 'pointer'}}>Request</Button>
       </Box>
-      
+      <PendingRequests/>
 
       </Box>
     )}

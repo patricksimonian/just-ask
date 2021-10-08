@@ -421,3 +421,36 @@ export const createInvitationRequest = async (req, res) => {
     })
   }
 }
+
+export const getUserPendingRequests = async (req, res) => {
+  log.info('getUserPendingRequests')
+
+  await createAudit({
+    apiVersion: 'v1',
+    action: AUDIT_ACTIONS.api.requests.get,
+    data: JSON.stringify({
+      message: `user attempting to view pending requests`,
+      user: req.auth.user,
+      payload: req.body,
+      type: 'info',
+    }),
+  })
+
+  try {
+    const requests = await InvitationRequest.find({
+      user: req.auth.user,
+      // state: INVITATION_REQUEST_STATES.PENDING
+    }).exec()
+
+    log.error(
+      `user ${req.auth.user} found ${requests.length} requests with state=${INVITATION_REQUEST_STATES.PENDING}`
+    )
+    return `awesome good job`
+  } catch (e) {
+    log.warn(`user ${req.auth.user} request failed`)
+    log.debug(e.message)
+    res.status(500).send({
+      message: "Unable to  fetch user's pending requests",
+    })
+  }
+}

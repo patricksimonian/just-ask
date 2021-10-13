@@ -5,7 +5,11 @@ import { difference } from 'lodash'
 import { getAuthenticatedApps } from '../utils/init'
 import log from 'log'
 import { createAudit } from '../utils/audit'
-import { getUserByName, inviteUserToOrgs } from '../utils/github'
+import {
+  getUserByName,
+  inviteUserToOrgs,
+  getRequestStatuses,
+} from '../utils/github'
 
 /**
  * PATCH /requests/:id
@@ -438,14 +442,17 @@ export const getUserPendingRequests = async (req, res) => {
 
   try {
     const requests = await InvitationRequest.find({
-      user: req.auth.user,
-      // state: INVITATION_REQUEST_STATES.PENDING
+      requester: req.auth.user,
     }).exec()
-
-    log.error(
-      `user ${req.auth.user} found ${requests.length} requests with state=${INVITATION_REQUEST_STATES.PENDING}`
-    )
-    return `awesome good job`
+    //  we have the requests made by the user (on other peoples'  behalf), now use github api to see the real status of those requests
+    log.error(`Requests: ${requests}`)
+    if (requests.length > 0) {
+      return getRequestStatuses(requests)
+    } else {
+      log.info(
+        `no invitation requests created by user were found in Mongo database`
+      )
+    }
   } catch (e) {
     log.warn(`user ${req.auth.user} request failed`)
     log.debug(e.message)

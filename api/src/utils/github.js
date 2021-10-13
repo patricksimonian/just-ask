@@ -66,3 +66,18 @@ export const getUserByName = async (username) => {
   })
   return response.data
 }
+
+export const getRequestStatuses = async (requests) => {
+  log.error(`getRequestStatuses`)
+  // let pendingRequests = [];
+  log.error(`requests is of type ${typeof requests}`)
+  for (const key in requests) {
+    if (requests[key]) {
+      log.error(
+        `recipient: ${requests[key]['recipient']}, org: ${requests[key]['organization']}`
+      )
+    }
+  }
+
+  return null
+}

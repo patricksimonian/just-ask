@@ -444,7 +444,9 @@ export const getUserPendingRequests = async (req, res) => {
     }).exec()
     //  we have the requests made by the user (on other peoples'  behalf), now use github api to see the real status of those requests
     if (requests.length > 0) {
-      return getRequestStatuses(requests)
+      const ret = await getRequestStatuses(requests)
+      log.info(`returning this to front-end: ${JSON.stringify(ret)}`)
+      return ret
     } else {
       log.info(
         `no invitation requests created by user were found in Mongo database`

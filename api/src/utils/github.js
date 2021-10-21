@@ -69,21 +69,46 @@ export const getUserByName = async (username) => {
 
 export const getRequestStatuses = async (requests) => {
   log.info(`getRequestStatuses`)
-  // let pendingRequests = [];
-  log.error(`requests is of type ${typeof requests}`)
+  let pendingUserRequests = []
+  let orgsWithUserPendingRequests = []
   const installations = await getAuthenticatedApps()
 
+  //dictionary of requests made by user with org as key, recipients as value(s)
+  // get each org once and check for pending requests
   for (const key in requests) {
-    if (requests[key] && requests[key]['organization']) {
-      const org = requests[key]['organization']
-      const testResponse = await installations.apps[
-        org.toLowerCase()
-      ].authenticatedRequest('GET /orgs/{org}/invitations', {
-        org,
-      })
-      log.debug(`response ${JSON.stringify(testResponse.data)}`)
+    if (
+      requests[key] &&
+      requests[key]['organization'] &&
+      orgsWithUserPendingRequests.indexOf(requests[key]['organization']) < 0
+    ) {
+      orgsWithUserPendingRequests.push(requests[key]['organization'])
     }
   }
 
-  return null
+  for (const org of orgsWithUserPendingRequests) {
+    log.info(`org being searched ${org}`)
+    const orgPendingRequests = await installations.apps[
+      org.toLowerCase()
+    ].authenticatedRequest('GET /orgs/{org}/invitations', {
+      org,
+    })
+
+    for (const key in orgPendingRequests.data) {
+      // was this pending request made by the current user?
+      for (const k in requests) {
+        if (
+          requests[k]['organization'].toLowerCase() === org &&
+          requests[k]['recipient'] === orgPendingRequests.data[key]['login']
+        ) {
+          log.info(
+            `Found pending request made by current user. Recipient: ${requests[k]['recipient']}, for org: ${org}`
+          )
+          pendingUserRequests.push(orgPendingRequests.data[key])
+        }
+      }
+    }
+    log.debug(`response ${JSON.stringify(orgPendingRequests.data)}`)
+  }
+
+  return pendingUserRequests
 }

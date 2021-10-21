@@ -29,7 +29,7 @@ export const resolveOrgRole = async (username, org, role) => {
     log.debug(`Checking if ${role} equals ${orgMembershipRole}: ${hasRole}`)
     return hasRole
   } catch (e) {
-    log.error(e.message)
+    log.error(e)
     return false
   }
 }

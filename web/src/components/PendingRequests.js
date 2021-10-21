@@ -5,7 +5,6 @@ import { useGetUser } from "../utils/hooks"
 const PendingRequests = ({username, organization}) => {
    // const {user, fetching} = useGetUser( username)
     var results = "nothing has been returned by the server"
-    console.log(`attempting to get resource from api`)
     axios.get(`/requests/userPendingRequests`).then((res) => {
         results = res
     });

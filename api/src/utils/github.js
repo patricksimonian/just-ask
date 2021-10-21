@@ -58,9 +58,9 @@ export const getUserByName = async (username) => {
   log.debug(`getUserByName ${username}`)
   const installations = await getAuthenticatedApps()
   const config = getConfig()
-
+  console.log(config, installations)
   const response = await installations.apps[
-    config.primaryOrg
+    config.primaryOrg.toLowerCase()
   ].authenticatedRequest('GET /users/{username}', {
     username,
   })
@@ -68,14 +68,20 @@ export const getUserByName = async (username) => {
 }
 
 export const getRequestStatuses = async (requests) => {
-  log.error(`getRequestStatuses`)
+  log.info(`getRequestStatuses`)
   // let pendingRequests = [];
   log.error(`requests is of type ${typeof requests}`)
+  const installations = await getAuthenticatedApps()
+
   for (const key in requests) {
-    if (requests[key]) {
-      log.error(
-        `recipient: ${requests[key]['recipient']}, org: ${requests[key]['organization']}`
-      )
+    if (requests[key] && requests[key]['organization']) {
+      const org = requests[key]['organization']
+      const testResponse = await installations.apps[
+        org.toLowerCase()
+      ].authenticatedRequest('GET /orgs/{org}/invitations', {
+        org,
+      })
+      log.debug(`response ${JSON.stringify(testResponse.data)}`)
     }
   }
 

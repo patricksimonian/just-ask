@@ -386,7 +386,6 @@ export const createInvitationRequest = async (req, res) => {
   try {
     log.info(`user ${req.auth.user} approved request created for ${recipient}`)
     const { id } = await getUserByName(recipient)
-
     const promises = await inviteUserToOrgs(
       id,
       organizations,
@@ -397,7 +396,6 @@ export const createInvitationRequest = async (req, res) => {
     await Promise.all(promises)
 
     // this is where we could create the invitations for recipient
-
     res.status(201).send({
       message: `${requests.length} approved invitation${
         requests.length > 1 ? 's' : ''
@@ -419,7 +417,7 @@ export const createInvitationRequest = async (req, res) => {
     })
   } catch (e) {
     log.warn(`user ${req.auth.user} request failed`)
-    log.debug(e.message)
+    log.error(e)
     res.status(500).send({
       message: 'Unable to create invitation',
     })
@@ -445,7 +443,6 @@ export const getUserPendingRequests = async (req, res) => {
       requester: req.auth.user,
     }).exec()
     //  we have the requests made by the user (on other peoples'  behalf), now use github api to see the real status of those requests
-    log.error(`Requests: ${requests}`)
     if (requests.length > 0) {
       return getRequestStatuses(requests)
     } else {

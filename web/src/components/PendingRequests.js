@@ -14,7 +14,9 @@ const PendingRequests = ({username, organization}) => {
         if(!fetched && !error) {
             setLoading(true)
             axios.get(`/requests/userPendingRequests`).then((res) => {
-                setPendingRequests(res.data);
+                setPendingRequests(res.data.map((item, index) => {
+                    return <Text key={index}>{item.login}</Text>
+                }));
                 setFetched(true); // should happen earlier
             })
             .catch((e) => {
@@ -30,7 +32,7 @@ const PendingRequests = ({username, organization}) => {
     return (
         <Box width={600} p={3} m={3} sx={{border: '1px solid', borderColor: 'primary'}}>
             {loading && <Text> Finding your pending requests...</Text>}
-            {fetched && pendingRequests && <Text>results!</Text>}
+            {fetched && pendingRequests && <Text>{pendingRequests}</Text>}
             {error && <Text>{error}</Text>}
         </Box>
       )

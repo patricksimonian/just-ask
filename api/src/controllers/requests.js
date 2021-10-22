@@ -80,7 +80,7 @@ export const patchInvitationRequest = async (req, res) => {
       `user ${req.auth.user} patched request ${req.params.id} to state=${sanitizedState}`
     )
   } catch (e) {
-    log.debug(e.message)
+    log.debug(e)
     log.warn(
       `user ${req.auth.user} request ${req.params.id} could not be updated to ${sanitizedState}`
     )
@@ -120,7 +120,7 @@ export const patchInvitationRequest = async (req, res) => {
         }),
       })
     } catch (e) {
-      log.debug(e.message)
+      log.debug(e)
       log.warn(
         `unable to invite recipient ${request.recipient} to organizations from request`
       )
@@ -224,7 +224,7 @@ export const getInvitationRequests = async (req, res) => {
     res.status(200).json(requests)
     return
   } catch (e) {
-    log.debug(e.message)
+    log.debug(e)
     log.error(`unable to find requests`)
 
     res.status(400).send({
@@ -352,7 +352,7 @@ export const createInvitationRequest = async (req, res) => {
         }),
       })
     } catch (e) {
-      log.debug(e.message)
+      log.debug(e)
       log.warn(`user ${req.auth.user} request failed`)
       res.status(400).send({
         message: 'Unable to create invitation',
@@ -444,9 +444,8 @@ export const getUserPendingRequests = async (req, res) => {
     }).exec()
     //  we have the requests made by the user (on other peoples'  behalf), now use github api to see the real status of those requests
     if (requests.length > 0) {
-      const ret = await getRequestStatuses(requests)
-      log.info(`returning this to front-end: ${JSON.stringify(ret)}`)
-      return ret
+      const requestStatuses = await getRequestStatuses(requests)
+      res.status(200).json(requestStatuses)
     } else {
       log.info(
         `no invitation requests created by user were found in Mongo database`
@@ -454,7 +453,7 @@ export const getUserPendingRequests = async (req, res) => {
     }
   } catch (e) {
     log.warn(`user ${req.auth.user} request failed`)
-    log.debug(e.message)
+    log.debug(e)
     res.status(500).send({
       message: "Unable to  fetch user's pending requests",
     })

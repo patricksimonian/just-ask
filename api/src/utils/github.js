@@ -86,7 +86,7 @@ export const getRequestStatuses = async (requests) => {
   }
 
   for (const org of orgsWithUserPendingRequests) {
-    log.info(`org being searched ${org}`)
+    log.debug(`org being searched ${org}`)
     const orgPendingRequests = await installations.apps[
       org.toLowerCase()
     ].authenticatedRequest('GET /orgs/{org}/invitations', {
@@ -100,14 +100,13 @@ export const getRequestStatuses = async (requests) => {
           requests[k]['organization'].toLowerCase() === org &&
           requests[k]['recipient'] === orgPendingRequests.data[key]['login']
         ) {
-          log.info(
+          log.debug(
             `Found pending request made by current user. Recipient: ${requests[k]['recipient']}, for org: ${org}`
           )
           pendingUserRequests.push(orgPendingRequests.data[key])
         }
       }
     }
-    log.debug(`response ${JSON.stringify(orgPendingRequests.data)}`)
   }
 
   return pendingUserRequests

@@ -15,9 +15,17 @@ const PendingRequests = ({username, organization}) => {
             setLoading(true)
             axios.get(`/requests/userPendingRequests`).then((res) => {
                 setPendingRequests(res.data.map((item, index) => {
-                    return <Text key={index}>{item.login}</Text>
+                    return (
+                    <div display="flex" flex-direction="row">
+                        <Text key={index}>Invitee: {item.login} </Text>
+                        <Text>Invited on: {item.created_at}</Text>
+                        <Text>Inviter: {item.inviter.login}</Text>
+                        {item.failed_reason && <Text color="red">Failed: {item.failed_reason}</Text>}
+                        <p/>
+                    </div>
+                    )
                 }));
-                setFetched(true); // should happen earlier
+                setFetched(true);
             })
             .catch((e) => {
                 setError(e.message)
@@ -30,9 +38,9 @@ const PendingRequests = ({username, organization}) => {
     }, [fetched, pendingRequests, setLoading, setError, setFetched, error])
     console.log(pendingRequests)
     return (
-        <Box width={600} p={3} m={3} sx={{border: '1px solid', borderColor: 'primary'}}>
+        <Box sx={{border: '1px solid'}} marginTop='12px'>
             {loading && <Text> Finding your pending requests...</Text>}
-            {fetched && pendingRequests && <Text>{pendingRequests}</Text>}
+            {fetched && pendingRequests && <Text>Pending Requests: {pendingRequests}</Text>}
             {error && <Text>{error}</Text>}
         </Box>
       )

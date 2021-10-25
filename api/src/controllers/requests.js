@@ -445,6 +445,7 @@ export const getUserPendingRequests = async (req, res) => {
     //  we have the requests made by the user (on other peoples'  behalf), now use github api to see the real status of those requests
     if (requests.length > 0) {
       const requestStatuses = await getRequestStatuses(requests)
+      log.info(requestStatuses)
       res.status(200).json(requestStatuses)
     } else {
       log.info(

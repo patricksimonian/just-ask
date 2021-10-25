@@ -424,12 +424,12 @@ export const createInvitationRequest = async (req, res) => {
   }
 }
 
-export const getUserPendingRequests = async (req, res) => {
-  log.info('getUserPendingRequests')
+export const getUserPendingInvitations = async (req, res) => {
+  log.info('getUserPendingInvitations')
 
   await createAudit({
     apiVersion: 'v1',
-    action: AUDIT_ACTIONS.api.requests.get,
+    action: AUDIT_ACTIONS.api.requests.getUserPendingInvitations,
     data: JSON.stringify({
       message: `user attempting to view pending requests`,
       user: req.auth.user,
@@ -442,6 +442,7 @@ export const getUserPendingRequests = async (req, res) => {
     const requests = await InvitationRequest.find({
       requester: req.auth.user,
     }).exec()
+    log.error(requests)
     //  we have the requests made by the user (on other peoples'  behalf), now use github api to see the real status of those requests
     if (requests.length > 0) {
       const requestStatuses = await getRequestStatuses(requests)

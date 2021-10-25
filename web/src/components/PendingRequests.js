@@ -13,7 +13,7 @@ const PendingRequests = ({username, organization}) => {
     useEffect(() => {
         if(!fetched && !error) {
             setLoading(true)
-            axios.get(`/requests/userPendingRequests`).then((res) => {
+            axios.get(`/requests/getUserPendingInvitations`).then((res) => {
                 setPendingRequests(res.data.map((item, index) => {
                     return (
                     <div display="flex" flex-direction="row">

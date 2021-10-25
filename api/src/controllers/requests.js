@@ -442,17 +442,11 @@ export const getUserPendingInvitations = async (req, res) => {
     const requests = await InvitationRequest.find({
       requester: req.auth.user,
     }).exec()
-    log.error(requests)
     //  we have the requests made by the user (on other peoples'  behalf), now use github api to see the real status of those requests
-    if (requests.length > 0) {
-      const requestStatuses = await getRequestStatuses(requests)
-      log.info(requestStatuses)
-      res.status(200).json(requestStatuses)
-    } else {
-      log.info(
-        `no invitation requests created by user were found in Mongo database`
-      )
-    }
+    const requestStatuses = await getRequestStatuses(requests)
+    log.info(requestStatuses)
+    res.status(200).json(requestStatuses)
+
   } catch (e) {
     log.warn(`user ${req.auth.user} request failed`)
     log.debug(e)

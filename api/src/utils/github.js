@@ -73,40 +73,23 @@ export const getRequestStatuses = async (requests) => {
   let orgsWithUserPendingRequests = []
   const installations = await getAuthenticatedApps()
 
-  //dictionary of requests made by user with org as key, recipients as value(s)
-  // get each org once and check for pending requests
-  for (const key in requests) {
-    if (
-      requests[key] &&
-      requests[key]['organization'] &&
-      orgsWithUserPendingRequests.indexOf(requests[key]['organization']) < 0
-    ) {
-      orgsWithUserPendingRequests.push(requests[key]['organization'])
-    }
-  }
-
-  for (const org of orgsWithUserPendingRequests) {
+  const config = getConfig()
+  
+  for (const org of config.orgs) {
     log.debug(`org being searched ${org}`)
     const orgPendingRequests = await installations.apps[
       org.toLowerCase()
     ].authenticatedRequest('GET /orgs/{org}/invitations', {
       org,
     })
-
-    for (const key in orgPendingRequests.data) {
-      // was this pending request made by the current user?
-      for (const k in requests) {
-        if (
-          requests[k]['organization'].toLowerCase() === org &&
-          requests[k]['recipient'] === orgPendingRequests.data[key]['login']
-        ) {
-          log.debug(
-            `Found pending request made by current user. Recipient: ${requests[k]['recipient']}, for org: ${org}`
-          )
-          pendingUserRequests.push(orgPendingRequests.data[key])
-        }
+    
+    orgPendingRequests.data.map((x) => {
+      // make sure the user made this request before we add it to  the information returned
+      // Patrick, I wonder if you have any thoughts about readability here. 
+      if(requests.map((r) => {r.recipient === x.login && r.organization.toLowerCase() === org.toLowerCase()})){
+        pendingUserRequests.push(x)
       }
-    }
+    })
   }
 
   return pendingUserRequests

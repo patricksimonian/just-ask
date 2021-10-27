@@ -90,7 +90,6 @@ const RequestForm = ({autoSelectCheckboxes, organizations, onSubmit, isRequester
         <Button onClick={() => handleSubmit()} bg="secondary" p={3} fontSize={5} style={{cursor: 'pointer'}}>Request</Button>
       </Box>
       <PendingRequests/>
-
       </Box>
     )}
   />

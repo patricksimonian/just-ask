@@ -14,17 +14,7 @@ const PendingRequests = ({username, organization}) => {
         if(!fetched && !error) {
             setLoading(true)
             axios.get(`/user/getUserPendingInvitations`).then((res) => {
-                setPendingRequests(res.data.map((item, index) => {
-                    return (
-                    <div display="flex" flex-direction="row">
-                        <Text key={index}>Invitee: {item.login} </Text>
-                        <Text>Invited on: {item.created_at}</Text>
-                        <Text>Inviter: {item.inviter.login}</Text>
-                        {item.failed_reason && <Text color="red">Failed: {item.failed_reason}</Text>}
-                        <p/>
-                    </div>
-                    )
-                }));
+                setPendingRequests(res.data) 
                 setFetched(true);
             })
             .catch((e) => {
@@ -36,14 +26,30 @@ const PendingRequests = ({username, organization}) => {
         }
         
     }, [fetched, pendingRequests, setLoading, setError, setFetched, error])
-    console.log(pendingRequests)
+    console.log(` this is the state of pending requests${JSON.stringify(pendingRequests)}`)
     return (
         <Box sx={{border: '1px solid'}} marginTop='12px'>
             {loading && <Text> Finding your pending requests...</Text>}
-            {fetched && pendingRequests && <Text>Pending Requests: {pendingRequests}</Text>}
+            {fetched && pendingRequests && 
+            <Text>Pending Requests: {
+            pendingRequests.map((item => 
+                <div id={item.id}>
+                    <div>Invitee: {item.login}</div>
+                    <div>Invited on: {item.created_at}</div>
+                    <div>Inviter: {item.inviter.login}</div>
+                    <p/>
+                </div>
+            ))
+            }</Text>}
             {error && <Text>{error}</Text>}
         </Box>
       )
 }
-
+/*{homes.map(home => <div>{home.name}</div>)}
+this.state.clouds.map((items =>
+                        <th key="">
+                            {items.cloud}
+                        </th>
+                    ))
+                    */
 export default PendingRequests;

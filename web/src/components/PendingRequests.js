@@ -32,7 +32,7 @@ const PendingRequests = ({username, organization}) => {
             {fetched && pendingRequests && 
             <Text>Pending Requests: {
             pendingRequests.map((item => 
-                <div id={item.id}>
+                <div key={item.id}>
                     <div>Invitee: {item.login}</div>
                     <div>Invited on: {item.created_at}</div>
                     <div>Inviter: {item.inviter.login}</div>

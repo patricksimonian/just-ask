@@ -26,7 +26,6 @@ const PendingRequests = ({username, organization}) => {
         }
         
     }, [fetched, pendingRequests, setLoading, setError, setFetched, error])
-    console.log(` this is the state of pending requests${JSON.stringify(pendingRequests)}`)
     return (
         <Box sx={{border: '1px solid'}} marginTop='12px'>
             {loading && <Text> Finding your pending requests...</Text>}

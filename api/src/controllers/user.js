@@ -1,8 +1,5 @@
-import { AUDIT_ACTIONS, INVITATION_REQUEST_STATES, RULES } from '../constants'
-import { hasRule } from '../utils/roles'
+import { AUDIT_ACTIONS } from '../constants'
 import InvitationRequest from '../db/models/InvitationRequest'
-import { difference } from 'lodash'
-import { getAuthenticatedApps } from '../utils/init'
 import log from 'log'
 import { createAudit } from '../utils/audit'
 
@@ -27,7 +24,7 @@ import {
     try {
       const requests = await InvitationRequest.find({
         requester: req.auth.user,
-     
+        status: {$ne: 'APPROVED'},
       }).exec()
       //  we have the requests made by the user (on other peoples'  behalf), now use github api to see the real status of those requests
       const requestStatuses = await getRequestStatuses(requests)

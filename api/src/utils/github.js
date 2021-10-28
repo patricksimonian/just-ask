@@ -70,11 +70,10 @@ export const getUserByName = async (username) => {
 export const getRequestStatuses = async (requests) => {
   log.info(`getRequestStatuses`)
   let pendingUserRequests = []
-  let orgsWithUserPendingRequests = []
   const installations = await getAuthenticatedApps()
 
   const config = getConfig()
-  
+
   for (const org of config.orgs) {
     log.debug(`org being searched ${org}`)
     const orgPendingRequests = await installations.apps[
@@ -83,11 +82,12 @@ export const getRequestStatuses = async (requests) => {
       org,
     })
     
-    orgPendingRequests.data.map((x) => {
+    orgPendingRequests.data.map((pendingRequest) => {
       // make sure the user made this request before we add it to  the information returned
       // Patrick, I wonder if you have any thoughts about readability here. 
-      if(requests.map((r) => {r.recipient === x.login && r.organization.toLowerCase() === org.toLowerCase()})){
-        pendingUserRequests.push(x)
+      if(requests.map((requestInDB) => {requestInDB.recipient === pendingRequest.login && 
+        requestInDB.organization.toLowerCase() === org.toLowerCase()})){
+        pendingUserRequests.push(pendingRequest)
       }
     })
   }

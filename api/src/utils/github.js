@@ -81,20 +81,10 @@ export const getRequestStatuses = async (requests) => {
     ].authenticatedRequest('GET /orgs/{org}/invitations', {
       org,
     })
-    log.info(Object.values(orgPendingRequests))
     pendingUserRequests = pendingUserRequests.concat(Object.values(orgPendingRequests.data).filter
     (match => requests.map((requestInDB) => {
       requestInDB.recipient === match.login
     })))
-    //pendingUserRequests += filterResult
-    // orgPendingRequests.data.map((pendingRequest) => {
-    //   // make sure the user made this request before we add it to  the information returned
-    //   // Patrick, I wonder if you have any thoughts about readability here. 
-    //   if(requests.map((requestInDB) => {requestInDB.recipient === pendingRequest.login && 
-    //     requestInDB.organization.toLowerCase() === org.toLowerCase()})){
-    //     pendingUserRequests.push(pendingRequest)
-    //   }
-    // })
   }
   
 

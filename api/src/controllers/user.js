@@ -27,9 +27,8 @@ import {
     try {
       const requests = await InvitationRequest.find({
         requester: req.auth.user,
-        status: {$ne: 'APPROVED'},
+     
       }).exec()
-      log.error(requests)
       //  we have the requests made by the user (on other peoples'  behalf), now use github api to see the real status of those requests
       const requestStatuses = await getRequestStatuses(requests)
       log.info(requestStatuses)

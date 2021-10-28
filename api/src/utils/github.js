@@ -81,16 +81,29 @@ export const getRequestStatuses = async (requests) => {
     ].authenticatedRequest('GET /orgs/{org}/invitations', {
       org,
     })
-    
-    orgPendingRequests.data.map((pendingRequest) => {
-      // make sure the user made this request before we add it to  the information returned
-      // Patrick, I wonder if you have any thoughts about readability here. 
-      if(requests.map((requestInDB) => {requestInDB.recipient === pendingRequest.login && 
-        requestInDB.organization.toLowerCase() === org.toLowerCase()})){
-        pendingUserRequests.push(pendingRequest)
-      }
+    let orgPendingRequestArray = []
+    orgPendingRequests.data.map((someValue) => {
+      orgPendingRequestArray.push(someValue)
     })
+    let pendingUserRequestArray = []
+    requests.map((request) => {
+      pendingUserRequestArray.push(request)
+    })
+    const requestsMadeByUser =  orgPendingRequestArray.filter((item) =>
+      pendingUserRequestArray.indexOf(x => x.recipient === item.login) >= 0
+    )
+    log.info(requestsMadeByUser)
+    pendingUserRequests += requestsMadeByUser
+    // orgPendingRequests.data.map((pendingRequest) => {
+    //   // make sure the user made this request before we add it to  the information returned
+    //   // Patrick, I wonder if you have any thoughts about readability here. 
+    //   if(requests.map((requestInDB) => {requestInDB.recipient === pendingRequest.login && 
+    //     requestInDB.organization.toLowerCase() === org.toLowerCase()})){
+    //     pendingUserRequests.push(pendingRequest)
+    //   }
+    // })
   }
+  
 
   return pendingUserRequests
 }

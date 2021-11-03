@@ -29,8 +29,8 @@ const PendingRequests = ({username, organization}) => {
     return (
         <Box sx={{border: '1px solid'}} marginTop='12px'>
             {loading && <Text> Finding your pending requests...</Text>}
-            {fetched && pendingRequests && 
-            <Text>Pending Requests: {
+            {fetched &&  pendingRequests &&
+            <Text>Found {Object.keys(pendingRequests).length} outstanding invitations you have made on behalf of other users: {
             pendingRequests.map((item => 
                 <div key={item.id}>
                     <div>Invitee: {item.login}</div>
@@ -44,11 +44,4 @@ const PendingRequests = ({username, organization}) => {
         </Box>
       )
 }
-/*{homes.map(home => <div>{home.name}</div>)}
-this.state.clouds.map((items =>
-                        <th key="">
-                            {items.cloud}
-                        </th>
-                    ))
-                    */
 export default PendingRequests;

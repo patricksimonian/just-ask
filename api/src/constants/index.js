@@ -87,7 +87,9 @@ export const AUDIT_ACTIONS = {
       list: 'audits.list',
     },
     user: {
-
+      invitations: {
+        get: 'user.invitations.get'
+     },
     },
   },
 }

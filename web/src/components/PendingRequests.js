@@ -8,12 +8,11 @@ const PendingRequests = ({username, organization}) => {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
     const [pendingRequests,  setPendingRequests] = useState(null)
-    // const {user, fetching} = useGetUser( username)
 
     useEffect(() => {
         if(!fetched && !error) {
             setLoading(true)
-            axios.get(`/user/getPendingInvitations`).then((res) => {
+            axios.get(`/users/getPendingInvitations`).then((res) => {
                 setPendingRequests(res.data) 
                 setFetched(true);
             })

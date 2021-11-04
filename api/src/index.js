@@ -12,7 +12,7 @@ import userRoleRouters from './routes/userRoles'
 import requestRouters from './routes/requests'
 import statRouters from './routes/stats'
 import auditRouters from './routes/audits'
-import userRouters from './routes/user'
+import userRouters from './routes/users'
 import { getUserFromToken, logMiddleware } from './middlewares/index.js'
 
 async function initailize() {
@@ -92,7 +92,7 @@ async function initailize() {
   app.use('/requests', requestRouters)
   app.use('/audits', auditRouters)
   app.use('/stats', statRouters)
-  app.use('/user', userRouters)
+  app.use('/users', userRouters)
 
   app.listen(PORT, () => {
     log.notice(`Listening on ${PORT}`)

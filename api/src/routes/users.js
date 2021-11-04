@@ -2,7 +2,7 @@ import express from 'express'
 
 import {
     getPendingInvitations,
-  } from '../controllers/user'
+  } from '../controllers/users'
   
 const router = express.Router()
 

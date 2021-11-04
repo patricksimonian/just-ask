@@ -58,7 +58,6 @@ export const getUserByName = async (username) => {
   log.debug(`getUserByName ${username}`)
   const installations = await getAuthenticatedApps()
   const config = getConfig()
-  console.log(config, installations)
   const response = await installations.apps[
     config.primaryOrg.toLowerCase()
   ].authenticatedRequest('GET /users/{username}', {

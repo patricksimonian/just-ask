@@ -1,11 +1,11 @@
 import express from 'express'
 
 import {
-    getUserPendingInvitations,
+    getPendingInvitations,
   } from '../controllers/user'
   
 const router = express.Router()
 
-router.get('/getUserPendingInvitations', getUserPendingInvitations)
+router.get('/getPendingInvitations', getPendingInvitations)
 
 export default router

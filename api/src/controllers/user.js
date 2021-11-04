@@ -10,12 +10,12 @@ import {
     getRequestStatuses,
   } from '../utils/github'
 
-  export const getUserPendingInvitations = async (req, res) => {
-    log.info('getUserPendingInvitations')
+  export const getPendingInvitations = async (req, res) => {
+    log.info('getPendingInvitations')
   
     await createAudit({
       apiVersion: 'v1',
-      action: AUDIT_ACTIONS.api.user.getUserPendingInvitations,
+      action: AUDIT_ACTIONS.api.user.getPendingInvitations,
       data: JSON.stringify({
         message: `user attempting to view pending requests`,
         user: req.auth.user,

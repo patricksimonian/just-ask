@@ -6,6 +6,6 @@ import {
   
 const router = express.Router()
 
-router.get('/getPendingInvitations', getPendingInvitations)
+router.get('/pending-invitations', getPendingInvitations)
 
 export default router

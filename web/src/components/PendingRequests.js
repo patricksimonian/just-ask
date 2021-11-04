@@ -30,15 +30,17 @@ const PendingRequests = ({username, organization}) => {
             {loading && <Text> Finding your pending requests...</Text>}
             {fetched &&  pendingRequests &&
             <Text>Found {Object.keys(pendingRequests).length} outstanding invitations you have made on behalf of other users: {
-            pendingRequests.map((item => 
-                <div key={item.id}>
-                    <div>Invitee: {item.login}</div>
-                    <div>Invited on: {item.created_at}</div>
-                    <div>Inviter: {item.inviter.login}</div>
-                    <p/>
-                </div>
-            ))
-            }</Text>}
+                pendingRequests.map((item => 
+                    <div key={item.id}>
+                        <div>Invitee: {item.login}</div>
+                        <div>Invited on: {item.created_at}</div>
+                        <div>Inviter: {item.inviter.login}</div>
+                                                            <p/>
+                    </div>
+                ))
+                }
+            </Text>
+            }
             {error && <Text>{error}</Text>}
         </Box>
       )

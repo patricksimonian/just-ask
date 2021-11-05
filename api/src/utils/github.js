@@ -80,12 +80,15 @@ export const getRequestStatuses = async (requests) => {
     ].authenticatedRequest('GET /orgs/{org}/invitations', {
       org,
     })
-    pendingUserRequests = pendingUserRequests.concat(Object.values(orgPendingRequests.data).filter
-    (match => requests.map((requestInDB) => {
-      requestInDB.recipient === match.login
-    })))
+    pendingUserRequests = pendingUserRequests.concat(filterOrgRequestsByUser(requests, orgPendingRequests, org))
   }
-  
 
   return pendingUserRequests
+}
+
+const filterOrgRequestsByUser = (requests, orgPendingRequests, org) => {
+  return Object.values(orgPendingRequests.data).filter
+  (match => requests.map((requestInDB) => {
+    requestInDB.recipient === match.login  && org.toLowerCase() === requestInDB.organization.toLowerCase()
+  }))
 }

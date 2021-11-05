@@ -1,9 +1,8 @@
 import axios from "../axios";
-import { Box, Button, Flex, Link, Text } from "rebass"
-import { useGetUser } from "../utils/hooks"
-import { useEffect, useMemo, useState } from "react"
+import { Box, Text } from "rebass"
+import { useEffect, useState } from "react"
 
-const PendingRequests = ({username, organization}) => {
+export const PendingRequests = ({username, organization}) => {
     const [fetched, setFetched] = useState(false)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)

@@ -3,7 +3,6 @@ import { Box, Button, Flex, Image, Link, Text } from "rebass"
 import { useGetUser } from "../utils/hooks"
 
 
-
 const Request = ({username, organization, message, onApprove, onDeny}) => {
   const {user, fetching} = useGetUser( username)
   return (

@@ -8,7 +8,7 @@ import { AuthContext } from "../providers/AuthContext";
 import { useGetOrganizations } from "../utils/hooks"
 import { Notice } from "../components/Notice";
 import { ConfigContext } from "../providers/ConfigProvider";
-
+import { PendingRequests } from "../components/PendingRequests";
 
 const Requests = () => {
   const { state } = useContext(AuthContext)
@@ -63,6 +63,7 @@ const Requests = () => {
           setError(null);
         }}>Okay</Button>
       </Box> }
+      <PendingRequests/>
     </WidthControlledContainer>)
 }
 

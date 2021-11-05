@@ -29,7 +29,7 @@ import {
         requester: req.auth.user,
         state: {$ne: 'APPROVED'}
       }).exec()
-      log.error(requests)
+      log.debug(requests)
       //  we have the requests made by the user (on other peoples'  behalf), now use github api to see the real status of those requests
       const requestStatuses = await getRequestStatuses(requests)
       res.status(200).json(requestStatuses)

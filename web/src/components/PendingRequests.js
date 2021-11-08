@@ -44,4 +44,5 @@ export const PendingRequests = ({username, organization}) => {
         </Box>
       )
 }
+
 export default PendingRequests;

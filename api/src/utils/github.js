@@ -87,8 +87,18 @@ export const getRequestStatuses = async (requests) => {
 }
 
 const filterOrgRequestsByUser = (requests, orgPendingRequests, org) => {
-  return Object.values(orgPendingRequests.data).filter
-  (match => requests.map((requestInDB) => {
-    requestInDB.recipient === match.login  && org.toLowerCase() === requestInDB.organization.toLowerCase()
-  }))
+  const recipients = requests.map((requestInDB) => {
+    return { 
+      name: requestInDB.recipient,
+      organization: requestInDB.organization}
+  })
+  let pendingRequests = []
+
+  for(const orgRequest of orgPendingRequests.data){
+    if(recipients.filter(e  => e.name === orgRequest.login && e.organization.toLowerCase() === org.toLowerCase()).length  > 0){
+      pendingRequests.push(orgRequest)
+    }
+  }
+
+  return pendingRequests
 }

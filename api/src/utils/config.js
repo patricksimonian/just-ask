@@ -40,3 +40,10 @@ export const getGithubPrivateKey = () => {
   const data = readFileSync(getBasePathWithFile('github-private-key.pem'))
   return data.toString()
 }
+
+/** @returns cors policy */
+export const getCors = () => {
+  console.log('SHOULD NOT BE CALLED')
+  const data = readFileSync(getBasePathWithFile('cors.json'))
+  return data.toString()
+}

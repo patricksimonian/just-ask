@@ -13,6 +13,16 @@ import requestRouters from './routes/requests'
 import statRouters from './routes/stats'
 import auditRouters from './routes/audits'
 import { getUserFromToken, logMiddleware } from './middlewares/index.js'
+import { getCorsPolicy } from './utils/cors.js'
+
+const handleCors = (origin, callback) => {
+  const allowList = getCorsPolicy()
+  if (allowList.indexOf(origin) !== -1) {
+    callback(null, true)
+  } else {
+    callback(new Error('Not allowed by CORS'))
+  }
+}
 
 async function initailize() {
   logNode()
@@ -38,7 +48,7 @@ async function initailize() {
 
   log.notice(`Cors enabled for ${process.env.WEB_URL}`)
 
-  app.use(cors({ origin: process.env.WEB_URL }))
+  app.use(cors({ origin: handleCors }))
   app.use(logMiddleware)
 
   app.get('/server-health', (req, res) =>

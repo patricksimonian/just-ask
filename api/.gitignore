@@ -7,3 +7,4 @@ dist
 **/**/role-mappers.json
 src/config/config.json
 src/config/role-mappers.json
+src/config/cors.json

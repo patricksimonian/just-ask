@@ -3,7 +3,6 @@ import { request } from '@octokit/request'
 import { every, intersectionBy, isArray, isObject, isString } from 'lodash'
 import { getConfig, getGithubPrivateKey } from './config'
 import log from 'log'
-import { getRequestStatuses } from './github'
 
 // cached value
 const installationApps = {
@@ -151,7 +150,6 @@ export const getAuthenticatedApps = async () => {
 export const init = async () => {
   log.info('Checking Authenticated Apps')
   await getAuthenticatedApps()
-  await getRequestStatuses()
 }
 
 export default init

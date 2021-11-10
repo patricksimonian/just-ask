@@ -25,7 +25,7 @@ The server expects three files:
 1. config.json
 2. role-mappers.json
 3. github-private-key.pem
-
+4. cors.json
 
 `config.json` is a backend descriptor of what installtions this app should expect. Since this application can theoretically be installed anywhere. The server utilizes this file to ensure that only valid changes can be made to the orgs that are configuired from this file.
 
@@ -74,7 +74,13 @@ Role mappings can be created from specific org roles in an org or membership in 
 }
 ```
 
+`cors.json` This config file __is not required__ but will allow you to reach the api from multiple origins. In the case __you have configured `WEB_URL` and `cors.json`__, the cors policy will allow both sets of urls. 
 **Take note of the `null`** field. This is a SPECIAL CASE for `REQUESTER`. If the `index 0` position of `REQUESTER` is `null`. Than any github user is granted that role implicitly. 
+
+```json
+[ "https://www.just-ask.com", "https://just-ask.com" ]
+```
+
 
 The app also takes several environment variables:
 
@@ -85,9 +91,9 @@ The app also takes several environment variables:
 5. `LOG_TIME`: defaults to `null` but can be set to `rel` or `abs`. For production installations `abs` is recommended
 6. `PORT`: defaults to 3000 when `null`.
 7. `MONGO_URL`: __required__ the fully qualified mongo connection string to your mongo database
-8. `WEB_URL`: __required__ to enable cors, the frontend components' origin of Just-ask! needs to be set
+8. `WEB_URL`: __required__ to enable cors, the frontend components' origin of Just-ask! needs to be set eg `WEB_URL=https://just-ask-frontend.com`
 9. `CONFIG_PATH`: __production only__ allows you to change the path of where the api should look for its config files. Only works if `NODE_ENV=production`
-10. PRIVATE_KEY_PATH: __production only__ allows you to change the path of where the private key is located. This is important in k8s based deployments as typically the API config and the private key would be in a configmap and secret respectively.  Only useable when `NODE_ENV=production`
+10. `PRIVATE_KEY_PATH`: __production only__ allows you to change the path of where the private key is located. This is important in k8s based deployments as typically the API config and the private key would be in a configmap and secret respectively.  Only useable when `NODE_ENV=production`
 
 
 ## Web Configuration

@@ -60,6 +60,9 @@ Apply these configurations to your container runtime
       mountPath: /var/opt/config/github-private-key.pem
     - name: config.json
       mountPath: /var/opt/config/config.json
+    - name: cors.json
+      mountPath: /var/opt/config/cors.json
+
 ```
 #### Examples
 1. Docker
@@ -123,6 +126,8 @@ stringData:
     }
   config.json: |
     similar
+  cors.json: |
+    [ "https://youroriginstoyourwebcomponent.com" ]
 kind: ConfigMap
 metadata:
   creationTimestamp: null

@@ -43,7 +43,6 @@ export const getGithubPrivateKey = () => {
 
 /** @returns cors policy */
 export const getCors = () => {
-  console.log('SHOULD NOT BE CALLED')
   const data = readFileSync(getBasePathWithFile('cors.json'))
-  return data.toString()
+  return JSON.parse(data.toString())
 }

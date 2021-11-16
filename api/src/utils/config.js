@@ -12,7 +12,6 @@ export const getJSONFromBufferWithError = (fileName, data) => {
   try {
     return JSON.parse(data.toString())
   } catch (e) {
-    console.log('THIS WAS CALLED')
     log.error(`Unable to parse JSON for ${fileName}.`)
     log.error(e)
     throw e

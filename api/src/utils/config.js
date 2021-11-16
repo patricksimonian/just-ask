@@ -2,6 +2,22 @@ import { readFileSync } from 'fs'
 import log from 'log'
 import path from 'path'
 
+/**
+ * Converts a Buffer to JSON but prints out a friendly log error message saying what file error'd
+ * @param {String} fileName
+ * @param {Buffer} data
+ * @returns {Object}
+ */
+const getJSONFromBufferWithError = (fileName, data) => {
+  try {
+    return JSON.parse(data.toString())
+  } catch (e) {
+    log.error(`Unable to parse JSON for ${fileName}.`)
+    log.error(e)
+    throw e
+  }
+}
+
 const getBasePathWithFile = (file) => {
   let filePath
   if (
@@ -23,16 +39,18 @@ const getBasePathWithFile = (file) => {
  * testability. File mocks can only be static :/
  */
 export const getConfig = () => {
-  const data = readFileSync(getBasePathWithFile('config.json'))
-  return JSON.parse(data.toString())
+  const file = 'config.json'
+  const data = readFileSync(getBasePathWithFile(file))
+  return getJSONFromBufferWithError(file, data)
 }
 
 /**
  * @returns role mapping configg
  */
 export const getRoleMapping = () => {
-  const data = readFileSync(getBasePathWithFile('role-mappers.json'))
-  return JSON.parse(data.toString())
+  const file = 'role-mappers.json'
+  const data = readFileSync(getBasePathWithFile(file))
+  return getJSONFromBufferWithError(file, data)
 }
 
 /** @returns github private key */
@@ -43,6 +61,7 @@ export const getGithubPrivateKey = () => {
 
 /** @returns cors policy */
 export const getCors = () => {
-  const data = readFileSync(getBasePathWithFile('cors.json'))
-  return JSON.parse(data.toString())
+  const file = 'cors.json'
+  const data = readFileSync(getBasePathWithFile(file))
+  return getJSONFromBufferWithError(file, data)
 }

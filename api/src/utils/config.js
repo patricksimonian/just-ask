@@ -8,17 +8,18 @@ import path from 'path'
  * @param {Buffer} data
  * @returns {Object}
  */
-const getJSONFromBufferWithError = (fileName, data) => {
+export const getJSONFromBufferWithError = (fileName, data) => {
   try {
     return JSON.parse(data.toString())
   } catch (e) {
+    console.log('THIS WAS CALLED')
     log.error(`Unable to parse JSON for ${fileName}.`)
     log.error(e)
     throw e
   }
 }
 
-const getBasePathWithFile = (file) => {
+export const getBasePathWithFile = (file) => {
   let filePath
   if (
     process.env.NODE_ENV === 'production' &&

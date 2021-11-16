@@ -3,12 +3,12 @@ import log from 'log'
 import path from 'path'
 
 /**
- * Converts a Buffer to JSON but prints out a friendly log error message saying what file error'd
+ * Converts a Buffer to JSON but prints out a friendly log error message when JSON fails to parse
  * @param {String} fileName
  * @param {Buffer} data
  * @returns {Object}
  */
-export const getJSONFromBufferWithError = (fileName, data) => {
+export const getJsonFromBuffer = (fileName, data) => {
   try {
     return JSON.parse(data.toString())
   } catch (e) {
@@ -41,7 +41,7 @@ export const getBasePathWithFile = (file) => {
 export const getConfig = () => {
   const file = 'config.json'
   const data = readFileSync(getBasePathWithFile(file))
-  return getJSONFromBufferWithError(file, data)
+  return getJsonFromBuffer(file, data)
 }
 
 /**
@@ -50,7 +50,7 @@ export const getConfig = () => {
 export const getRoleMapping = () => {
   const file = 'role-mappers.json'
   const data = readFileSync(getBasePathWithFile(file))
-  return getJSONFromBufferWithError(file, data)
+  return getJsonFromBuffer(file, data)
 }
 
 /** @returns github private key */
@@ -63,5 +63,5 @@ export const getGithubPrivateKey = () => {
 export const getCors = () => {
   const file = 'cors.json'
   const data = readFileSync(getBasePathWithFile(file))
-  return getJSONFromBufferWithError(file, data)
+  return getJsonFromBuffer(file, data)
 }

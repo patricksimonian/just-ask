@@ -13,16 +13,7 @@ import requestRouters from './routes/requests'
 import statRouters from './routes/stats'
 import auditRouters from './routes/audits'
 import { getUserFromToken, logMiddleware } from './middlewares/index.js'
-import { getCorsPolicy } from './utils/cors.js'
-
-const handleCors = (origin, callback) => {
-  const allowList = getCorsPolicy()
-  if (allowList.indexOf(origin) !== -1) {
-    callback(null, true)
-  } else {
-    callback(new Error('Not allowed by CORS'))
-  }
-}
+import { handleCors } from './utils/cors.js'
 
 async function initailize() {
   logNode()

@@ -45,3 +45,12 @@ export const getCorsPolicy = (webUrl = undefined) => {
   }
   return corsUrls
 }
+
+export const handleCors = (origin, callback) => {
+  const allowList = getCorsPolicy(process.env.WEB_URL)
+  if (allowList.indexOf(origin) !== -1) {
+    callback(null, true)
+  } else {
+    callback(new Error('Not allowed by CORS'))
+  }
+}

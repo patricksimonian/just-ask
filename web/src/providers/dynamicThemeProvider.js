@@ -10,25 +10,31 @@ import Color from 'color';
 const defaultCreatedPallete = createPalette(defaultPallete, luminosities);
 
 export const DynamicThemeProvider = ({children}) => {
-  const [ palette, fetched, error] = useConfig('/config/pallete.json', {
+  const [ pallete,,, error] = useConfig('/config/pallete.json', {
     headers: {
       accept: 'application/json'
     }
   })
+
   const [colors, setColors] = useState({...defaultCreatedPallete,
     primaryText: Color(defaultCreatedPallete.primary).isDark() ? defaultCreatedPallete.white : defaultCreatedPallete.text,
     secondaryText: Color(defaultCreatedPallete.secondary).isDark() ? defaultCreatedPallete.white : defaultCreatedPallete.text,
   });
 
   useEffect(() => {
-    if(fetched && palette && !error) {
+    if(pallete && !error) {
 
-      setColors({...defaultCreatedPallete, ...palette, primaryText: Color(palette.primary).isDark() ? defaultCreatedPallete.white : defaultCreatedPallete.text,
-
-        secondaryText: Color(palette.secondary).isDark() ? defaultCreatedPallete.white : defaultCreatedPallete.text })
+      setColors({
+        ...defaultCreatedPallete, 
+        ...pallete, 
+        primaryText: Color(pallete.primary).isDark() ? defaultCreatedPallete.white : defaultCreatedPallete.text,
+        secondaryText: Color(pallete.secondary).isDark() ? defaultCreatedPallete.white : defaultCreatedPallete.text,
+      })
+      console.log('created colors', {...defaultCreatedPallete, ...pallete})
     }
-  }, [error, fetched, palette])
+  }, [error, pallete])
 
+    console.log('colors', colors)
 
  return (
     <ThemeProvider theme={{

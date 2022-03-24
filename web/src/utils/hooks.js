@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import axios from "../axios";
 import Axios from 'axios';
 import { parse } from "query-string"
-import { GITHUB_API_URL } from "../constants";
+import { CONFIG_CACHE_MAX_DAYS, GITHUB_API_URL } from "../constants";
 import { AuthContext } from "../providers/AuthContext";
 import { useLocation } from "@reach/router";
 
@@ -24,27 +24,58 @@ export const useQueryParams = (params) => {
 /**
  * react hook to get our app config from a static path
  */
- export const useConfig = (filePath, axiosConfig) => {
+ export const useConfig = (filePath, axiosConfig, cache = true) => {
   const [ config, setConfig ] = useState(null);
   const [ fetched, setFetched ] = useState(false);
   const [ fetching, setFetching ] = useState(false);
   const [ error, setError ] = useState(null);
+  console.log(config)
   useEffect(() => {
+    let cachedConfig = null;
+    if (cache && !config) {
+      const d = new Date();
+      const cachedItem = JSON.parse(localStorage.getItem(filePath))
+      if(cachedItem) {
+        try {
+          const expiry = new Date(cachedItem.exp);
 
-    if(!config && !error) {
+          if(expiry > d) {
+            cachedConfig = cachedItem.data;
+            setConfig(cachedConfig);
+          }
+          
+        } catch(e) {
+          console.error(`Unable to parse expiry of cached config ${filePath}`);
+          localStorage.removeItem(filePath);
+        }
+        
+      }
+      
+    }
+    
+    if(!config && !cachedConfig && !error) {
+
       setFetching(false);
 
       Axios.get(filePath, axiosConfig).then(response => {
         setFetched(true);
         setConfig(response.data)
-
+        if(cache) {
+          const date = new Date();
+          date.setDate(date.getDate() + CONFIG_CACHE_MAX_DAYS);
+          const cachedData = {
+            data: response.data,
+            exp: date.toUTCString(),
+          }
+          localStorage.setItem(filePath, JSON.stringify(cachedData));
+        }
       }).catch(e => {
         setFetched(false);
         setFetching(false);
         setError(e);
       })
     }
-  }, [config, filePath, error, axiosConfig])
+  }, [config, filePath, error, axiosConfig, cache])
 
   return [config, fetched, fetching, error];
 };

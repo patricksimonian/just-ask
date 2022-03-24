@@ -16,6 +16,7 @@ import { useConfig } from './utils/hooks';
 import CustomEntryPage from './components/CustomEntry';
 import Entry from './components/Entry';
 import PrivateRoute from './components/PrivateRoute';
+import { Initialization } from './components/Initialization';
 
 function App() {
 
@@ -50,6 +51,7 @@ function App() {
   return (
     <Layout>
       <Toolbar />
+      <Initialization />
       <Router>
 
         {!state.isLoggedIn && !content && <NotLoggedIn path="/" />}

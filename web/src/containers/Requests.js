@@ -12,7 +12,7 @@ import { ConfigContext } from "../providers/ConfigProvider";
 
 const Requests = () => {
   const { state } = useContext(AuthContext)
-  const { noIndividualOrgRequests } = useContext(ConfigContext);
+  const { config: {noIndividualOrgRequests} } = useContext(ConfigContext);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);

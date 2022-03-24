@@ -53,7 +53,7 @@ export const useQueryParams = (params) => {
       
     }
     
-    if(!config && !cachedConfig && !error) {
+    if(!config && !error) {
 
       setFetching(false);
 

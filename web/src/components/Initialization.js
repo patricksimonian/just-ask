@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Flex,Image,Text } from "rebass";
+import {   Flex,Image,Text } from "rebass";
 import robot from '../images/robot.png';
 export const Initialization = () => {
   const [display, setDisplay] = useState(true);

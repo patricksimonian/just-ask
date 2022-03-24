@@ -6,7 +6,7 @@ import { useConfig } from '../utils/hooks';
 export const ConfigContext = createContext();
 
 export const ConfigProvider = ({children}) => {
-  const [ content,,,error ] = useConfig('/config/config.json', {
+  const [ content,, loading ,error ] = useConfig('/config/config.json', {
     headers: {
       accept: 'application/json'
     }
@@ -14,7 +14,7 @@ export const ConfigProvider = ({children}) => {
   const value = content && !error ? {...defaultContent, ...content}: defaultContent 
 
   return (
-    <ConfigContext.Provider value={value}>
+    <ConfigContext.Provider value={{config: value, loading}}>
       {children}
     </ConfigContext.Provider>
   )

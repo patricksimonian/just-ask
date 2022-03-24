@@ -6,12 +6,16 @@ import React from 'react';
 
 
 const RequestForm = ({autoSelectCheckboxes, organizations, onSubmit, isRequester, username = ''}) => {
+  let initialOrganizations = [];
+  if(autoSelectCheckboxes || organizations.length === 1) {
+    initialOrganizations = organizations.map(o => o.name)
+  }
 
   return (
     <Form
     onSubmit={onSubmit}
     initialValues={{
-      organizations: autoSelectCheckboxes ? organizations.map(o => o.name): []
+      organizations: initialOrganizations
     }}
     render={({ handleSubmit }) => (
       <Box>
@@ -34,7 +38,7 @@ const RequestForm = ({autoSelectCheckboxes, organizations, onSubmit, isRequester
               </Box>
             )} />
   
-              <Text pr={3}>to organizations: </Text>
+              <Text pr={3}>to organization{organizations.length > 1 ? 's:' : ''} </Text>
             <Box  mr={4}>
   
         {organizations.map(org => (
@@ -49,9 +53,11 @@ const RequestForm = ({autoSelectCheckboxes, organizations, onSubmit, isRequester
                       {org.name}
   
                     </Text>
+                  
                   <Checkbox  {...input} disabled={autoSelectCheckboxes} sx={{
                     bg: 'primary',
                     color: 'secondary',
+                    visibility: organizations.length === 1 ? 'hidden': 'visible',
                     outline: 'none',
                     'input:checked ~ &': {
                       bg: 'primary',

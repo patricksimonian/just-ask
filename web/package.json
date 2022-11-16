@@ -19,7 +19,7 @@
     "react-dom": "^16.4.0",
     "react-final-form": "^6.5.3",
     "react-markdown": "^7.0.1",
-    "react-scripts": "^4.0.3",
+    "react-scripts": "^5.0.1",
     "react-table": "^7.7.0",
     "rebass": "^4.0.7",
     "remark-gfm": "^2.0.0",

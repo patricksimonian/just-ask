@@ -15,7 +15,8 @@ const Footer = () => {
           {content.issuesLink && <Link ml={5} href={content.issuesLink} color="text" sx={{':visited': {
             color: 'initial',
             textDecoration: 'none'
-          }}}>Issues</Link> }
+          }
+          }}>Request support</Link> }
 
         </Flex>
       </WidthControlledContainer>

@@ -5,6 +5,7 @@ env:
   REPOSITORY_NAME: plat-gen-docker-local/just-ask-web
 
 on: 
+  workflow_dispatch:
   push:
     paths: 
       - 'web/**'
@@ -58,4 +59,3 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }} 
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          

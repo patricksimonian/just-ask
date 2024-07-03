@@ -1,29 +1,30 @@
 name: WEB - Docker Publish
 
+env:
+  REGISTRY: ghcr.io
+  REPOSITORY_NAME: plat-gen-docker-local/just-ask-web
+
 on: 
-  release:
-    types: [published, edited, released]
-  
+  push:
+    paths: 
+      - 'web/**'
+    branches:
+      - "main"
 
 jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out the repo
-        uses: actions/checkout@v2
-      - name: Login to DockerHub
-        uses: docker/login-action@v1 
-        with:
-          username: ${{ secrets.DOCKER_LOGIN }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Checkout
+        uses: actions/checkout@v4
+    
       - name: Docker meta
         id: meta
-        uses: crazy-max/ghaction-docker-meta@v2
+        uses: docker/metadata-action@v5
         with:
-          # list of Docker images to use as base name for tags
-          images: |
-            wazzacky/just-ask-web
-          # generate Docker tags based on the following events/attributes
+          images: ghcr.io/${{ github.repository_owner }}/${{ env.REPOSITORY_NAME }}
+          # Always generate latest tag (https://github.com/docker/metadata-action#latest-tag)
+          flavor: latest=true
           tags: |
             type=schedule
             type=ref,event=branch
@@ -32,9 +33,29 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
             type=sha
-      - name: Push to Docker Hub
-        uses: docker/build-push-action@v2
+      - name: Login to GHCR
+        uses: docker/login-action@v3
         with:
-          context: web
-          tags: ${{ steps.meta.outputs.tags }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - 
+        # Support for multiplatform build. Using for dev debugging
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+              
+      - # Support for multiplatform build. Using for dev debugging
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        
+      - name: Build container
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: web/Dockerfile
           push: true
+          platforms: linux/amd64,linux/arm64
+          tags: ${{ steps.meta.outputs.tags }} 
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          

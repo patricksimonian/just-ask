@@ -1,7 +1,7 @@
 name: WEB - Docker Publish
 
 env:
-  REGISTRY: ghcr.io
+  REGISTRY: artifacts.developer.gov.bc.ca
   REPOSITORY_NAME: plat-gen-docker-local/just-ask-web
 
 on: 
@@ -34,14 +34,13 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
             type=sha
-      # - name: Login to GHCR
-      #   uses: docker/login-action@v3
-      #   with:
-      #     registry: ${{ env.REGISTRY }}
-      #     username: ${{ github.repository_owner }}
-      #     password: ${{ secrets.GITHUB_TOKEN }}
+            
       - name: Login to Artifactory
-        run: echo ${{ secrets.ARTIFACTORY_PASSWORD }} | docker login -u ${{ secrets.ARTIFACTORY_USERNAME }} --password-stdin artifacts.developer.gov.bc.ca/plat-gen-docker-local
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.ARTIFACTORY_USERNAME }}
+          password: ${{ secrets.ARTIFACTORY_PASSWORD }}
       
       - # Support for multiplatform build. Using for dev debugging
         name: Set up QEMU

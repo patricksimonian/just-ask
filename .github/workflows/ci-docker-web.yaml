@@ -23,7 +23,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/${{ github.repository_owner }}/${{ env.REPOSITORY_NAME }}
+          images: artifacts.developer.gov.bc.ca/${{ env.REPOSITORY_NAME }}
           # Always generate latest tag (https://github.com/docker/metadata-action#latest-tag)
           flavor: latest=true
           tags: |
@@ -34,7 +34,7 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
             type=sha
-            
+
       - name: Login to Artifactory
         uses: docker/login-action@v3
         with:
@@ -58,5 +58,5 @@ jobs:
           push: true
           platforms: linux/amd64,linux/arm64
           tags: ${{ steps.meta.outputs.tags }} 
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          # cache-from: type=gha
+          # cache-to: type=gha,mode=max

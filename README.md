@@ -1,4 +1,4 @@
-# [Just Ask](https://justask.cloud)
+# [Just Ask]( https://patricksimonian.github.io/just-ask/)
 [![Aqua Trivy Vulnerability Scanner](https://github.com/patricksimonian/just-ask/actions/workflows/trivy.yaml/badge.svg)](https://github.com/patricksimonian/just-ask/actions/workflows/trivy.yaml)
 [![CodeQL](https://github.com/patricksimonian/just-ask/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/patricksimonian/just-ask/actions/workflows/codeql-analysis.yml)
 

@@ -26,7 +26,7 @@ A management api/interface for organizations to self-serve org membership.
 
 ## Docs
 
-Checkout out [justask.cloud](https://justask.cloud) for the app documentation.
+Checkout out [justask.cloud]( https://patricksimonian.github.io/just-ask/) for the app documentation.
 
 
 ## Contributions
